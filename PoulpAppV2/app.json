@@ -4,13 +4,12 @@
     "slug": "PoulpAppV2",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
-    "userInterfaceStyle": "automatic",
+    "icon": "./image/logo.png",
+    "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/images/splash.png",
+      "image": "./image/logo.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#000000"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -20,13 +19,12 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./image/logo.png",
         "backgroundColor": "#ffffff"
       }
     },
     "web": {
-      "bundler": "metro",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/favicon.png"
     }
   }
 }
