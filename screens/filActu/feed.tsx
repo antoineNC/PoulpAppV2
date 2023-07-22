@@ -14,9 +14,8 @@ function FeedScreen({ navigation }: FeedScreenNavProp) {
   useEffect(() => {
     firestoreService.listenPost((posts) => setPosts(posts));
     firestoreService.checkIfAdmin().then((response) => {
-      if (response) {
-        setIsAdmin(true);
-      }
+      // setIsAdmin(response);
+      setIsAdmin(true);
     });
   }, []);
 

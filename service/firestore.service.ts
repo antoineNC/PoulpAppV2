@@ -154,7 +154,7 @@ class FirestoreService {
         exists = false;
         Alert.alert(
           "Erreur",
-          "Le compte selectionné n'est pas inscrit sur l'application./nAttention, le compte doit avoir une adresse 'ensc.fr'."
+          "Le compte selectionné n'est pas inscrit sur l'application.\nAttention, le compte doit avoir une adresse 'ensc.fr'."
         );
       } else {
         await AsyncStorage.setItem("sessionId", id);
@@ -165,10 +165,15 @@ class FirestoreService {
     return exists;
   }
 
-  getId = async () => {
+  async LoginTest(id: string): Promise<boolean> {
+    await AsyncStorage.setItem("sessionId", id);
+    return true;
+  }
+
+  async getId() {
     const id = await AsyncStorage.getItem("sessionId");
     return id;
-  };
+  }
 
   async getProfile(
     setState: (profil: {

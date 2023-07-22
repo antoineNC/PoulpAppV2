@@ -114,7 +114,21 @@ export default function LogIn({ navigation, route }: LoginScreenNavProp) {
     <View style={styles.mainContainer}>
       <View style={styles.container}>
         <Image source={require("../../image/logo.png")} style={styles.logo} />
-        {route.params ? null : (
+        {route.params !== undefined ? null : (
+          <View style={{ marginVertical: 20 }}>
+            <Button
+              color={"#52234E"}
+              title="Acccéder à la session"
+              onPress={() =>
+                navigation.navigate("Home", {
+                  screen: "FeedStack",
+                  params: { screen: "Feed" },
+                })
+              }
+            />
+          </View>
+        )}
+        {/* {route.params?.reconnect === false ? null : (
           <View style={{ marginVertical: 20 }}>
             <Button
               title="Acccéder à la session"
@@ -126,23 +140,11 @@ export default function LogIn({ navigation, route }: LoginScreenNavProp) {
               }
             />
           </View>
-        )}
-        {route.params?.reconnect === false ? null : (
-          <View style={{ marginVertical: 20 }}>
-            <Button
-              title="Acccéder à la session"
-              onPress={() =>
-                navigation.navigate("Home", {
-                  screen: "FeedStack",
-                  params: { screen: "Feed" },
-                })
-              }
-            />
-          </View>
-        )}
+        )} */}
 
         <Button
-          title="Sign in with Google"
+          color={"#52234E"}
+          title="Connectez-vous avec votre mail ENSC"
           disabled={!request}
           onPress={() => {
             promptAsync();
@@ -160,6 +162,21 @@ export default function LogIn({ navigation, route }: LoginScreenNavProp) {
         <TouchableOpacity onPress={() => navigation.navigate("Inscription")}>
           <Text style={{ color: "#57B9BB" }}>Je m'inscris !</Text>
         </TouchableOpacity>
+        <View style={{ margin: 30 }}>
+          <TouchableOpacity
+            onPress={async () => {
+              const exists = await firestoreService.LoginTest("BDE2");
+              if (exists) {
+                navigation.navigate("Home", {
+                  screen: "FeedStack",
+                  params: { screen: "Feed" },
+                });
+              }
+            }}
+          >
+            <Text>login test</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );

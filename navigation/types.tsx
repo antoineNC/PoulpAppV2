@@ -48,7 +48,7 @@ export type PointStackParamList = {
 
 export type MenuStackParamList = {
   Menu: undefined;
-  Profil: undefined;
+  BureauProfil: { idBureau: "BDE" | "BDS" | "BDA" | "JE" };
   //   GererMesPosts: undefined;
   Partenariats: undefined;
   //   Partenariat: Partenariat;
@@ -138,5 +138,9 @@ export type MenuScreenNavProp = CompositeScreenProps<
 export type BureauxScreenNavProp = StackScreenProps<
   MenuStackParamList,
   "Bureaux"
+>;
+export type BureauProfilNavProp = StackScreenProps<
+  MenuStackParamList,
+  "BureauProfil"
 >;
 export type ClubsScreenNavProp = StackScreenProps<MenuStackParamList, "Clubs">;

@@ -26,11 +26,10 @@ function MenuScreen({ navigation }: MenuScreenNavProp) {
     firestoreService.getProfile((profil) => {
       setProfil({ nom: profil.nom, photo: profil.photo, info: profil.info });
     });
-    const isAdminFunc = async () => {
-      const admin = await firestoreService.checkIfAdmin();
-      setIsAdmin(admin);
-    };
-    isAdminFunc();
+    firestoreService.checkIfAdmin().then((response) => {
+      setIsAdmin(true);
+      // setIsAdmin(response);
+    });
   }, []);
 
   const photoURL = profil.photo;
@@ -78,14 +77,23 @@ function MenuScreen({ navigation }: MenuScreenNavProp) {
           ) : (
             <Text>{info}</Text>
           )}
+          {isAdmin ? (
+            <View style={{ marginTop: 10, alignItems: "flex-start" }}>
+              <TouchableOpacity
+                style={{
+                  paddingVertical: 10,
+                  paddingHorizontal: 15,
+                  backgroundColor: "#52234E",
+                  borderRadius: 10,
+                }}
+              >
+                <Text style={{ color: "white", fontSize: 16 }}>
+                  Modifier profil
+                </Text>
+              </TouchableOpacity>
+            </View>
+          ) : null}
         </View>
-        {isAdmin ? (
-          <View>
-            <TouchableOpacity>
-              <Text>Modifier profil</Text>
-            </TouchableOpacity>
-          </View>
-        ) : null}
       </View>
 
       <View style={{ paddingHorizontal: 20 }}>

@@ -11,6 +11,7 @@ export interface Etudiant {
 export interface Bureau {
   id: string; // en majuscules
   nom: string;
+  mail: string;
   description: string;
   logo: string;
   membres: Array<{}>;

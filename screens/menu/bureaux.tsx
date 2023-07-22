@@ -2,8 +2,9 @@ import { Card } from "@rneui/themed";
 import { StyleSheet } from "react-native";
 import { Dimensions, TouchableOpacity } from "react-native";
 import { View } from "react-native";
+import { BureauxScreenNavProp } from "../../navigation/types";
 
-export default function Bureaux() {
+export default function Bureaux({ navigation }: BureauxScreenNavProp) {
   return (
     <View
       style={{
@@ -13,7 +14,11 @@ export default function Bureaux() {
     >
       <View style={{ flexDirection: "row" }}>
         <View style={styles.cardContainer}>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate("BureauProfil", { idBureau: "BDE" })
+            }
+          >
             <Card containerStyle={styles.card}>
               <Card.Title>Bureau Des Elèves</Card.Title>
               <Card.Divider />
@@ -25,7 +30,11 @@ export default function Bureaux() {
           </TouchableOpacity>
         </View>
         <View style={styles.cardContainer}>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate("BureauProfil", { idBureau: "BDS" })
+            }
+          >
             <Card containerStyle={styles.card}>
               <Card.Title>Bureau Des Sports</Card.Title>
               <Card.Divider />
@@ -39,7 +48,11 @@ export default function Bureaux() {
       </View>
       <View style={{ flexDirection: "row" }}>
         <View style={styles.cardContainer}>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate("BureauProfil", { idBureau: "BDA" })
+            }
+          >
             <Card containerStyle={styles.card}>
               <Card.Title>Bureau des Arts</Card.Title>
               <Card.Divider />
@@ -51,7 +64,11 @@ export default function Bureaux() {
           </TouchableOpacity>
         </View>
         <View style={styles.cardContainer}>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate("BureauProfil", { idBureau: "JE" })
+            }
+          >
             <Card containerStyle={styles.card}>
               <Card.Title>Junior Entreprise</Card.Title>
               <Card.Divider />

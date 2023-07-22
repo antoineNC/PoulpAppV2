@@ -23,9 +23,11 @@ import ModifPoints from "../screens/cdf/modifPoint";
 import FeedFamille from "../screens/cdf/feedFam";
 import Menu from "../screens/menu/menu";
 import Bureaux from "../screens/menu/bureaux";
+import BureauProfil from "../screens/menu/bureauProfil";
 import Cartes from "../screens/menu/cartes";
 import Clubs from "../screens/menu/searchClub";
 import Partenariats from "../screens/menu/searchPartenariat";
+
 import Constants from "expo-constants";
 
 export const deconnexion = (navigation: any) => {
@@ -160,7 +162,7 @@ export const MenuStackNav = () => {
           ),
         })}
       />
-      {/* <MenuStack.Screen name="Profil" component={Menu} /> */}
+      <MenuStack.Screen name="BureauProfil" component={BureauProfil} />
       <MenuStack.Screen name="Bureaux" component={Bureaux} />
       <MenuStack.Screen name="Cartes" component={Cartes} />
       <MenuStack.Screen name="Partenariats" component={Partenariats} />
