@@ -7,6 +7,7 @@ import {
   ScrollView,
   Button,
   TouchableOpacity,
+  Linking,
 } from "react-native";
 import firestoreService from "../../service/firestore.service";
 import { Bureau, Club, Partenariat } from "../../service/collecInterface";
@@ -22,7 +23,14 @@ export default function BureauProfil({
   route,
 }: BureauProfilNavProp) {
   const { idBureau } = route.params;
-  const [bureau, setBureau] = useState<Bureau>();
+  const [bureau, setBureau] = useState<Bureau>({
+    nom: "Erreur",
+    mail: "erreur",
+    id: "err",
+    description: "erreur",
+    logo: "",
+    membres: [],
+  });
   const [editor, setEditing] = useState(false);
   const logo = firestoreService.getImagePath(idBureau);
   useEffect(() => {
@@ -46,9 +54,13 @@ export default function BureauProfil({
           style={{ width: 100, height: 100, resizeMode: "contain" }}
         />
         <View style={{ flex: 1, paddingHorizontal: 12 }}>
-          <Text style={styles.nomProfil}>{bureau?.nom}</Text>
-          <Text style={styles.descriptionProfil}>E-mail : {bureau?.mail}</Text>
-          <Text style={styles.descriptionProfil}>{bureau?.description}</Text>
+          <Text style={styles.nomProfil}>{bureau.nom}</Text>
+          <TouchableOpacity
+            onPress={() => Linking.openURL("mailto:" + bureau.mail)}
+          >
+            <Text style={styles.descriptionProfil}>{bureau.mail}</Text>
+          </TouchableOpacity>
+          <Text style={styles.descriptionProfil}>{bureau.description}</Text>
         </View>
       </View>
       {editor ? (

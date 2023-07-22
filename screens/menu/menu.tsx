@@ -27,8 +27,8 @@ function MenuScreen({ navigation }: MenuScreenNavProp) {
       setProfil({ nom: profil.nom, photo: profil.photo, info: profil.info });
     });
     firestoreService.checkIfAdmin().then((response) => {
-      setIsAdmin(true);
-      // setIsAdmin(response);
+      // setIsAdmin(true);
+      setIsAdmin(response);
     });
   }, []);
 
@@ -109,10 +109,10 @@ function MenuScreen({ navigation }: MenuScreenNavProp) {
 
         <Bouton
           screen="Partenariats"
-          text="Les partenariats"
+          text="Partenariats"
           navigation={navigation}
         />
-        <Bouton screen="Clubs" text="Les clubs" navigation={navigation} />
+        <Bouton screen="Clubs" text="Clubs" navigation={navigation} />
         <Bouton
           screen="BoiteQuestions"
           text="Boîte à questions"

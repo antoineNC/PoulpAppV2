@@ -1,32 +1,38 @@
-import { RouteProp } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
-import React, { Component } from "react";
 import {
-  StyleSheet,
-  Text,
   View,
   Image,
-  Button,
-  Linking,
+  Text,
   TouchableOpacity,
+  StyleSheet,
+  Linking,
 } from "react-native";
-// import Button from "../../components/Button";
+import { Club } from "../service/collecInterface";
+import { Icon } from "@rneui/themed";
 
-export default function ClubScreen({ club }: { club: Club }) {
+export default function ClubDisp(props: {
+  clubDisp: Club;
+  setModal: (state: boolean) => void;
+}) {
   return (
     <View style={styles.container}>
+      <Icon
+        style={{ alignSelf: "flex-end", marginRight: 20 }}
+        name="close"
+        type="simple-line-icon"
+        color={"#52234E"}
+        size={35}
+        onPress={() => {
+          props.setModal(false);
+        }}
+      />
       <View style={styles.image_description_container}>
-        <Image
-          source={{ uri: this.props.route.params.ImageUrl }}
-          style={styles.strech}
-        />
-        <Text style={styles.description}>
-          {this.props.route.params.Description}
-        </Text>
+        <Image source={{ uri: props.clubDisp.logo }} style={styles.strech} />
+        <Text style={{ fontSize: 20 }}>{props.clubDisp.nom}</Text>
+        <Text style={styles.description}>{props.clubDisp.description}</Text>
       </View>
       <TouchableOpacity
         style={styles.buttonContainer}
-        onPress={() => Linking.openURL(this.props.route.params.ContactUrl)}
+        onPress={() => Linking.openURL(props.clubDisp.contact)}
       >
         <Text style={styles.appButtonText}>Nous contacter</Text>
       </TouchableOpacity>
@@ -36,7 +42,6 @@ export default function ClubScreen({ club }: { club: Club }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    margin: 10,
   },
   image_description_container: {
     justifyContent: "center",

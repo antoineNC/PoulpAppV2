@@ -22,12 +22,12 @@ export default function PointScreen({ navigation }: PointScreenNavProp) {
     // On récupère la liste de posts à afficher et on les stocke dans le state
     firestoreService.listenEvent((listPoints) => setPoints(listPoints));
     // On récupère l'utilisateur actuel de la session, et on regarde si c'est un admin ou non
-    const isBdfFunc = async () => {
-      if ((await firestoreService.getId()) === "BDF") {
-        setIsBdf(true);
-      }
-    };
-    isBdfFunc();
+    firestoreService.getId().then((response) => {
+      // if (response === "BDF") {
+      //   setIsBdf(true);
+      // }
+      setIsBdf(true);
+    });
   }, []);
 
   // Fonction appelée lors de la suppression d'un post

@@ -1,14 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  Text,
-  View,
-  Image,
-  TextInput,
-  TouchableOpacity,
-  Alert,
-  Button,
-  Platform,
-} from "react-native";
+import { Text, View, Image, TouchableOpacity, Button } from "react-native";
 import { LoginScreenNavProp } from "../../navigation/types";
 import * as AuthSession from "expo-auth-session";
 import * as WebBrowser from "expo-web-browser";
