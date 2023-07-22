@@ -1,0 +1,46 @@
+{
+  "expo": {
+    "name": "PoulpAppV2",
+    "slug": "PoulpAppV2",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./image/logo.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./image/logo.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#000000"
+    },
+    "scheme": "poulpapp",
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier":"com.ensc.poulpapp"
+    },
+    "android": {
+      "package": "com.ensc.poulpapp",
+      "adaptiveIcon": {
+        "foregroundImage": "./image/logo.png",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "103e8866-8dd6-402b-9b54-e062cec0958d"
+      }
+    },
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "La Poulp'App accède à vos photos pour vous permettre d'importer des images si besoin (uniquement utile pour les Respo Com)."
+        }
+      ]
+    ]
+  }
+}
