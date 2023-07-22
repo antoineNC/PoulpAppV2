@@ -12,6 +12,8 @@ import firestoreService from "../../service/firestore.service";
 import { Bureau, Club, Partenariat } from "../../service/collecInterface";
 import { BureauProfilNavProp } from "../../navigation/types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import ClubList from "../../components/clubList";
+import PartenariatList from "../../components/parteList";
 // import MemberList from "../../components/MemberList";
 // import Button from "../../components/Button";
 
@@ -59,24 +61,28 @@ export default function BureauProfil({
       ) : null}
 
       {/* C'est la partie des clubs, avec un titre et une flatlist de club */}
-      {/* <View style={styles.partie}>
+      <View style={styles.partie}>
         <Text style={styles.titretext}> Les clubs</Text>
         <View style={styles.separator} />
         <ClubList
-          onPress={(club: Club) => this.props.navigation.navigate("Club", club)}
+          bureau={idBureau}
+          onPress={(club: Club) =>
+            navigation.navigate("BureauProfil", { idBureau: "BDE" })
+          }
         />
-      </View> */}
+      </View>
 
       {/* C'est la partie des partenariats, avec un titre et une flatlist de partenariats */}
-      {/* <View style={styles.partie}>
+      <View style={styles.partie}>
         <Text style={styles.titretext}> Les partenariats</Text>
         <View style={styles.separator} />
         <PartenariatList
+          bureau={idBureau}
           onPress={(partenariat: Partenariat) =>
-            this.props.navigation.navigate("Partenariat", partenariat)
+            navigation.navigate("BureauProfil", { idBureau: "BDE" })
           }
         />
-      </View> */}
+      </View>
 
       {/* C'est la partie des Membres et des postes, avec un titre et une liste de membres et de postes */}
       {/* <View style={styles.partie}>
