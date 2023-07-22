@@ -395,8 +395,14 @@ class FirestoreService {
   }
 
   //----------CLUB
-  listenClubsBDE(onClubsChange: (clubs: Array<Club>) => void): () => void {
-    const q = query(this.clubRef, where("Asso", "==", "BDE"));
+  listenClubs(
+    onClubsChange: (clubs: Array<Club>) => void,
+    asso?: "BDE" | "BDS" | "BDA" | "JE"
+  ): () => void {
+    var q = query(this.clubRef);
+    if (asso) {
+      q = query(this.clubRef, where("bureau", "==", asso));
+    }
     return onSnapshot(q, (querySnapshot: { docs: any[] }) => {
       onClubsChange(
         querySnapshot.docs.map(
@@ -408,10 +414,14 @@ class FirestoreService {
   }
 
   //----------PARTENARIAT
-  listenPartenariatsBDE(
-    onPartenariatsChange: (users: Array<Partenariat>) => void
+  listenPartenariats(
+    onPartenariatsChange: (users: Array<Partenariat>) => void,
+    asso?: "BDE" | "BDS" | "BDA" | "JE"
   ): () => void {
-    const q = query(this.partenariatRef, where("Asso", "==", "BDE"));
+    var q = query(this.partenariatRef);
+    if (asso) {
+      q = query(this.partenariatRef, where("bureau", "==", asso));
+    }
     return onSnapshot(q, (querySnapshot: { docs: any[] }) => {
       onPartenariatsChange(
         querySnapshot.docs.map(

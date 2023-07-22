@@ -6,6 +6,7 @@ import Bouton from "../../components/button";
 import firestoreService from "../../service/firestore.service";
 import { Bureau } from "../../service/collecInterface";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import styles from "../../theme/styles";
 
 interface Profil {
   nom: string;
@@ -36,8 +37,10 @@ function MenuScreen({ navigation }: MenuScreenNavProp) {
   const nom = profil.nom;
   const info = profil.info;
   return (
-    <View style={styles.main_container}>
-      <View style={{ flexDirection: "row" }}>
+    <View>
+      <View
+        style={{ flexDirection: "row", paddingVertical: 30, paddingLeft: 20 }}
+      >
         <Image
           source={
             typeof photoURL !== "string"
@@ -59,14 +62,19 @@ function MenuScreen({ navigation }: MenuScreenNavProp) {
             uri: "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png",
           }}
         />
-        <View>
+        <View style={{ justifyContent: "center", paddingLeft: 10 }}>
           <Text>{nom}</Text>
           {typeof info !== "string" ? (
-            <FlatList
-              data={info}
-              horizontal={true}
-              renderItem={({ item }) => <Text>{item}</Text>}
-            />
+            <View style={{ flexDirection: "row" }}>
+              <Text>Adhésions : </Text>
+              <FlatList
+                data={info}
+                horizontal={true}
+                renderItem={({ item }) => (
+                  <Text style={{ fontWeight: "bold" }}>[{item}] </Text>
+                )}
+              />
+            </View>
           ) : (
             <Text>{info}</Text>
           )}
@@ -80,7 +88,7 @@ function MenuScreen({ navigation }: MenuScreenNavProp) {
         ) : null}
       </View>
 
-      <View>
+      <View style={{ paddingHorizontal: 20 }}>
         <Bouton screen="Bureaux" text="Bureaux" navigation={navigation} />
 
         {!isAdmin ? (
@@ -122,10 +130,3 @@ function MenuScreen({ navigation }: MenuScreenNavProp) {
 }
 
 export default MenuScreen;
-
-const styles = StyleSheet.create({
-  main_container: {
-    flex: 1,
-    marginTop: Constants.statusBarHeight,
-  },
-});

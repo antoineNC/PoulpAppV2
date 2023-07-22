@@ -9,14 +9,15 @@ export default function SearchBar(props: {
   setClicked: (arg0: boolean) => void;
 }) {
   return (
-    <View style={styles.container}>
-      <View
-        style={
-          !props.clicked
-            ? styles.searchBar__unclicked
-            : styles.searchBar__clicked
-        }
-      >
+    <View
+      style={{
+        flexDirection: "row",
+        alignItems: "center",
+        marginTop: 25,
+        paddingHorizontal: 15,
+      }}
+    >
+      <View style={styles.searchBar}>
         <Feather
           name="search"
           size={20}
@@ -25,7 +26,7 @@ export default function SearchBar(props: {
         />
         <TextInput
           style={styles.input}
-          placeholder="Search"
+          placeholder="Chercher"
           value={props.searchPhrase}
           onChangeText={props.setSearchPhrase}
           onFocus={() => {
@@ -48,7 +49,8 @@ export default function SearchBar(props: {
       {props.clicked && (
         <View>
           <Button
-            title="Cancel"
+            color={"#52234E"}
+            title="Annuler"
             onPress={() => {
               Keyboard.dismiss();
               props.setClicked(false);
@@ -61,33 +63,18 @@ export default function SearchBar(props: {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    margin: 15,
-    justifyContent: "flex-start",
-    alignItems: "center",
-    flexDirection: "row",
-    width: "90%",
-  },
-  searchBar__unclicked: {
+  searchBar: {
+    flex: 1,
+    marginHorizontal: 10,
     padding: 10,
     flexDirection: "row",
-    width: "95%",
     backgroundColor: "#d9dbda",
     borderRadius: 15,
     alignItems: "center",
-  },
-  searchBar__clicked: {
-    padding: 10,
-    flexDirection: "row",
-    width: "80%",
-    backgroundColor: "#d9dbda",
-    borderRadius: 15,
-    alignItems: "center",
-    justifyContent: "space-evenly",
   },
   input: {
+    flex: 1,
     fontSize: 20,
-    marginLeft: 10,
-    width: "90%",
+    paddingLeft: 10,
   },
 });

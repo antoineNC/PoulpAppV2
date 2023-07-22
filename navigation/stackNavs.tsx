@@ -149,6 +149,7 @@ export const MenuStackNav = () => {
         name="Menu"
         component={Menu}
         options={({ navigation }) => ({
+          headerLeft: () => null,
           headerRight: () => (
             <TouchableOpacity
               onPress={() => deconnexion(navigation)}

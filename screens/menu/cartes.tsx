@@ -14,16 +14,16 @@ export default function Cartes() {
     <ScrollView>
       <View
         style={{
-          marginVertical: 10,
+          marginBottom: 50,
         }}
       >
         {adhesion[0] === undefined ? (
-          <Text style={{ alignSelf: "center" }}>
+          <Text style={{ alignSelf: "center", justifyContent: "center" }}>
             Vous n'avez aucune adhésion en cours :'(
           </Text>
         ) : null}
         {adhesion.includes("BDE") ? (
-          <View style={styles.cardContainer}>
+          <View>
             <Card containerStyle={styles.card}>
               <Card.Title>Bureau Des Elèves</Card.Title>
               <Card.Divider />
@@ -37,7 +37,7 @@ export default function Cartes() {
         ) : null}
 
         {adhesion.includes("BDS") ? (
-          <View style={styles.cardContainer}>
+          <View>
             <Card containerStyle={styles.card}>
               <Card.Title>Bureau Des Sports</Card.Title>
               <Card.Divider />
@@ -51,7 +51,7 @@ export default function Cartes() {
         ) : null}
 
         {adhesion.includes("BDA") ? (
-          <View style={styles.cardContainer}>
+          <View>
             <Card containerStyle={styles.card}>
               <Card.Title>Bureau des Arts</Card.Title>
               <Card.Divider />
@@ -65,7 +65,7 @@ export default function Cartes() {
         ) : null}
 
         {adhesion.includes("JE") ? (
-          <View style={styles.cardContainer}>
+          <View>
             <Card containerStyle={styles.card}>
               <Card.Title>Junior Entreprise - I2C</Card.Title>
               <Card.Divider />
@@ -83,6 +83,5 @@ export default function Cartes() {
 }
 
 const styles = StyleSheet.create({
-  cardContainer: {},
   card: { borderRadius: 10, backgroundColor: "#dfc9ec" },
 });

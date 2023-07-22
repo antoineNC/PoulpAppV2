@@ -50,9 +50,11 @@ export default function List(props: {
     ) {
       return <Item item={item} />;
     }
+    // items does not match any filter
+    return null;
 
     // in case nothing found
-    return <Text>Aucun élément trouver</Text>;
+    // return <Text style={{ textAlign: "center" }}>Aucun élément trouvé</Text>;
   };
 
   return (
@@ -75,7 +77,8 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   item: {
-    margin: 30,
+    paddingBottom: 10,
+    margin: 20,
     borderBottomWidth: 2,
     borderBottomColor: "lightgrey",
   },

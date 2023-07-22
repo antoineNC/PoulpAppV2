@@ -34,11 +34,12 @@ export default function LogOut({ navigation }: DecoScreenNavProp) {
 
   useEffect(() => {
     console.log("useEffect deco: ", response?.type);
-
     logout();
   }, []);
 
   const logout = async () => {
+    await AsyncStorage.clear();
+    console.log("clear");
     const authJSON = await AsyncStorage.getItem("auth");
     if (authJSON) {
       console.log("authJSON ", authJSON);

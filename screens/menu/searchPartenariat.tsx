@@ -1,15 +1,11 @@
 import React, { useState, useEffect } from "react";
-import {
-  StyleSheet,
-  Text,
-  SafeAreaView,
-  ActivityIndicator,
-} from "react-native";
+import { StyleSheet, Text, View, ActivityIndicator } from "react-native";
 
 import List from "../../components/searchList";
 import SearchBar from "../../components/searchBar";
 import firestoreService from "../../service/firestore.service";
 import { Partenariat } from "../../service/collecInterface";
+import styles from "../../theme/styles";
 
 export default function PartenariatScreen() {
   const [searchPhrase, setSearchPhrase] = useState("");
@@ -19,7 +15,7 @@ export default function PartenariatScreen() {
   // get data from the fake api
   useEffect(() => {
     const getData = async () => {
-      firestoreService.listenPartenariatsBDE((partenariats) =>
+      firestoreService.listenPartenariats((partenariats) =>
         setParte(partenariats)
       );
     };
@@ -27,9 +23,7 @@ export default function PartenariatScreen() {
   }, []);
 
   return (
-    <SafeAreaView style={styles.root}>
-      {!clicked && <Text style={styles.title}>Programming Languages</Text>}
-
+    <View style={styles.mainContainer}>
       <SearchBar
         searchPhrase={searchPhrase}
         setSearchPhrase={setSearchPhrase}
@@ -45,20 +39,6 @@ export default function PartenariatScreen() {
           setClicked={setClicked}
         />
       )}
-    </SafeAreaView>
+    </View>
   );
 }
-
-const styles = StyleSheet.create({
-  root: {
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  title: {
-    width: "100%",
-    marginTop: 20,
-    fontSize: 25,
-    fontWeight: "bold",
-    marginLeft: "10%",
-  },
-});

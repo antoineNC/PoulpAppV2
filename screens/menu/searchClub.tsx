@@ -10,6 +10,7 @@ import List from "../../components/searchList";
 import SearchBar from "../../components/searchBar";
 import firestoreService from "../../service/firestore.service";
 import { Club } from "../../service/collecInterface";
+import styles from "../../theme/styles";
 
 export default function ClubScreen() {
   const [searchPhrase, setSearchPhrase] = useState("");
@@ -19,15 +20,13 @@ export default function ClubScreen() {
   // get data from the fake api
   useEffect(() => {
     const getData = async () => {
-      firestoreService.listenClubsBDE((clubs) => setClubs(clubs));
+      firestoreService.listenClubs((clubs) => setClubs(clubs));
     };
     getData();
   }, []);
 
   return (
-    <SafeAreaView style={styles.root}>
-      {!clicked && <Text style={styles.title}>Programming Languages</Text>}
-
+    <SafeAreaView style={styles.mainContainer}>
       <SearchBar
         searchPhrase={searchPhrase}
         setSearchPhrase={setSearchPhrase}
@@ -46,17 +45,3 @@ export default function ClubScreen() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  root: {
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  title: {
-    width: "100%",
-    marginTop: 20,
-    fontSize: 25,
-    fontWeight: "bold",
-    marginLeft: "10%",
-  },
-});

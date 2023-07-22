@@ -116,9 +116,9 @@ export default function PointScreen({ navigation }: PointScreenNavProp) {
         height={220}
         fromZero
         chartConfig={{
-          backgroundGradientFrom: "#52234E",
-          backgroundGradientTo: "#52234E",
-          color: (opacity = 1) => `rgba(255,255,255, ${opacity})`,
+          backgroundGradientFrom: "#FFFFFF",
+          backgroundGradientTo: "#FFFFFF",
+          color: (opacity = 1) => `rgba(82,35,78,${opacity})`,
         }}
         style={{
           marginTop: 10,

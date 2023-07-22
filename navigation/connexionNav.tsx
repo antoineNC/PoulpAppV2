@@ -11,7 +11,11 @@ export default function ConnexionNav() {
     <ConnexionStack.Navigator screenOptions={{ headerTitleAlign: "center" }}>
       <ConnexionStack.Screen name="Connexion" component={LogIn} />
       <ConnexionStack.Screen name="Inscription" component={SignUp} />
-      <ConnexionStack.Screen name="Deconnexion" component={LogOut} />
+      <ConnexionStack.Screen
+        name="Deconnexion"
+        component={LogOut}
+        options={{ headerLeft: () => null }}
+      />
       <ConnexionStack.Screen
         name="Home"
         component={HomeTabNav}
