@@ -1,23 +1,18 @@
 import { useEffect, useState } from "react";
 import { Post } from "../service/collecInterface";
-import {
-  Alert,
-  FlatList,
-  Modal,
-  ScrollView,
-  TouchableOpacity,
-  View,
-  Text,
-} from "react-native";
+import { Alert, FlatList, Modal, TouchableOpacity, View } from "react-native";
 import firestoreService from "../service/firestore.service";
 import styles from "../theme/styles";
 import PostItem from "./postItem";
 import PostDisplayed from "./postDisplayed";
 import { Timestamp } from "firebase/firestore";
+import { RouteProp } from "@react-navigation/native";
+import { FeedFamStackParamList } from "../navigation/types";
 
 export default function PostList(props: {
   posts: Array<Post>;
   navigation: { navigate: (arg0: string, arg1: { post: Post }) => any };
+  route?: RouteProp<FeedFamStackParamList, "FeedFamille">;
 }) {
   const [isVisible, setIsVisible] = useState(false);
   const [postDisplayed, setPostDisplayed] = useState<Post>({
@@ -62,7 +57,11 @@ export default function PostList(props: {
 
   // Permet de naviguer vers l'écran de modification d'un post
   const modifPost = (post: Post) => {
-    props.navigation.navigate("ModifPost", { post: post }); // On passe en paramètre le post en question à modifier
+    if (props.route) {
+      props.navigation.navigate("ModifPostFamille", { post: post }); // On passe en paramètre le post en question à modifier
+    } else {
+      props.navigation.navigate("ModifPost", { post: post });
+    }
 
     // Si l'utilisateur modifie le post depuis le "pop-up" (postDisplayed), alors on ferme le modal
     if (isVisible == true) {

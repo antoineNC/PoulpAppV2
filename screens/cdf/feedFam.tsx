@@ -5,7 +5,10 @@ import { Post } from "../../service/collecInterface";
 import PostList from "../../components/postList";
 import { FeedFamScreenNavProps } from "../../navigation/types";
 
-export default function FeedFamille({ navigation }: FeedFamScreenNavProps) {
+export default function FeedFamille({
+  navigation,
+  route,
+}: FeedFamScreenNavProps) {
   const [posts, setPosts] = useState<Array<Post>>([]);
 
   useEffect(() => {
@@ -14,7 +17,7 @@ export default function FeedFamille({ navigation }: FeedFamScreenNavProps) {
 
   return (
     <View style={styles.mainContainer}>
-      <PostList posts={posts} navigation={navigation} />
+      <PostList posts={posts} navigation={navigation} route={route} />
     </View>
   );
 }

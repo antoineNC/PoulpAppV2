@@ -165,11 +165,13 @@ export default function AddPost({ navigation }: AddPostScreenNP) {
 
         <View style={styles.selectTagsView}>
           <Picker
-            placeholder="oui"
+            selectedValue={
+              post.tags.length ? post.tags[post.tags.length - 1] : "BDE"
+            }
+            placeholder="Sélectionner"
             onValueChange={(tag: string) => {
               addTag(tag);
             }}
-            mode="dropdown"
           >
             {listTags.map((tag, index) => {
               return (
@@ -179,15 +181,12 @@ export default function AddPost({ navigation }: AddPostScreenNP) {
           </Picker>
         </View>
 
-        <FlatList<string>
-          horizontal
-          contentContainerStyle={styles.tagsSelected}
-          data={post.tags}
-          keyExtractor={(tag) => tag}
-          renderItem={({ item }: { item: string }) => (
-            <Tag tag={item} removeTag={removeTag} />
-          )}
-        />
+        {/* display tags selected for the post */}
+        <View style={styles.tagsSelected}>
+          {post.tags.map((item, index) => (
+            <Tag key={index} tag={item} removeTag={removeTag} />
+          ))}
+        </View>
 
         {/*Si une image est sélectionnée, on l'affiche, et les boutons de supression et modification d'image apparaissent */}
         {post.image != "" ? (
@@ -406,8 +405,7 @@ const styles = StyleSheet.create({
   },
   selectTagsView: {
     flexDirection: "column",
-    alignItems: "center",
-    width: 150,
+    width: 200,
     margin: 10,
     backgroundColor: "whitesmoke",
     borderWidth: 1,
@@ -415,8 +413,10 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   tagsSelected: {
-    width: 300,
+    flex: 1,
     flexDirection: "row",
+    flexWrap: "wrap",
+    width: 300,
   },
   imageView: {
     width: "100%",
