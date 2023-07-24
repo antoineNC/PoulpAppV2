@@ -17,9 +17,12 @@ import { CheckBox } from "@rneui/themed";
 import * as ImagePicker from "expo-image-picker";
 import { Icon } from "@rneui/themed";
 import Tag from "../../components/tag";
-import { ModifPostScreenNP } from "../../navigation/types";
+import { ModifPostScreenNavProp } from "../../navigation/types";
 
-export default function ModifPost({ navigation, route }: ModifPostScreenNP) {
+export default function ModifPostFamille({
+  navigation,
+  route,
+}: ModifPostScreenNavProp) {
   const [post, setPost] = useState<Post>(route.params.post);
   const [timePStart, setTimePStart] = useState(false);
   const [timePEnd, setTimePEnd] = useState(false);
@@ -42,7 +45,7 @@ export default function ModifPost({ navigation, route }: ModifPostScreenNP) {
       firestoreService.modifPost(nvPost);
     }
 
-    navigation.navigate("Feed");
+    navigation.navigate("FeedFamille");
   };
 
   // Permet d'ajouter un tag à la liste

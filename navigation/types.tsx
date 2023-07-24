@@ -37,7 +37,7 @@ export type CDFTabParamList = {
 export type FeedFamStackParamList = {
   FeedFamille: undefined;
   AddPost: undefined;
-  ModifPost: { post: Post };
+  ModifPostFamille: { post: Post };
 };
 
 export type PointStackParamList = {
@@ -122,7 +122,7 @@ export type FeedFamScreenNavProps = CompositeScreenProps<
   MaterialTopTabScreenProps<CDFTabParamList>
 >;
 export type ModifPostScreenNavProp = CompositeScreenProps<
-  StackScreenProps<FeedFamStackParamList, "ModifPost">,
+  StackScreenProps<FeedFamStackParamList, "ModifPostFamille">,
   MaterialTopTabScreenProps<CDFTabParamList>
 >;
 

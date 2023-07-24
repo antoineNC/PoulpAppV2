@@ -15,6 +15,7 @@ import {
 import Feed from "../screens/filActu/feed";
 import AddPost from "../screens/filActu/addPost";
 import ModifPost from "../screens/filActu/modifPost";
+import ModifPostFamille from "../screens/cdf/modifPostFam";
 import Calendrier from "../screens/filActu/calendrier";
 import Calabar from "../screens/calabar/calabar";
 import Points from "../screens/cdf/points";
@@ -123,7 +124,10 @@ export const FeedFamStackNav = () => {
         component={FeedFamille}
         options={{ headerShown: false }}
       />
-      <FeedFamStack.Screen name="ModifPost" component={ModifPost} />
+      <FeedFamStack.Screen
+        name="ModifPostFamille"
+        component={ModifPostFamille}
+      />
     </FeedFamStack.Navigator>
   );
 };
