@@ -57,7 +57,12 @@ export default function PartenariatList(props: {
               <View style={styles.club}>
                 <Image
                   source={{ uri: item.image }}
-                  style={{ width: 50, height: 50, resizeMode: "contain" }}
+                  style={{
+                    width: 70,
+                    height: 70,
+                    resizeMode: "contain",
+                    borderRadius: 5,
+                  }}
                 />
                 <Text style={styles.nomText}>{item.nom}</Text>
               </View>

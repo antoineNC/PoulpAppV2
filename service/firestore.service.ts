@@ -441,6 +441,10 @@ class FirestoreService {
     });
   }
 
+  async deleteClub(idClub: string) {
+    await deleteDoc(doc(this.clubRef, idClub));
+  }
+
   // ========== PARTENARIAT ==============
   listenPartenariats(
     onPartenariatsChange: (users: Array<Partenariat>) => void,

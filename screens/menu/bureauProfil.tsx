@@ -5,18 +5,15 @@ import {
   StyleSheet,
   Image,
   ScrollView,
-  Button,
   TouchableOpacity,
   Linking,
 } from "react-native";
 import firestoreService from "../../service/firestore.service";
-import { Bureau, Club, Partenariat, Role } from "../../service/collecInterface";
+import { Bureau, Role } from "../../service/collecInterface";
 import { BureauProfilNavProp } from "../../navigation/types";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import ClubList from "../../components/clubList";
 import PartenariatList from "../../components/parteList";
-// import MemberList from "../../components/MemberList";
-// import Button from "../../components/Button";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function BureauProfil({
   navigation,
@@ -74,7 +71,7 @@ export default function BureauProfil({
       <View style={styles.partie}>
         <Text style={styles.titretext}> Les clubs</Text>
         <View style={styles.separator} />
-        <ClubList bureau={idBureau} />
+        <ClubList bureau={idBureau} navigation={navigation} />
         {editor ? (
           <TouchableOpacity
             style={styles.buttonContainer}
