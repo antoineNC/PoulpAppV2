@@ -100,7 +100,6 @@ export const CDFTabNav = () => {
           borderRadius: 10,
         },
         tabBarStyle: {
-          height: 60,
           marginTop: Constants.statusBarHeight,
           elevation: 0,
         },
@@ -127,6 +126,7 @@ export const FeedFamStackNav = () => {
       <FeedFamStack.Screen
         name="ModifPostFamille"
         component={ModifPostFamille}
+        options={{ headerStatusBarHeight: 0 }}
       />
     </FeedFamStack.Navigator>
   );
@@ -141,8 +141,16 @@ export const PointStackNav = () => {
         component={Points}
         options={{ headerShown: false }}
       />
-      <PointStack.Screen name="AddPoints" component={AddPoints} />
-      <PointStack.Screen name="ModifPoints" component={ModifPoints} />
+      <PointStack.Screen
+        name="AddPoints"
+        component={AddPoints}
+        options={{ headerStatusBarHeight: 0 }}
+      />
+      <PointStack.Screen
+        name="ModifPoints"
+        component={ModifPoints}
+        options={{ headerStatusBarHeight: 0 }}
+      />
     </PointStack.Navigator>
   );
 };

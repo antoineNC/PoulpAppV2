@@ -39,7 +39,7 @@ export default function BureauProfil({
     });
     const isEditor = async () => {
       const userId = await AsyncStorage.getItem("sessionId");
-      if (userId == "BDE2") {
+      if (userId == idBureau) {
         setEditing(true);
       }
     };
@@ -63,37 +63,35 @@ export default function BureauProfil({
           <Text style={styles.descriptionProfil}>{bureau.description}</Text>
         </View>
       </View>
-      {editor ? (
-        <TouchableOpacity
-          style={styles.buttonContainer}
-          //   onPress={() => navigation.navigate("ModifAsso", bureau)}
-        >
-          <Text style={styles.appButtonText}>Modifier profil</Text>
-        </TouchableOpacity>
-      ) : null}
 
       {/* C'est la partie des clubs, avec un titre et une flatlist de club */}
       <View style={styles.partie}>
         <Text style={styles.titretext}> Les clubs</Text>
         <View style={styles.separator} />
-        <ClubList
-          bureau={idBureau}
-          onPress={(club: Club) =>
-            navigation.navigate("BureauProfil", { idBureau: "BDE" })
-          }
-        />
+        <ClubList bureau={idBureau} />
+        {editor ? (
+          <TouchableOpacity
+            style={styles.buttonContainer}
+            //   onPress={() => navigation.navigate("ModifAsso", bureau)}
+          >
+            <Text style={styles.appButtonText}>Gérer les clubs</Text>
+          </TouchableOpacity>
+        ) : null}
       </View>
 
       {/* C'est la partie des partenariats, avec un titre et une flatlist de partenariats */}
       <View style={styles.partie}>
         <Text style={styles.titretext}> Les partenariats</Text>
         <View style={styles.separator} />
-        <PartenariatList
-          bureau={idBureau}
-          onPress={(partenariat: Partenariat) =>
-            navigation.navigate("BureauProfil", { idBureau: "BDE" })
-          }
-        />
+        <PartenariatList bureau={idBureau} />
+        {editor ? (
+          <TouchableOpacity
+            style={styles.buttonContainer}
+            //   onPress={() => navigation.navigate("ModifAsso", bureau)}
+          >
+            <Text style={styles.appButtonText}>Gérer les partenariats</Text>
+          </TouchableOpacity>
+        ) : null}
       </View>
 
       {/* C'est la partie des Membres et des postes, avec un titre et une liste de membres et de postes */}
@@ -144,7 +142,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingVertical: 10,
     paddingHorizontal: 12,
-    width: 200,
   },
   appButtonText: {
     fontSize: 18,

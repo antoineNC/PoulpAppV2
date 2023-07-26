@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet, Image, FlatList } from "react-native";
+import { Text, View, StyleSheet, Image, FlatList, Alert } from "react-native";
 import { MenuScreenNavProp } from "../../navigation/types";
 import React, { useEffect, useState } from "react";
 import Constants from "expo-constants";
@@ -35,6 +35,19 @@ function MenuScreen({ navigation }: MenuScreenNavProp) {
   const photoURL = profil.photo;
   const nom = profil.nom;
   const info = profil.info;
+
+  const modifProfile = () => {
+    firestoreService.getId().then((response) => {
+      if (response === ("BDE" || "BDS" || "BDA" || "JE")) {
+        navigation.navigate("BureauProfil", { idBureau: response });
+      } else {
+        Alert.alert(
+          "Une erreur est survenue",
+          "Il semblerait que le compte sur lequel vous êtes connectés ne correspond à l'identifiant de la session actuelle.\nVeuillez vous reconnecter ou contacter un administrateur."
+        );
+      }
+    });
+  };
   return (
     <View>
       <View
@@ -61,7 +74,7 @@ function MenuScreen({ navigation }: MenuScreenNavProp) {
             uri: "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png",
           }}
         />
-        <View style={{ justifyContent: "center", paddingLeft: 10 }}>
+        <View style={{ flex: 1, justifyContent: "center", paddingLeft: 10 }}>
           <Text>{nom}</Text>
           {typeof info !== "string" ? (
             <View style={{ flexDirection: "row" }}>
@@ -86,6 +99,7 @@ function MenuScreen({ navigation }: MenuScreenNavProp) {
                   backgroundColor: "#52234E",
                   borderRadius: 10,
                 }}
+                onPress={modifProfile}
               >
                 <Text style={{ color: "white", fontSize: 16 }}>
                   Modifier profil

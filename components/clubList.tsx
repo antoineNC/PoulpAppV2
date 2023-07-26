@@ -16,7 +16,6 @@ import ClubDisp from "./clubDisp";
 
 export default function ClubList(props: {
   bureau: "BDE" | "BDS" | "BDA" | "JE";
-  onPress: (club: Club) => void;
 }) {
   const [clubs, setClubs] = useState<Club[]>();
   const [clubDisp, setClubDisp] = useState<Club>();

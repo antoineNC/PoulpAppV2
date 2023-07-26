@@ -17,7 +17,6 @@ import PartenariatDisp from "./parteDisp";
 
 export default function PartenariatList(props: {
   bureau: "BDE" | "BDS" | "BDA" | "JE";
-  onPress: (partenariat: Partenariat) => void;
 }) {
   const [partenariats, setPartenariats] = useState<Partenariat[]>();
   const [parteDisp, setParteDisp] = useState<Partenariat>();

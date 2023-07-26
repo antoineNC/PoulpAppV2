@@ -156,7 +156,7 @@ export default function LogIn({ navigation, route }: LoginScreenNavProp) {
         <View style={{ margin: 30 }}>
           <TouchableOpacity
             onPress={async () => {
-              const exists = await firestoreService.LoginTest("BDE2");
+              const exists = await firestoreService.LoginTest("BDE");
               if (exists) {
                 navigation.navigate("Home", {
                   screen: "FeedStack",

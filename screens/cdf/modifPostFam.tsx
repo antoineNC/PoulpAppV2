@@ -114,7 +114,7 @@ export default function ModifPostFamille({
 
   return (
     <ScrollView>
-      <View style={[styles.mainContainer]}>
+      <View style={styles.mainContainer}>
         <View style={styles.textInput}>
           <TextInput
             placeholder="Titre"
@@ -380,7 +380,7 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     alignItems: "center",
-    marginTop: Constants.statusBarHeight,
+    // marginTop: Constants.statusBarHeight,
   },
   textInput: {
     backgroundColor: "whitesmoke",
