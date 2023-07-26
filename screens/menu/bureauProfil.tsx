@@ -10,7 +10,7 @@ import {
   Linking,
 } from "react-native";
 import firestoreService from "../../service/firestore.service";
-import { Bureau, Club, Partenariat } from "../../service/collecInterface";
+import { Bureau, Club, Partenariat, Role } from "../../service/collecInterface";
 import { BureauProfilNavProp } from "../../navigation/types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ClubList from "../../components/clubList";
@@ -31,11 +31,17 @@ export default function BureauProfil({
     logo: "",
     membres: [],
   });
+  const [roles, setRoles] = useState<Array<Role>>([
+    { idRole: 1, nomRole: "Président" },
+  ]);
   const [editor, setEditing] = useState(false);
   const logo = firestoreService.getImagePath(idBureau);
   useEffect(() => {
     firestoreService.listenAsso(idBureau, (bureau: Bureau) => {
       setBureau(bureau);
+    });
+    firestoreService.getAllRoles().then((roles) => {
+      setRoles(roles);
     });
     const isEditor = async () => {
       const userId = await AsyncStorage.getItem("sessionId");
@@ -95,26 +101,34 @@ export default function BureauProfil({
       </View>
 
       {/* C'est la partie des Membres et des postes, avec un titre et une liste de membres et de postes */}
-      {/* <View style={styles.partie}>
+      <View style={styles.partie}>
         <Text style={styles.titretext}>Les membres </Text>
         <View style={styles.separator} />
         <View style={styles.members}>
           <View>
-            {this.state.asso.Postes.map((item, key) => (
+            {bureau.membres.map((item, key) => (
               <Text key={key} style={styles.membersContent}>
-                {item}:
+                {roles.find((value) => value.idRole === item.idRole)?.nomRole} :
               </Text>
             ))}
           </View>
           <View>
-            {this.state.asso.Membres.map((item, key) => (
+            {bureau.membres.map((item, key) => (
               <Text key={key} style={styles.membersContent}>
-                {item}
+                {item.nomEtu}
               </Text>
             ))}
           </View>
         </View>
-      </View> */}
+        {editor ? (
+          <TouchableOpacity
+            style={[styles.buttonContainer, { marginVertical: 15 }]}
+            //   onPress={() => navigation.navigate("ModifAsso", bureau)}
+          >
+            <Text style={styles.appButtonText}>Gérer les membres</Text>
+          </TouchableOpacity>
+        ) : null}
+      </View>
     </ScrollView>
   );
 }

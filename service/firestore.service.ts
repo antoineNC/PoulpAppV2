@@ -18,6 +18,7 @@ import {
   orderBy,
   serverTimestamp,
   Timestamp,
+  DocumentData,
 } from "firebase/firestore";
 import {
   Etudiant,
@@ -62,6 +63,7 @@ class FirestoreService {
     this.pointRef = collection(this.db, "Point");
   }
 
+  //========== Connexion ===============
   // Insertion d'un nouvel Etudiant dans la BDD
   async SignUp(userInfo: any): Promise<boolean> {
     var isBureau = false;
@@ -138,10 +140,6 @@ class FirestoreService {
 
   async LogIn(id: string, mail: string): Promise<boolean> {
     var exists = true;
-    // if (mail === "aneyracontr@ensc.fr") {
-    //   await AsyncStorage.setItem("sessionId", "JE");
-    //   return exists;
-    // }
     // chercher si l'identifiant existe dans Bureau
     const bureau = this.convertEmailToAsso(mail);
     var docRef = doc(this.db, "Bureau", bureau);
@@ -175,6 +173,7 @@ class FirestoreService {
     return id;
   }
 
+  // Récupère les infos principales à afficher dans le menu ou l'écran BureauProfile
   async getProfile(
     setState: (profil: {
       nom: string;
@@ -205,16 +204,7 @@ class FirestoreService {
     }
   }
 
-  listenEtu(
-    docEtu: string,
-    setState: (etudiant: Etudiant) => void
-  ): () => void {
-    const docRef = doc(this.db, "Etudiant", docEtu);
-    return onSnapshot(docRef, (doc) => {
-      setState({ ...doc.data() } as Etudiant);
-    });
-  }
-
+  // ============= BUREAU ===========
   // Vérifie si l'utilisateur donné en entrée est un admin
   async checkIfAdmin(): Promise<boolean> {
     var isAdmin = false;
@@ -260,6 +250,39 @@ class FirestoreService {
     }
   }
 
+  // Recupère le nom des postes avec l'id
+  async getRole(id: string) {
+    const docRef = doc(this.db, "RoleBureau", id);
+    const docSnap = await getDoc(docRef);
+    return docSnap.data();
+  }
+
+  // Récupère la liste des postes
+  async getAllRoles(): Promise<any> {
+    const querySnapshot = await getDocs(collection(this.db, "RoleBureau"));
+    const array: { idRole: string; nomRole: DocumentData }[] = [];
+    querySnapshot.forEach((doc) => {
+      array.push({ idRole: doc.id, nomRole: doc.data().role });
+    });
+    return array;
+  }
+
+  // ============ ETUDIANTS ===============
+
+  // Récupère les infos d'un étudiant particulier
+  listenEtu(
+    docEtu: string,
+    setState: (etudiant: Etudiant) => void
+  ): () => void {
+    const docRef = doc(this.etuRef, docEtu);
+    return onSnapshot(docRef, (doc) => {
+      setState({ ...doc.data() } as Etudiant);
+    });
+  }
+
+  // Récupère la liste de tous les étudiants
+
+  // ============ POSTS ==============
   // Permet de récupérer la liste des posts enregistrés dans la BDD
   listenPost(setState: (post: Array<Post>) => void, tag?: string): () => void {
     var q = query(this.postRef, orderBy("timeStamp", "desc")); // plus récent en haut de la liste
@@ -341,7 +364,7 @@ class FirestoreService {
     });
   }
 
-  //----------EVENT (Points)
+  //========== EVENT (Points) ===============
   listenEvent(setState: (point: Array<Points>) => void): () => void {
     const q = query(this.pointRef, orderBy("date", "desc"));
     return onSnapshot(q, (snapshot: { docs: any[] }) =>
@@ -385,7 +408,7 @@ class FirestoreService {
     });
   }
 
-  // ------- BUREAU
+  // ========== BUREAU =============
   getAsso(): string {
     const getid = async () => {
       const userId = await AsyncStorage.getItem("sessionId");
@@ -399,7 +422,7 @@ class FirestoreService {
     });
   }
 
-  //----------CLUB
+  // ========== CLUB ===============
   listenClubs(
     onClubsChange: (clubs: Array<Club>) => void,
     asso?: "BDE" | "BDS" | "BDA" | "JE"
@@ -418,7 +441,7 @@ class FirestoreService {
     });
   }
 
-  //----------PARTENARIAT
+  // ========== PARTENARIAT ==============
   listenPartenariats(
     onPartenariatsChange: (users: Array<Partenariat>) => void,
     asso?: "BDE" | "BDS" | "BDA" | "JE"

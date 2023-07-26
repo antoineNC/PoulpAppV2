@@ -14,7 +14,12 @@ export interface Bureau {
   mail: string;
   description: string;
   logo: string;
-  membres: Array<{}>;
+  membres: Array<{ nomEtu: string; idRole: number }>;
+}
+
+export interface Role {
+  idRole: number;
+  nomRole: string;
 }
 
 export interface Club {
