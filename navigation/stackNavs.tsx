@@ -17,16 +17,20 @@ import AddPost from "../screens/filActu/addPost";
 import ModifPost from "../screens/filActu/modifPost";
 import ModifPostFamille from "../screens/cdf/modifPostFam";
 import Calendrier from "../screens/filActu/calendrier";
+
 import Calabar from "../screens/calabar/calabar";
+
 import Points from "../screens/cdf/points";
 import AddPoints from "../screens/cdf/addPoint";
 import ModifPoints from "../screens/cdf/modifPoint";
 import FeedFamille from "../screens/cdf/feedFam";
+
 import Menu from "../screens/menu/menu";
 import Bureaux from "../screens/menu/bureaux";
 import BureauProfil from "../screens/menu/bureauProfil";
 import Cartes from "../screens/menu/cartes";
 import Clubs from "../screens/menu/searchClub";
+import ClubModif from "../screens/menu/club/clubModif";
 import Partenariats from "../screens/menu/searchPartenariat";
 
 import Constants from "expo-constants";
@@ -179,6 +183,7 @@ export const MenuStackNav = () => {
       <MenuStack.Screen name="Cartes" component={Cartes} />
       <MenuStack.Screen name="Partenariats" component={Partenariats} />
       <MenuStack.Screen name="Clubs" component={Clubs} />
+      <MenuStack.Screen name="ClubModif" component={ClubModif} />
       {/* <MenuStack.Screen name="BAQ" component={Menu} /> */}
       {/* <MenuStack.Screen name="Notifications" component={Menu} /> */}
       {/* <MenuStack.Screen name="Details" component={Menu} /> */}

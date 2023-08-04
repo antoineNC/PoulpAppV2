@@ -9,13 +9,12 @@ import {
   Image,
 } from "react-native";
 import Constants from "expo-constants";
-import firestoreService from "../../service/firestore.service";
-import { Post } from "../../service/collecInterface";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Picker } from "@react-native-picker/picker";
-import { CheckBox } from "@rneui/themed";
 import * as ImagePicker from "expo-image-picker";
-import { Icon } from "@rneui/themed";
+import { CheckBox, Icon } from "@rneui/themed";
+import firestoreService from "../../service/firestore.service";
+import { Post } from "../../service/collecInterface";
 import Tag from "../../components/tag";
 import { ModifPostScreenNP } from "../../navigation/types";
 
@@ -111,7 +110,7 @@ export default function ModifPost({ navigation, route }: ModifPostScreenNP) {
 
   return (
     <ScrollView>
-      <View style={[styles.mainContainer]}>
+      <View style={styles.mainContainer}>
         <View style={styles.textInput}>
           <TextInput
             placeholder="Titre"

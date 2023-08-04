@@ -12,21 +12,30 @@ import {
 import firestoreService from "../service/firestore.service";
 import { Club } from "../service/collecInterface";
 import ClubDisp from "./clubDisp";
-import { Badge, Icon, Chip } from "@rneui/themed";
+import { Icon } from "@rneui/themed";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function ClubList(props: {
   bureau: "BDE" | "BDS" | "BDA" | "JE";
-  navigation: { navigate: (arg0: string, arg1: { idClub: string }) => void };
+  navigation: { navigate: (arg0: string, arg1: { club: Club }) => void };
 }) {
   const [clubs, setClubs] = useState<Club[]>();
   const [clubDisp, setClubDisp] = useState<Club>();
   const [modal, setModal] = useState(false);
+  const [editor, setEditing] = useState(false);
 
   useEffect(() => {
     const getData = async () => {
       firestoreService.listenClubs((clubs) => setClubs(clubs), props.bureau);
     };
     getData();
+    const isEditor = async () => {
+      const userId = await AsyncStorage.getItem("sessionId");
+      if (userId == props.bureau) {
+        setEditing(true);
+      }
+    };
+    isEditor();
   }, []);
 
   const showModal = (item: Club) => {
@@ -70,55 +79,57 @@ export default function ClubList(props: {
                     borderRadius: 5,
                   }}
                 />
-                <Badge
-                  value={<Icon name="trash" type="evilicon" size={20} />}
-                  status="error"
-                  badgeStyle={{
-                    borderColor: "black",
-                    borderWidth: 0.5,
-                    height: 25,
-                    width: 25,
-                  }}
-                  containerStyle={{
-                    position: "absolute",
-                    left: 5,
-                  }}
-                  onPress={() => {
-                    Alert.alert(
-                      "Suppression",
-                      "Voulez-vous vraiment supprimer " + item.nom + " ?",
-                      [
-                        {
-                          text: "Oui",
-                          onPress: () => {
-                            deleteClub(item.id);
-                          },
-                        },
-                        { text: "Non" },
-                      ]
-                    );
-                  }}
-                />
-                <Badge
-                  value={<Icon name="pencil" type="evilicon" size={20} />}
-                  badgeStyle={{
-                    borderColor: "#52234E",
-                    borderWidth: 0.5,
-                    backgroundColor: "#dfc9ec",
-                    height: 25,
-                    width: 25,
-                  }}
-                  containerStyle={{
-                    position: "absolute",
-                    right: 5,
-                  }}
-                  onPress={() => {
-                    props.navigation.navigate("ModifClubs", {
-                      idClub: item.id,
-                    });
-                  }}
-                />
                 <Text style={styles.nomText}>{item.nom}</Text>
+                {editor ? (
+                  <>
+                    <TouchableOpacity
+                      style={{
+                        position: "absolute",
+                        left: 5,
+                        borderColor: "black",
+                        borderWidth: 0.5,
+                        borderRadius: 5,
+                        backgroundColor: "red",
+                        height: 25,
+                        width: 25,
+                      }}
+                      onPress={() => {
+                        Alert.alert(
+                          "Suppression",
+                          "Voulez-vous vraiment supprimer " + item.nom + " ?",
+                          [
+                            {
+                              text: "Oui",
+                              onPress: () => {
+                                deleteClub(item.id);
+                              },
+                            },
+                            { text: "Non" },
+                          ]
+                        );
+                      }}
+                    >
+                      <Icon name="trash" type="evilicon" />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={{
+                        position: "absolute",
+                        right: 5,
+                        borderColor: "#52234E",
+                        borderWidth: 0.5,
+                        borderRadius: 5,
+                        backgroundColor: "#dfc9ec",
+                        height: 25,
+                        width: 25,
+                      }}
+                      onPress={() => {
+                        props.navigation.navigate("ClubModif", { club: item });
+                      }}
+                    >
+                      <Icon name="pencil" type="evilicon" />
+                    </TouchableOpacity>
+                  </>
+                ) : null}
               </View>
             </TouchableOpacity>
           </View>

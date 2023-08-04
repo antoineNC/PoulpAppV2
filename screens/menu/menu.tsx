@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet, Image, FlatList, Alert } from "react-native";
+import { Text, View, Image, FlatList, Alert, ScrollView } from "react-native";
 import { MenuScreenNavProp } from "../../navigation/types";
 import React, { useEffect, useState } from "react";
 import Constants from "expo-constants";
@@ -49,7 +49,7 @@ function MenuScreen({ navigation }: MenuScreenNavProp) {
     });
   };
   return (
-    <View>
+    <ScrollView>
       <View
         style={{ flexDirection: "row", paddingVertical: 30, paddingLeft: 20 }}
       >
@@ -147,7 +147,7 @@ function MenuScreen({ navigation }: MenuScreenNavProp) {
           navigation={navigation}
         />
       </View>
-    </View>
+    </ScrollView>
   );
 }
 

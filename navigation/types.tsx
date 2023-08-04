@@ -5,7 +5,7 @@ import {
 } from "@react-navigation/native";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import { MaterialTopTabScreenProps } from "@react-navigation/material-top-tabs";
-import { Points, Post } from "../service/collecInterface";
+import { Club, Points, Post } from "../service/collecInterface";
 
 //======PARAM LIST=======
 export type RootStackParamList = {
@@ -53,10 +53,10 @@ export type MenuStackParamList = {
   Partenariats: undefined;
   //   Partenariat: Partenariat;
   Bureaux: undefined;
-  //   ModifAsso: Asso;
+
   Cartes: undefined;
   Clubs: undefined;
-  //   Club: Club;
+  ClubModif: { club: Club };
   BAQ: undefined;
   Notifications: undefined;
   Details: undefined;
@@ -144,3 +144,4 @@ export type BureauProfilNavProp = StackScreenProps<
   "BureauProfil"
 >;
 export type ClubsScreenNavProp = StackScreenProps<MenuStackParamList, "Clubs">;
+export type ClubModifProps = StackScreenProps<MenuStackParamList, "ClubModif">;

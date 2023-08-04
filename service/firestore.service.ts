@@ -441,6 +441,16 @@ class FirestoreService {
     });
   }
 
+  modifClub(club: Club) {
+    return updateDoc(doc(this.clubRef, club.id), {
+      nom: club.nom,
+      description: club.description,
+      contact: club.contact,
+      logo: club.logo,
+      bureau: club.bureau,
+    });
+  }
+
   async deleteClub(idClub: string) {
     await deleteDoc(doc(this.clubRef, idClub));
   }

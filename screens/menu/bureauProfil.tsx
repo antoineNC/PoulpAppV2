@@ -72,14 +72,6 @@ export default function BureauProfil({
         <Text style={styles.titretext}> Les clubs</Text>
         <View style={styles.separator} />
         <ClubList bureau={idBureau} navigation={navigation} />
-        {editor ? (
-          <TouchableOpacity
-            style={styles.buttonContainer}
-            //   onPress={() => navigation.navigate("ModifAsso", bureau)}
-          >
-            <Text style={styles.appButtonText}>Gérer les clubs</Text>
-          </TouchableOpacity>
-        ) : null}
       </View>
 
       {/* C'est la partie des partenariats, avec un titre et une flatlist de partenariats */}
