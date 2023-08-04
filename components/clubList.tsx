@@ -109,7 +109,7 @@ export default function ClubList(props: {
                         );
                       }}
                     >
-                      <Icon name="trash" type="evilicon" />
+                      <Icon name="trash" type="evilicon" color={"white"} />
                     </TouchableOpacity>
                     <TouchableOpacity
                       style={{

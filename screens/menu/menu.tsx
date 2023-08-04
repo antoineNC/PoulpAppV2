@@ -1,12 +1,16 @@
-import { Text, View, Image, FlatList, Alert, ScrollView } from "react-native";
-import { MenuScreenNavProp } from "../../navigation/types";
 import React, { useEffect, useState } from "react";
-import Constants from "expo-constants";
+import {
+  Text,
+  View,
+  Image,
+  FlatList,
+  Alert,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
+import { MenuScreenNavProp } from "../../navigation/types";
 import Bouton from "../../components/button";
 import firestoreService from "../../service/firestore.service";
-import { Bureau } from "../../service/collecInterface";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import styles from "../../theme/styles";
 
 interface Profil {
   nom: string;

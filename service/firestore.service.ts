@@ -441,6 +441,17 @@ class FirestoreService {
     });
   }
 
+  addClub(club: Club) {
+    var nvClub = {
+      nom: club.nom,
+      description: club.description,
+      contact: club.contact,
+      logo: club.logo,
+      bureau: club.bureau,
+    };
+    return addDoc(this.clubRef, nvClub);
+  }
+
   modifClub(club: Club) {
     return updateDoc(doc(this.clubRef, club.id), {
       nom: club.nom,

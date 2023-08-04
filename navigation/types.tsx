@@ -57,6 +57,7 @@ export type MenuStackParamList = {
   Cartes: undefined;
   Clubs: undefined;
   ClubModif: { club: Club };
+  ClubAdd: { idBureau: string };
   BAQ: undefined;
   Notifications: undefined;
   Details: undefined;
@@ -145,3 +146,4 @@ export type BureauProfilNavProp = StackScreenProps<
 >;
 export type ClubsScreenNavProp = StackScreenProps<MenuStackParamList, "Clubs">;
 export type ClubModifProps = StackScreenProps<MenuStackParamList, "ClubModif">;
+export type ClubAddProps = StackScreenProps<MenuStackParamList, "ClubAdd">;

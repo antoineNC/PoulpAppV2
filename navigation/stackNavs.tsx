@@ -31,6 +31,7 @@ import BureauProfil from "../screens/menu/bureauProfil";
 import Cartes from "../screens/menu/cartes";
 import Clubs from "../screens/menu/searchClub";
 import ClubModif from "../screens/menu/club/clubModif";
+import ClubAdd from "../screens/menu/club/clubAdd";
 import Partenariats from "../screens/menu/searchPartenariat";
 
 import Constants from "expo-constants";
@@ -184,6 +185,7 @@ export const MenuStackNav = () => {
       <MenuStack.Screen name="Partenariats" component={Partenariats} />
       <MenuStack.Screen name="Clubs" component={Clubs} />
       <MenuStack.Screen name="ClubModif" component={ClubModif} />
+      <MenuStack.Screen name="ClubAdd" component={ClubAdd} />
       {/* <MenuStack.Screen name="BAQ" component={Menu} /> */}
       {/* <MenuStack.Screen name="Notifications" component={Menu} /> */}
       {/* <MenuStack.Screen name="Details" component={Menu} /> */}

@@ -6,19 +6,18 @@ import {
   TextInput,
   View,
   StyleSheet,
-  FlatList,
   Image,
   TouchableOpacity,
 } from "react-native";
-import { Post } from "../../service/collecInterface";
-import { Timestamp } from "firebase/firestore";
-import { AddPostScreenNP } from "../../navigation/types";
 import * as ImagePicker from "expo-image-picker";
 import { Picker } from "@react-native-picker/picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { CheckBox, Icon } from "@rneui/themed";
 import Constants from "expo-constants";
+import { Timestamp } from "firebase/firestore";
 import firestoreService from "../../service/firestore.service";
+import { Post } from "../../service/collecInterface";
+import { AddPostScreenNP } from "../../navigation/types";
 import Tag from "../../components/tag";
 
 export default function AddPost({ navigation }: AddPostScreenNP) {

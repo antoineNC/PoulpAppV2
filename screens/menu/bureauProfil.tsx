@@ -14,6 +14,7 @@ import { BureauProfilNavProp } from "../../navigation/types";
 import ClubList from "../../components/clubList";
 import PartenariatList from "../../components/parteList";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Icon } from "@rneui/themed";
 
 export default function BureauProfil({
   navigation,
@@ -33,6 +34,7 @@ export default function BureauProfil({
   ]);
   const [editor, setEditing] = useState(false);
   const logo = firestoreService.getImagePath(idBureau);
+
   useEffect(() => {
     firestoreService.listenAsso(idBureau, (bureau: Bureau) => {
       setBureau(bureau);
@@ -48,6 +50,14 @@ export default function BureauProfil({
     };
     isEditor();
   }, [idBureau]);
+
+  const addClub = (idBureau: string) => {
+    navigation.navigate("ClubAdd", { idBureau: idBureau });
+  };
+  const addParte = (idBureau: string) => {
+    navigation.navigate("ParteAdd", { idBureau: idBureau });
+  };
+
   return (
     <ScrollView style={styles.main_container}>
       {/* C'est la partie description de l'asso avec le logo, le nom et une description de l'asso */}
@@ -71,22 +81,38 @@ export default function BureauProfil({
       <View style={styles.partie}>
         <Text style={styles.titretext}> Les clubs</Text>
         <View style={styles.separator} />
-        <ClubList bureau={idBureau} navigation={navigation} />
+        <View style={{ flexDirection: "row" }}>
+          <TouchableOpacity onPress={() => addClub(idBureau)}>
+            <View style={styles.addItem}>
+              <Icon
+                name="plussquareo"
+                type="antdesign"
+                size={70}
+                color={"grey"}
+              />
+            </View>
+          </TouchableOpacity>
+          <ClubList bureau={idBureau} navigation={navigation} />
+        </View>
       </View>
 
       {/* C'est la partie des partenariats, avec un titre et une flatlist de partenariats */}
       <View style={styles.partie}>
         <Text style={styles.titretext}> Les partenariats</Text>
         <View style={styles.separator} />
-        <PartenariatList bureau={idBureau} />
-        {editor ? (
-          <TouchableOpacity
-            style={styles.buttonContainer}
-            //   onPress={() => navigation.navigate("ModifAsso", bureau)}
-          >
-            <Text style={styles.appButtonText}>Gérer les partenariats</Text>
+        <View style={{ flexDirection: "row" }}>
+          <TouchableOpacity onPress={() => addParte(idBureau)}>
+            <View style={styles.addItem}>
+              <Icon
+                name="plussquareo"
+                type="antdesign"
+                size={70}
+                color={"grey"}
+              />
+            </View>
           </TouchableOpacity>
-        ) : null}
+          <PartenariatList bureau={idBureau} />
+        </View>
       </View>
 
       {/* C'est la partie des Membres et des postes, avec un titre et une liste de membres et de postes */}
@@ -165,6 +191,12 @@ const styles = StyleSheet.create({
     height: 1,
     width: "80%",
     backgroundColor: "#52234E",
+  },
+  addItem: {
+    flexDirection: "column",
+    paddingHorizontal: 12,
+    paddingVertical: 12,
+    alignItems: "center",
   },
   members: {
     flexDirection: "row",
