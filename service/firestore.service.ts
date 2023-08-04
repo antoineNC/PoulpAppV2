@@ -427,9 +427,13 @@ class FirestoreService {
     onClubsChange: (clubs: Array<Club>) => void,
     asso?: "BDE" | "BDS" | "BDA" | "JE"
   ): () => void {
-    var q = query(this.clubRef);
+    var q = query(this.clubRef, orderBy("nom", "asc"));
     if (asso) {
-      q = query(this.clubRef, where("bureau", "==", asso));
+      q = query(
+        this.clubRef,
+        where("bureau", "==", asso),
+        orderBy("nom", "asc")
+      );
     }
     return onSnapshot(q, (querySnapshot: { docs: any[] }) => {
       onClubsChange(
@@ -471,9 +475,13 @@ class FirestoreService {
     onPartenariatsChange: (users: Array<Partenariat>) => void,
     asso?: "BDE" | "BDS" | "BDA" | "JE"
   ): () => void {
-    var q = query(this.partenariatRef);
+    var q = query(this.partenariatRef, orderBy("nom", "asc"));
     if (asso) {
-      q = query(this.partenariatRef, where("bureau", "==", asso));
+      q = query(
+        this.partenariatRef,
+        where("bureau", "==", asso),
+        orderBy("nom", "asc")
+      );
     }
     return onSnapshot(q, (querySnapshot: { docs: any[] }) => {
       onPartenariatsChange(
@@ -483,6 +491,35 @@ class FirestoreService {
         )
       );
     });
+  }
+
+  addPartenariat(partenariat: Partenariat) {
+    var nvPartenariat = {
+      nom: partenariat.nom,
+      description: partenariat.description,
+      adresse: partenariat.adresse,
+      adresseMap: partenariat.adresseMap,
+      avantages: partenariat.avantages,
+      image: partenariat.image,
+      bureau: partenariat.bureau,
+    };
+    return addDoc(this.partenariatRef, nvPartenariat);
+  }
+
+  modifPartenariat(partenariat: Partenariat) {
+    return updateDoc(doc(this.partenariatRef, partenariat.id), {
+      nom: partenariat.nom,
+      description: partenariat.description,
+      adresse: partenariat.adresse,
+      adresseMap: partenariat.adresseMap,
+      avantages: partenariat.avantages,
+      image: partenariat.image,
+      bureau: partenariat.bureau,
+    });
+  }
+
+  async deleteParte(idParte: string) {
+    await deleteDoc(doc(this.partenariatRef, idParte));
   }
 }
 

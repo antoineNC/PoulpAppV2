@@ -5,7 +5,7 @@ import {
 } from "@react-navigation/native";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import { MaterialTopTabScreenProps } from "@react-navigation/material-top-tabs";
-import { Club, Points, Post } from "../service/collecInterface";
+import { Club, Partenariat, Points, Post } from "../service/collecInterface";
 
 //======PARAM LIST=======
 export type RootStackParamList = {
@@ -49,15 +49,15 @@ export type PointStackParamList = {
 export type MenuStackParamList = {
   Menu: undefined;
   BureauProfil: { idBureau: "BDE" | "BDS" | "BDA" | "JE" };
-  //   GererMesPosts: undefined;
-  Partenariats: undefined;
-  //   Partenariat: Partenariat;
   Bureaux: undefined;
-
+  GererMesPosts: undefined;
   Cartes: undefined;
   Clubs: undefined;
   ClubModif: { club: Club };
   ClubAdd: { idBureau: string };
+  Partenariats: undefined;
+  ParteModif: { partenariat: Partenariat };
+  ParteAdd: { idBureau: string };
   BAQ: undefined;
   Notifications: undefined;
   Details: undefined;
@@ -144,6 +144,10 @@ export type BureauProfilNavProp = StackScreenProps<
   MenuStackParamList,
   "BureauProfil"
 >;
-export type ClubsScreenNavProp = StackScreenProps<MenuStackParamList, "Clubs">;
 export type ClubModifProps = StackScreenProps<MenuStackParamList, "ClubModif">;
 export type ClubAddProps = StackScreenProps<MenuStackParamList, "ClubAdd">;
+export type ParteModifProps = StackScreenProps<
+  MenuStackParamList,
+  "ParteModif"
+>;
+export type ParteAddProps = StackScreenProps<MenuStackParamList, "ParteAdd">;

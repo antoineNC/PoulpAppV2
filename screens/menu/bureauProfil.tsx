@@ -111,7 +111,7 @@ export default function BureauProfil({
               />
             </View>
           </TouchableOpacity>
-          <PartenariatList bureau={idBureau} />
+          <PartenariatList bureau={idBureau} navigation={navigation} />
         </View>
       </View>
 

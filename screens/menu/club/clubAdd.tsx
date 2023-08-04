@@ -25,7 +25,7 @@ export default function ClubAdd({ navigation, route }: ClubAddProps) {
     logo: "",
     bureau: "",
   });
-  const addPost = () => {
+  const addClub = () => {
     // Vérification si le club n'est pas vide (il doit contenir au moins un titre)
     if (club.nom != "") {
       var nvClub = club;
@@ -104,7 +104,7 @@ export default function ClubAdd({ navigation, route }: ClubAddProps) {
           </View>
         )}
 
-        <TouchableOpacity style={styles.buttonContainer} onPress={addPost}>
+        <TouchableOpacity style={styles.buttonContainer} onPress={addClub}>
           <Text style={styles.appButtonText}>Ajouter le club</Text>
         </TouchableOpacity>
       </View>

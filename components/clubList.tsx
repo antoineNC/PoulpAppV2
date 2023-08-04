@@ -49,6 +49,7 @@ export default function ClubList(props: {
       .then(() => console.log("club deleted"))
       .catch(() => console.log("an error occured"));
   };
+
   return (
     <>
       <Modal
