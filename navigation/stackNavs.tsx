@@ -44,17 +44,19 @@ export const deconnexion = (navigation: any) => {
 };
 
 const screenOptions: StackNavigationOptions = {
-  headerShown: false,
+  headerTintColor: "#fff",
+  headerStyle: { backgroundColor: "#52234E" },
 };
 
 const FeedStack = createStackNavigator<FeedStackParamList>();
 export const FeedStackNav = () => {
   return (
-    <FeedStack.Navigator>
+    <FeedStack.Navigator screenOptions={screenOptions}>
       <FeedStack.Screen
         name="Feed"
         component={Feed}
         options={({ navigation }) => ({
+          title: "Fil d'actualité",
           headerLeft: () => null,
           headerRight: () => (
             <TouchableOpacity
@@ -76,8 +78,16 @@ export const FeedStackNav = () => {
         })}
       />
       <FeedStack.Screen name="Calendrier" component={Calendrier} />
-      <FeedStack.Screen name="AddPost" component={AddPost} />
-      <FeedStack.Screen name="ModifPost" component={ModifPost} />
+      <FeedStack.Screen
+        name="AddPost"
+        component={AddPost}
+        options={{ title: "Ajouter un nouveau post" }}
+      />
+      <FeedStack.Screen
+        name="ModifPost"
+        component={ModifPost}
+        options={{ title: "Modifier le post" }}
+      />
     </FeedStack.Navigator>
   );
 };
@@ -113,10 +123,15 @@ export const CDFTabNav = () => {
         },
       }}
     >
-      <CoupeFamillesTab.Screen name="PointStack" component={PointStackNav} />
+      <CoupeFamillesTab.Screen
+        name="PointStack"
+        component={PointStackNav}
+        options={{ title: "Les points" }}
+      />
       <CoupeFamillesTab.Screen
         name="FeedFamStack"
         component={FeedFamStackNav}
+        options={{ title: "Actu famille" }}
       />
     </CoupeFamillesTab.Navigator>
   );
@@ -134,7 +149,7 @@ export const FeedFamStackNav = () => {
       <FeedFamStack.Screen
         name="ModifPostFamille"
         component={ModifPostFamille}
-        options={{ headerStatusBarHeight: 0 }}
+        options={{ headerStatusBarHeight: 0, title: "Modifier le post" }}
       />
     </FeedFamStack.Navigator>
   );
@@ -152,12 +167,12 @@ export const PointStackNav = () => {
       <PointStack.Screen
         name="AddPoints"
         component={AddPoints}
-        options={{ headerStatusBarHeight: 0 }}
+        options={{ headerStatusBarHeight: 0, title: "Ajouter des points" }}
       />
       <PointStack.Screen
         name="ModifPoints"
         component={ModifPoints}
-        options={{ headerStatusBarHeight: 0 }}
+        options={{ headerStatusBarHeight: 0, title: "Modifer les points" }}
       />
     </PointStack.Navigator>
   );
@@ -166,7 +181,7 @@ export const PointStackNav = () => {
 const MenuStack = createStackNavigator<MenuStackParamList>();
 export const MenuStackNav = () => {
   return (
-    <MenuStack.Navigator>
+    <MenuStack.Navigator screenOptions={screenOptions}>
       <MenuStack.Screen
         name="Menu"
         component={Menu}
@@ -182,16 +197,44 @@ export const MenuStackNav = () => {
           ),
         })}
       />
-      <MenuStack.Screen name="BureauProfil" component={BureauProfil} />
+      <MenuStack.Screen
+        name="BureauProfil"
+        component={BureauProfil}
+        options={{ title: "Profil du bureau" }}
+      />
       <MenuStack.Screen name="Bureaux" component={Bureaux} />
-      <MenuStack.Screen name="Cartes" component={Cartes} />
+      <MenuStack.Screen
+        name="Cartes"
+        component={Cartes}
+        options={{ title: "Cartes d'adhésions" }}
+      />
       <MenuStack.Screen name="Partenariats" component={Partenariats} />
       <MenuStack.Screen name="Clubs" component={Clubs} />
-      <MenuStack.Screen name="ClubModif" component={ClubModif} />
-      <MenuStack.Screen name="ClubAdd" component={ClubAdd} />
-      <MenuStack.Screen name="ParteModif" component={ParteModif} />
-      <MenuStack.Screen name="ParteAdd" component={ParteAdd} />
-      <MenuStack.Screen name="GestMembres" component={GestMembres} />
+      <MenuStack.Screen
+        name="ClubModif"
+        component={ClubModif}
+        options={{ title: "Modifier le club" }}
+      />
+      <MenuStack.Screen
+        name="ClubAdd"
+        component={ClubAdd}
+        options={{ title: "Ajouter un club" }}
+      />
+      <MenuStack.Screen
+        name="ParteModif"
+        component={ParteModif}
+        options={{ title: "Modifier le partenariat" }}
+      />
+      <MenuStack.Screen
+        name="ParteAdd"
+        component={ParteAdd}
+        options={{ title: "Ajouter un partenariat" }}
+      />
+      <MenuStack.Screen
+        name="GestMembres"
+        component={GestMembres}
+        options={{ title: "Gérer les membres" }}
+      />
       {/* <MenuStack.Screen name="BAQ" component={Menu} /> */}
       {/* <MenuStack.Screen name="Notifications" component={Menu} /> */}
       {/* <MenuStack.Screen name="Details" component={Menu} /> */}
