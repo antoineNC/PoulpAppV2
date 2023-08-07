@@ -14,12 +14,12 @@ export interface Bureau {
   mail: string;
   description: string;
   logo: string;
-  membres: Array<{ nomEtu: string; idRole: number }>;
+  membres: Array<{ idEtu: string; idRole: string }>;
 }
 
 export interface Role {
-  idRole: number;
-  nomRole: string;
+  idRole: string;
+  role: string;
 }
 
 export interface Club {

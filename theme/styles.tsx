@@ -86,7 +86,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  modalView: { flex: 1, backgroundColor: "#F0E4EF", borderRadius: 5 },
+  modalView: {
+    flex: 1,
+    backgroundColor: "#F0E4EF",
+    borderRadius: 5,
+    borderWidth: 2,
+    marginHorizontal: 5,
+    marginVertical: 20,
+  },
 });
 
 // Common stack header options
@@ -171,6 +178,7 @@ export const postDisStyle = StyleSheet.create({
     position: "absolute",
     right: 7,
     top: 5,
+    zIndex: 10,
   },
   headerContainer: {
     flex: 1,

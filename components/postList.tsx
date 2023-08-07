@@ -88,7 +88,7 @@ export default function PostList(props: {
   return (
     <View style={styles.mainContainer}>
       {/*Si le modal est visible, il affiche le post à afficher sous forme de pop-up*/}
-      <Modal visible={isVisible}>
+      <Modal visible={isVisible} transparent={true} animationType="slide">
         <View style={styles.modalView}>
           <PostDisplayed
             post={postDisplayed}

@@ -167,7 +167,6 @@ export default function AddPost({ navigation }: AddPostScreenNP) {
             selectedValue={
               post.tags.length ? post.tags[post.tags.length - 1] : "BDE"
             }
-            placeholder="Sélectionner"
             onValueChange={(tag: string) => {
               addTag(tag);
             }}

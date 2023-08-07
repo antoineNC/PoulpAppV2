@@ -27,6 +27,7 @@ import {
   Bureau,
   Club,
   Partenariat,
+  Role,
 } from "./collecInterface";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -45,6 +46,7 @@ const firebaseConfig = {
 class FirestoreService {
   private auth;
   private db;
+  private bureauRef;
   private etuRef: any;
   private postRef: any;
   private clubRef: any;
@@ -56,6 +58,7 @@ class FirestoreService {
     initializeApp(firebaseConfig);
     this.auth = getAuth();
     this.db = getFirestore();
+    this.bureauRef = collection(this.db, "Bureau");
     this.etuRef = collection(this.db, "Etudiant");
     this.postRef = collection(this.db, "Post");
     this.clubRef = collection(this.db, "Club");
@@ -205,6 +208,33 @@ class FirestoreService {
   }
 
   // ============= BUREAU ===========
+
+  getAsso(): string {
+    const getid = async () => {
+      const userId = await AsyncStorage.getItem("sessionId");
+    };
+    return "BDF";
+  }
+
+  listenAsso(docBureau: string, setState: (asso: Bureau) => void): () => void {
+    return onSnapshot(doc(this.db, "Bureau", docBureau), (documentSnapshot) => {
+      setState({
+        ...documentSnapshot.data(),
+        ...{ id: documentSnapshot.id },
+      } as Bureau);
+    });
+  }
+
+  updateBureau(bureau: Bureau): Promise<void> {
+    return updateDoc(doc(this.bureauRef, bureau.id), {
+      nom: bureau.nom,
+      mail: bureau.mail,
+      description: bureau.description,
+      membres: bureau.membres,
+      logo: bureau.logo,
+    });
+  }
+
   // Vérifie si l'utilisateur donné en entrée est un admin
   async checkIfAdmin(): Promise<boolean> {
     var isAdmin = false;
@@ -219,7 +249,7 @@ class FirestoreService {
     return isAdmin;
   }
 
-  getImagePath = (asso: string) => {
+  getImagePath(asso: string) {
     if (asso == "BDE") {
       return require("../image/bde.png");
     } else if (asso == "BDS") {
@@ -231,7 +261,7 @@ class FirestoreService {
     } else if (asso == "JE") {
       return require("../image/je.png");
     }
-  };
+  }
 
   // Convertit l'email donnée en entrée en nom de l'association
   convertEmailToAsso(email: string): string {
@@ -258,13 +288,18 @@ class FirestoreService {
   }
 
   // Récupère la liste des postes
-  async getAllRoles(): Promise<any> {
-    const querySnapshot = await getDocs(collection(this.db, "RoleBureau"));
-    const array: { idRole: string; nomRole: DocumentData }[] = [];
-    querySnapshot.forEach((doc) => {
-      array.push({ idRole: doc.id, nomRole: doc.data().role });
-    });
-    return array;
+  getAllRoles(setState: (roles: Role[]) => void): () => void {
+    return onSnapshot(
+      collection(this.db, "RoleBureau"),
+      (snapshot: { docs: any[] }) => {
+        setState(
+          snapshot.docs.map(
+            (d: { data: () => Role; id: any }) =>
+              ({ ...d.data(), ...{ idRole: d.id } } as Role)
+          )
+        );
+      }
+    );
   }
 
   // ============ ETUDIANTS ===============
@@ -281,6 +316,17 @@ class FirestoreService {
   }
 
   // Récupère la liste de tous les étudiants
+  listenEtudiants(setState: (etus: Array<Etudiant>) => void): () => void {
+    var q = query(this.etuRef, orderBy("nom", "asc")); // ordre alphabétique
+    return onSnapshot(q, (snapshot: { docs: any[] }) => {
+      setState(
+        snapshot.docs.map(
+          (d: { data: () => Etudiant; id: any }) =>
+            ({ ...d.data(), ...{ id: d.id } } as Etudiant)
+        )
+      );
+    });
+  }
 
   // ============ POSTS ==============
   // Permet de récupérer la liste des posts enregistrés dans la BDD
@@ -348,12 +394,12 @@ class FirestoreService {
 
   // Permet de supprimer le post correspondant à l'ID d'entrée
   removePost(id: string): Promise<void> {
-    return deleteDoc(doc(this.db, "Post", id));
+    return deleteDoc(doc(this.postRef, id));
   }
 
   // Permet de modifier le post entré en paramètre
   modifPost(post: Post): Promise<void> {
-    return updateDoc(doc(this.db, "Post", post.id), {
+    return updateDoc(doc(this.postRef, post.id), {
       titre: post.titre,
       description: post.description,
       tags: post.tags,
@@ -405,20 +451,6 @@ class FirestoreService {
       orange: point.orange,
       rouge: point.rouge,
       vert: point.vert,
-    });
-  }
-
-  // ========== BUREAU =============
-  getAsso(): string {
-    const getid = async () => {
-      const userId = await AsyncStorage.getItem("sessionId");
-    };
-    return "BDF";
-  }
-
-  listenAsso(docBureau: string, setState: (asso: Bureau) => void): () => void {
-    return onSnapshot(doc(this.db, "Bureau", docBureau), (documentSnapshot) => {
-      setState(documentSnapshot.data() as Bureau);
     });
   }
 

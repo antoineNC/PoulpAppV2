@@ -35,6 +35,7 @@ import ClubAdd from "../screens/menu/club/clubAdd";
 import Partenariats from "../screens/menu/searchPartenariat";
 import ParteModif from "../screens/menu/partenariat/parteModif";
 import ParteAdd from "../screens/menu/partenariat/parteAdd";
+import GestMembres from "../screens/menu/GestMembres";
 
 import Constants from "expo-constants";
 
@@ -190,6 +191,7 @@ export const MenuStackNav = () => {
       <MenuStack.Screen name="ClubAdd" component={ClubAdd} />
       <MenuStack.Screen name="ParteModif" component={ParteModif} />
       <MenuStack.Screen name="ParteAdd" component={ParteAdd} />
+      <MenuStack.Screen name="GestMembres" component={GestMembres} />
       {/* <MenuStack.Screen name="BAQ" component={Menu} /> */}
       {/* <MenuStack.Screen name="Notifications" component={Menu} /> */}
       {/* <MenuStack.Screen name="Details" component={Menu} /> */}

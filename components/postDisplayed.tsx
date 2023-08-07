@@ -59,7 +59,7 @@ export default function PostDisplayed({
     <ScrollView>
       <View style={postDisStyle.postContainer}>
         <TouchableOpacity
-          // style={postDisStyle.closeButton}
+          style={postDisStyle.closeButton}
           onPress={onPressClose}
         >
           <Icon
@@ -81,15 +81,10 @@ export default function PostDisplayed({
             </View>
 
             {/*Affichage de la liste de tags */}
-            <View>
-              <FlatList
-                horizontal
-                data={post.tags}
-                keyExtractor={(tag) => tag}
-                renderItem={({ item }: { item: string }) => (
-                  <Text> [{item}] </Text>
-                )}
-              />
+            <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
+              {post.tags.map((value, index) => (
+                <Text key={index}> [{value}] </Text>
+              ))}
             </View>
 
             {/*S'il s'agit d'un événement visible sur le calendrier, on affiche les dates */}

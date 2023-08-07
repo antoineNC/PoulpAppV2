@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   View,
   Text,
@@ -7,9 +7,11 @@ import {
   ScrollView,
   TouchableOpacity,
   Linking,
+  TextInput,
+  Animated,
 } from "react-native";
 import firestoreService from "../../service/firestore.service";
-import { Bureau, Role } from "../../service/collecInterface";
+import { Bureau, Etudiant, Role } from "../../service/collecInterface";
 import { BureauProfilNavProp } from "../../navigation/types";
 import ClubList from "../../components/clubList";
 import PartenariatList from "../../components/parteList";
@@ -29,9 +31,10 @@ export default function BureauProfil({
     logo: "",
     membres: [],
   });
-  const [roles, setRoles] = useState<Array<Role>>([
-    { idRole: 1, nomRole: "Président" },
+  const [etudiants, setEtus] = useState<Etudiant[]>([
+    { id: "", nom: "", prenom: "", adhesions: [], mail: "" },
   ]);
+  const [roles, setRoles] = useState<Array<Role>>([{ idRole: "", role: "" }]);
   const [editor, setEditing] = useState(false);
   const logo = firestoreService.getImagePath(idBureau);
 
@@ -39,9 +42,8 @@ export default function BureauProfil({
     firestoreService.listenAsso(idBureau, (bureau: Bureau) => {
       setBureau(bureau);
     });
-    firestoreService.getAllRoles().then((roles) => {
-      setRoles(roles);
-    });
+    firestoreService.listenEtudiants((etus) => setEtus(etus));
+    firestoreService.getAllRoles((roles) => setRoles(roles));
     const isEditor = async () => {
       const userId = await AsyncStorage.getItem("sessionId");
       if (userId == idBureau) {
@@ -51,6 +53,24 @@ export default function BureauProfil({
     isEditor();
   }, [idBureau]);
 
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+
+  const updateBureau = async () => {
+    await firestoreService.updateBureau(bureau);
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 100,
+      useNativeDriver: true,
+    }).start();
+    setTimeout(() => {
+      Animated.timing(fadeAnim, {
+        toValue: 0,
+        duration: 2000,
+        useNativeDriver: true,
+      }).start();
+    }, 5000);
+  };
+
   const addClub = (idBureau: string) => {
     navigation.navigate("ClubAdd", { idBureau: idBureau });
   };
@@ -59,92 +79,155 @@ export default function BureauProfil({
   };
 
   return (
-    <ScrollView style={styles.main_container}>
-      {/* C'est la partie description de l'asso avec le logo, le nom et une description de l'asso */}
-      <View style={styles.profil}>
-        <Image
-          source={logo}
-          style={{ width: 100, height: 100, resizeMode: "contain" }}
-        />
-        <View style={{ flex: 1, paddingHorizontal: 12 }}>
-          <Text style={styles.nomProfil}>{bureau.nom}</Text>
-          <TouchableOpacity
-            onPress={() => Linking.openURL("mailto:" + bureau.mail)}
-          >
-            <Text style={styles.descriptionProfil}>{bureau.mail}</Text>
-          </TouchableOpacity>
-          <Text style={styles.descriptionProfil}>{bureau.description}</Text>
-        </View>
-      </View>
+    <>
+      <ScrollView style={styles.main_container}>
+        {/* C'est la partie description de l'asso avec le logo, le nom et une description de l'asso */}
+        <View style={styles.profil}>
+          <Image
+            source={logo}
+            style={{ width: 100, height: 100, resizeMode: "contain" }}
+          />
 
-      {/* C'est la partie des clubs, avec un titre et une flatlist de club */}
-      <View style={styles.partie}>
-        <Text style={styles.titretext}> Les clubs</Text>
-        <View style={styles.separator} />
-        <View style={{ flexDirection: "row" }}>
-          <TouchableOpacity onPress={() => addClub(idBureau)}>
-            <View style={styles.addItem}>
-              <Icon
-                name="plussquareo"
-                type="antdesign"
-                size={70}
-                color={"grey"}
-              />
+          {editor ? (
+            <View style={{ flex: 1, paddingHorizontal: 12, rowGap: 5 }}>
+              <View style={styles.textInput}>
+                <TextInput
+                  placeholder="Nom"
+                  value={bureau.nom}
+                  onChangeText={(text) => setBureau({ ...bureau, nom: text })}
+                />
+              </View>
+              <View style={styles.textInput}>
+                <TextInput
+                  placeholder="e-mail"
+                  value={bureau.mail}
+                  onChangeText={(text) => setBureau({ ...bureau, mail: text })}
+                />
+              </View>
+              <View style={[styles.textInput, { height: 100, paddingTop: 5 }]}>
+                <TextInput
+                  placeholder="Decription"
+                  value={bureau.description}
+                  multiline
+                  onChangeText={(text) =>
+                    setBureau({ ...bureau, description: text })
+                  }
+                />
+              </View>
+              <TouchableOpacity
+                style={[
+                  styles.buttonContainer,
+                  { alignSelf: "auto", marginTop: 10 },
+                ]}
+                onPress={updateBureau}
+              >
+                <Text style={styles.appButtonText}>Valider le profil</Text>
+              </TouchableOpacity>
             </View>
-          </TouchableOpacity>
-          <ClubList bureau={idBureau} navigation={navigation} />
-        </View>
-      </View>
-
-      {/* C'est la partie des partenariats, avec un titre et une flatlist de partenariats */}
-      <View style={styles.partie}>
-        <Text style={styles.titretext}> Les partenariats</Text>
-        <View style={styles.separator} />
-        <View style={{ flexDirection: "row" }}>
-          <TouchableOpacity onPress={() => addParte(idBureau)}>
-            <View style={styles.addItem}>
-              <Icon
-                name="plussquareo"
-                type="antdesign"
-                size={70}
-                color={"grey"}
-              />
+          ) : (
+            <View style={{ flex: 1, paddingHorizontal: 12 }}>
+              <Text style={styles.nomProfil}>{bureau.nom}</Text>
+              <TouchableOpacity
+                onPress={() => Linking.openURL("mailto:" + bureau.mail)}
+              >
+                <Text style={styles.descriptionProfil}>{bureau.mail}</Text>
+              </TouchableOpacity>
+              <Text style={styles.descriptionProfil}>{bureau.description}</Text>
             </View>
-          </TouchableOpacity>
-          <PartenariatList bureau={idBureau} navigation={navigation} />
+          )}
         </View>
-      </View>
 
-      {/* C'est la partie des Membres et des postes, avec un titre et une liste de membres et de postes */}
-      <View style={styles.partie}>
-        <Text style={styles.titretext}>Les membres </Text>
-        <View style={styles.separator} />
-        <View style={styles.members}>
+        {/* C'est la partie des clubs, avec un titre et une flatlist de club */}
+        <View style={styles.partie}>
+          <Text style={styles.titretext}> Les clubs</Text>
+          <View style={styles.separator} />
+          <View style={{ flexDirection: "row" }}>
+            {editor ? (
+              <TouchableOpacity onPress={() => addClub(idBureau)}>
+                <View style={styles.addItem}>
+                  <Icon
+                    name="plussquareo"
+                    type="antdesign"
+                    size={70}
+                    color={"grey"}
+                  />
+                </View>
+              </TouchableOpacity>
+            ) : null}
+            <ClubList bureau={idBureau} navigation={navigation} />
+          </View>
+        </View>
+
+        {/* C'est la partie des partenariats, avec un titre et une flatlist de partenariats */}
+        <View style={styles.partie}>
+          <Text style={styles.titretext}> Les partenariats</Text>
+          <View style={styles.separator} />
+          <View style={{ flexDirection: "row" }}>
+            {editor ? (
+              <TouchableOpacity onPress={() => addParte(idBureau)}>
+                <View style={styles.addItem}>
+                  <Icon
+                    name="plussquareo"
+                    type="antdesign"
+                    size={70}
+                    color={"grey"}
+                  />
+                </View>
+              </TouchableOpacity>
+            ) : null}
+
+            <PartenariatList bureau={idBureau} navigation={navigation} />
+          </View>
+        </View>
+
+        {/* C'est la partie des Membres et des postes, avec un titre et une liste de membres et de postes */}
+        <View style={styles.partie}>
+          <Text style={styles.titretext}>Les membres </Text>
+          <View style={styles.separator} />
           <View>
             {bureau.membres.map((item, key) => (
-              <Text key={key} style={styles.membersContent}>
-                {roles.find((value) => value.idRole === item.idRole)?.nomRole} :
-              </Text>
+              <View key={key} style={styles.members}>
+                <Text style={styles.membersContent}>
+                  {roles.find((value) => value.idRole === item.idRole)?.role} :
+                </Text>
+                <Text style={styles.membersContent}>
+                  {etudiants.find((value) => value.id === item.idEtu)?.prenom +
+                    " " +
+                    etudiants.find((value) => value.id === item.idEtu)?.nom}
+                </Text>
+              </View>
             ))}
           </View>
-          <View>
-            {bureau.membres.map((item, key) => (
-              <Text key={key} style={styles.membersContent}>
-                {item.nomEtu}
-              </Text>
-            ))}
-          </View>
+          {editor ? (
+            <TouchableOpacity
+              style={[styles.buttonContainer, { marginVertical: 15 }]}
+              onPress={() => navigation.navigate("GestMembres", { bureau })}
+            >
+              <Text style={styles.appButtonText}>Gérer les membres</Text>
+            </TouchableOpacity>
+          ) : null}
         </View>
-        {editor ? (
-          <TouchableOpacity
-            style={[styles.buttonContainer, { marginVertical: 15 }]}
-            //   onPress={() => navigation.navigate("ModifAsso", bureau)}
-          >
-            <Text style={styles.appButtonText}>Gérer les membres</Text>
-          </TouchableOpacity>
-        ) : null}
-      </View>
-    </ScrollView>
+      </ScrollView>
+      <Animated.View
+        style={{
+          position: "absolute",
+          bottom: 0,
+          alignSelf: "center",
+          margin: 10,
+          opacity: fadeAnim,
+        }}
+      >
+        <View
+          style={{
+            backgroundColor: "lightgreen",
+            padding: 10,
+            borderRadius: 5,
+          }}
+        >
+          <Text>Le profil du bureau a bien été mis à jour.</Text>
+        </View>
+      </Animated.View>
+    </>
   );
 }
 
@@ -153,7 +236,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 7,
   },
   profil: {
-    // flex:1,
     flexDirection: "row",
     paddingVertical: 12,
   },
@@ -164,6 +246,13 @@ const styles = StyleSheet.create({
   },
   descriptionProfil: {
     fontSize: 13,
+  },
+  textInput: {
+    backgroundColor: "whitesmoke",
+    borderWidth: 1,
+    borderColor: "grey",
+    borderRadius: 5,
+    paddingHorizontal: 15,
   },
   buttonContainer: {
     alignSelf: "center",
@@ -200,11 +289,9 @@ const styles = StyleSheet.create({
   },
   members: {
     flexDirection: "row",
-    // alignItems:"center",
-    justifyContent: "space-around",
+    justifyContent: "space-between",
   },
   membersContent: {
-    // fontSize: 2,
     paddingHorizontal: 12,
     paddingVertical: 4,
     justifyContent: "center",
