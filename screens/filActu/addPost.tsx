@@ -8,6 +8,8 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
+  ActivityIndicator,
+  Dimensions,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { Picker } from "@react-native-picker/picker";
@@ -19,6 +21,7 @@ import firestoreService from "../../service/firestore.service";
 import { Post } from "../../service/collecInterface";
 import { AddPostScreenNP } from "../../navigation/types";
 import Tag from "../../components/tag";
+import { getDownloadURL, uploadBytesResumable } from "firebase/storage";
 
 export default function AddPost({ navigation }: AddPostScreenNP) {
   const getCurrentDate = () => {
@@ -51,6 +54,7 @@ export default function AddPost({ navigation }: AddPostScreenNP) {
   const [timePEnd, setTimePEnd] = useState(false);
   const [datePStart, setDatePStart] = useState(false);
   const [datePEnd, setDatePEnd] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const listTags = [
     { label: "BDE", value: "BDE" },
@@ -71,6 +75,7 @@ export default function AddPost({ navigation }: AddPostScreenNP) {
     // Vérification si le post n'est pas vide (il doit contenir au moins un titre)
     if (post.titre != "") {
       var nvPost = post;
+      console.log(nvPost.image);
       nvPost.editor = firestoreService.getAsso();
       setPost(nvPost);
       console.log(post);
@@ -126,14 +131,32 @@ export default function AddPost({ navigation }: AddPostScreenNP) {
   // Le chemin d'accès de l'image choisie est enregistrée dans le state
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
     });
 
     if (!result.canceled) {
-      setPost({ ...post, image: result.assets[0].uri });
+      setLoading(true);
+      firestoreService.storeImage(result.assets[0].uri).then((res) => {
+        const uploadTask = uploadBytesResumable(res.storageRef, res.blob);
+        uploadTask.on(
+          "state_changed",
+          () => {},
+          (error) => {
+            console.log("Error", error.message);
+            setLoading(false);
+          },
+          () => {
+            // Handle successful uploads on complete
+            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+              setPost({ ...post, image: downloadURL });
+              setLoading(false);
+            });
+          }
+        );
+      });
     }
   };
 
@@ -143,234 +166,260 @@ export default function AddPost({ navigation }: AddPostScreenNP) {
   };
 
   return (
-    <ScrollView>
-      <View style={styles.mainContainer}>
-        <View style={styles.textInput}>
-          <TextInput
-            placeholder="Titre"
-            style={{ width: 300, fontSize: 15 }}
-            onChangeText={(text) => setPost({ ...post, titre: text })}
-          />
+    <View style={{ flex: 1 }}>
+      {loading ? (
+        <View
+          style={{
+            flex: 1,
+            position: "absolute",
+            height: Dimensions.get("window").height,
+            width: Dimensions.get("window").width,
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 10,
+            backgroundColor: "white",
+            opacity: 0.8,
+          }}
+        >
+          <ActivityIndicator size="large" color="#52234E" />
         </View>
-
-        <View style={[styles.textInput, styles.textInputDescription]}>
-          <TextInput
-            placeholder="Description"
-            multiline={true}
-            style={styles.descriptionText}
-            onChangeText={(text) => setPost({ ...post, description: text })}
-          />
-        </View>
-
-        <View style={styles.selectTagsView}>
-          <Picker
-            selectedValue={
-              post.tags.length ? post.tags[post.tags.length - 1] : "BDE"
-            }
-            onValueChange={(tag: string) => {
-              addTag(tag);
-            }}
-          >
-            {listTags.map((tag, index) => {
-              return (
-                <Picker.Item key={index} value={tag.value} label={tag.label} />
-              );
-            })}
-          </Picker>
-        </View>
-
-        {/* display tags selected for the post */}
-        <View style={styles.tagsSelected}>
-          {post.tags.map((item, index) => (
-            <Tag key={index} tag={item} removeTag={removeTag} />
-          ))}
-        </View>
-
-        {/*Si une image est sélectionnée, on l'affiche, et les boutons de supression et modification d'image apparaissent */}
-        {post.image != "" ? (
-          <View style={styles.imageView}>
-            <Image source={{ uri: post.image }} style={styles.image} />
-            <View style={{ flexDirection: "row" }}>
-              <TouchableOpacity style={styles.buttonImage} onPress={pickImage}>
-                <Text style={styles.appButtonText}>Modifier l'image</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.buttonImage}
-                onPress={deleteImage}
-              >
-                <Text style={styles.appButtonText}>Supprimer l'image</Text>
-              </TouchableOpacity>
-            </View>
+      ) : null}
+      <ScrollView>
+        <View style={styles.mainContainer}>
+          <View style={styles.textInput}>
+            <TextInput
+              placeholder="Titre"
+              style={{ width: 300, fontSize: 15 }}
+              onChangeText={(text) => setPost({ ...post, titre: text })}
+            />
           </View>
-        ) : (
-          //Si aucune image n'est sélectionnée, seul le bouton d'importation est affiché
-          <View>
-            <TouchableOpacity
-              style={styles.buttonContainer}
-              onPress={pickImage}
+
+          <View style={[styles.textInput, styles.textInputDescription]}>
+            <TextInput
+              placeholder="Description"
+              multiline={true}
+              style={styles.descriptionText}
+              onChangeText={(text) => setPost({ ...post, description: text })}
+            />
+          </View>
+
+          <View style={styles.selectTagsView}>
+            <Picker
+              selectedValue={
+                post.tags.length ? post.tags[post.tags.length - 1] : "BDE"
+              }
+              onValueChange={(tag: string) => {
+                addTag(tag);
+              }}
             >
-              <Text style={styles.appButtonText}>Importer une image</Text>
-            </TouchableOpacity>
+              {listTags.map((tag, index) => {
+                return (
+                  <Picker.Item
+                    key={index}
+                    value={tag.value}
+                    label={tag.label}
+                  />
+                );
+              })}
+            </Picker>
           </View>
-        )}
 
-        <View style={styles.checkBoxView}>
-          <CheckBox
-            title="Evenement"
-            checked={post.visibleCal}
-            checkedColor="#52234E"
-            onPress={() => setPost({ ...post, visibleCal: !post.visibleCal })}
-            containerStyle={styles.checkBox}
-          />
+          {/* display tags selected for the post */}
+          <View style={styles.tagsSelected}>
+            {post.tags.map((item, index) => (
+              <Tag key={index} tag={item} removeTag={removeTag} />
+            ))}
+          </View>
+
+          {/*Si une image est sélectionnée, on l'affiche, et les boutons de supression et modification d'image apparaissent */}
+          {post.image != "" ? (
+            <View style={styles.imageView}>
+              <Image source={{ uri: post.image }} style={styles.image} />
+              <View style={{ flexDirection: "row" }}>
+                <TouchableOpacity
+                  style={styles.buttonImage}
+                  onPress={pickImage}
+                >
+                  <Text style={styles.appButtonText}>Modifier l'image</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.buttonImage}
+                  onPress={deleteImage}
+                >
+                  <Text style={styles.appButtonText}>Supprimer l'image</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          ) : (
+            //Si aucune image n'est sélectionnée, seul le bouton d'importation est affiché
+            <View>
+              <TouchableOpacity
+                style={styles.buttonContainer}
+                onPress={pickImage}
+              >
+                <Text style={styles.appButtonText}>Importer une image</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+
+          <View style={styles.checkBoxView}>
+            <CheckBox
+              title="Evenement"
+              checked={post.visibleCal}
+              checkedColor="#52234E"
+              onPress={() => setPost({ ...post, visibleCal: !post.visibleCal })}
+              containerStyle={styles.checkBox}
+            />
+          </View>
+
+          {/*Si l'utilisateur a définit le post comme un événement, on affiche les dateTimePickers*/}
+          {post.visibleCal == true ? (
+            <View style={{ alignItems: "center" }}>
+              <View style={styles.dtPickerContainer}>
+                <Text style={{ width: 50, fontWeight: "bold" }}>Début : </Text>
+                <Text>Le</Text>
+                <TouchableOpacity
+                  style={[styles.dtPicker, { width: 130 }]}
+                  onPress={() => setDatePStart(true)}
+                >
+                  <Icon name="calendar" type="font-awesome" color="#52234E" />
+                  <Text>{post.date[0]}</Text>
+                </TouchableOpacity>
+
+                {datePStart && (
+                  <DateTimePicker
+                    display="default"
+                    value={new Date()}
+                    onChange={(event, date) => {
+                      var nvDate = post.date;
+                      date && event.type === "set"
+                        ? (nvDate[0] =
+                            (date.getDate() < 10 ? "0" : "") +
+                            date.getDate() +
+                            "/" +
+                            (date.getMonth() < 9 ? "0" : "") +
+                            (date.getMonth() + 1) +
+                            "/" +
+                            date.getFullYear())
+                        : "";
+                      setPost({
+                        ...post,
+                        date: nvDate,
+                      });
+                      setDatePStart(false);
+                    }}
+                  />
+                )}
+                <Text>à</Text>
+
+                <TouchableOpacity
+                  style={[styles.dtPicker, { width: 90 }]}
+                  onPress={() => setTimePStart(true)}
+                >
+                  <Icon name="clock" type="feather" color="#52234E" />
+                  <Text>{post.date[2]}</Text>
+                </TouchableOpacity>
+
+                {/*Permet d'afficher le timePicker*/}
+                {timePStart && (
+                  <DateTimePicker
+                    mode={"time"}
+                    display="default"
+                    is24Hour={true}
+                    value={new Date()}
+                    onChange={(event, value) => {
+                      var nvDate = post.date;
+                      value && event.type === "set"
+                        ? (nvDate[2] =
+                            value?.getHours() +
+                            ":" +
+                            (value?.getMinutes() < 10
+                              ? "0" + value?.getMinutes()
+                              : value?.getMinutes()))
+                        : "";
+                      setPost({
+                        ...post,
+                        date: nvDate,
+                      });
+                      setTimePStart(false);
+                    }}
+                  />
+                )}
+              </View>
+              <View style={styles.dtPickerContainer}>
+                <Text style={{ width: 50, fontWeight: "bold" }}>Fin : </Text>
+                <Text>Le</Text>
+
+                <TouchableOpacity
+                  style={[styles.dtPicker, { width: 130 }]}
+                  onPress={() => setDatePEnd(true)}
+                >
+                  <Icon name="calendar" type="font-awesome" color="#52234E" />
+                  <Text>{post.date[1]}</Text>
+                </TouchableOpacity>
+
+                {datePEnd && (
+                  <DateTimePicker
+                    display="default"
+                    value={new Date()}
+                    onChange={(event, date) => {
+                      var nvDate = post.date;
+                      date && event.type === "set"
+                        ? (nvDate[1] =
+                            (date.getDate() < 10 ? "0" : "") +
+                            date.getDate() +
+                            "/" +
+                            (date.getMonth() < 9 ? "0" : "") +
+                            (date.getMonth() + 1) +
+                            "/" +
+                            date.getFullYear())
+                        : "";
+                      setPost({ ...post, date: nvDate });
+                      setDatePEnd(false);
+                    }}
+                  />
+                )}
+                <Text>à</Text>
+
+                <TouchableOpacity
+                  style={[styles.dtPicker, { width: 90 }]}
+                  onPress={() => setTimePEnd(true)}
+                >
+                  <Icon name="clock" type="feather" color="#52234E" />
+                  <Text>{post.date[3]}</Text>
+                </TouchableOpacity>
+
+                {timePEnd && (
+                  <DateTimePicker
+                    mode={"time"}
+                    display="default"
+                    is24Hour={true}
+                    value={new Date()}
+                    onChange={(event, value) => {
+                      var nvDate = post.date;
+                      value && event.type === "set"
+                        ? (nvDate[3] =
+                            value?.getHours() +
+                            ":" +
+                            (value?.getMinutes() < 10
+                              ? "0" + value?.getMinutes()
+                              : value?.getMinutes()))
+                        : "";
+                      setPost({ ...post, date: nvDate });
+                      setTimePEnd(false);
+                    }}
+                  />
+                )}
+              </View>
+            </View>
+          ) : null}
+
+          <TouchableOpacity style={styles.buttonContainer} onPress={addPost}>
+            <Text style={styles.appButtonText}>Publier le post</Text>
+          </TouchableOpacity>
         </View>
-
-        {/*Si l'utilisateur a définit le post comme un événement, on affiche les dateTimePickers*/}
-        {post.visibleCal == true ? (
-          <View style={{ alignItems: "center" }}>
-            <View style={styles.dtPickerContainer}>
-              <Text style={{ width: 50, fontWeight: "bold" }}>Début : </Text>
-              <Text>Le</Text>
-              <TouchableOpacity
-                style={[styles.dtPicker, { width: 130 }]}
-                onPress={() => setDatePStart(true)}
-              >
-                <Icon name="calendar" type="font-awesome" color="#52234E" />
-                <Text>{post.date[0]}</Text>
-              </TouchableOpacity>
-
-              {datePStart && (
-                <DateTimePicker
-                  display="default"
-                  value={new Date()}
-                  onChange={(event, date) => {
-                    var nvDate = post.date;
-                    date && event.type === "set"
-                      ? (nvDate[0] =
-                          (date.getDate() < 10 ? "0" : "") +
-                          date.getDate() +
-                          "/" +
-                          (date.getMonth() < 9 ? "0" : "") +
-                          (date.getMonth() + 1) +
-                          "/" +
-                          date.getFullYear())
-                      : "";
-                    setPost({
-                      ...post,
-                      date: nvDate,
-                    });
-                    setDatePStart(false);
-                  }}
-                />
-              )}
-              <Text>à</Text>
-
-              <TouchableOpacity
-                style={[styles.dtPicker, { width: 90 }]}
-                onPress={() => setTimePStart(true)}
-              >
-                <Icon name="clock" type="feather" color="#52234E" />
-                <Text>{post.date[2]}</Text>
-              </TouchableOpacity>
-
-              {/*Permet d'afficher le timePicker*/}
-              {timePStart && (
-                <DateTimePicker
-                  mode={"time"}
-                  display="default"
-                  is24Hour={true}
-                  value={new Date()}
-                  onChange={(event, value) => {
-                    var nvDate = post.date;
-                    value && event.type === "set"
-                      ? (nvDate[2] =
-                          value?.getHours() +
-                          ":" +
-                          (value?.getMinutes() < 10
-                            ? "0" + value?.getMinutes()
-                            : value?.getMinutes()))
-                      : "";
-                    setPost({
-                      ...post,
-                      date: nvDate,
-                    });
-                    setTimePStart(false);
-                  }}
-                />
-              )}
-            </View>
-            <View style={styles.dtPickerContainer}>
-              <Text style={{ width: 50, fontWeight: "bold" }}>Fin : </Text>
-              <Text>Le</Text>
-
-              <TouchableOpacity
-                style={[styles.dtPicker, { width: 130 }]}
-                onPress={() => setDatePEnd(true)}
-              >
-                <Icon name="calendar" type="font-awesome" color="#52234E" />
-                <Text>{post.date[1]}</Text>
-              </TouchableOpacity>
-
-              {datePEnd && (
-                <DateTimePicker
-                  display="default"
-                  value={new Date()}
-                  onChange={(event, date) => {
-                    var nvDate = post.date;
-                    date && event.type === "set"
-                      ? (nvDate[1] =
-                          (date.getDate() < 10 ? "0" : "") +
-                          date.getDate() +
-                          "/" +
-                          (date.getMonth() < 9 ? "0" : "") +
-                          (date.getMonth() + 1) +
-                          "/" +
-                          date.getFullYear())
-                      : "";
-                    setPost({ ...post, date: nvDate });
-                    setDatePEnd(false);
-                  }}
-                />
-              )}
-              <Text>à</Text>
-
-              <TouchableOpacity
-                style={[styles.dtPicker, { width: 90 }]}
-                onPress={() => setTimePEnd(true)}
-              >
-                <Icon name="clock" type="feather" color="#52234E" />
-                <Text>{post.date[3]}</Text>
-              </TouchableOpacity>
-
-              {timePEnd && (
-                <DateTimePicker
-                  mode={"time"}
-                  display="default"
-                  is24Hour={true}
-                  value={new Date()}
-                  onChange={(event, value) => {
-                    var nvDate = post.date;
-                    value && event.type === "set"
-                      ? (nvDate[3] =
-                          value?.getHours() +
-                          ":" +
-                          (value?.getMinutes() < 10
-                            ? "0" + value?.getMinutes()
-                            : value?.getMinutes()))
-                      : "";
-                    setPost({ ...post, date: nvDate });
-                    setTimePEnd(false);
-                  }}
-                />
-              )}
-            </View>
-          </View>
-        ) : null}
-
-        <TouchableOpacity style={styles.buttonContainer} onPress={addPost}>
-          <Text style={styles.appButtonText}>Publier le post</Text>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 }
 

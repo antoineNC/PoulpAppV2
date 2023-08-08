@@ -12,14 +12,18 @@ import {
   onSnapshot,
   query,
   where,
-  getDocs,
   getDoc,
   setDoc,
   orderBy,
-  serverTimestamp,
   Timestamp,
-  DocumentData,
 } from "firebase/firestore";
+import {
+  getDownloadURL,
+  getStorage,
+  ref,
+  uploadBytesResumable,
+  UploadTask,
+} from "firebase/storage";
 import {
   Etudiant,
   Post,
@@ -52,6 +56,7 @@ class FirestoreService {
   private clubRef: any;
   private partenariatRef: any;
   private pointRef: any;
+  private storage: any;
 
   // Connexion à la base de données
   constructor() {
@@ -64,6 +69,8 @@ class FirestoreService {
     this.clubRef = collection(this.db, "Club");
     this.partenariatRef = collection(this.db, "Partenariat");
     this.pointRef = collection(this.db, "Point");
+    // Get a reference to the storage service, which is used to create references in your storage bucket
+    this.storage = getStorage();
   }
 
   //========== Connexion ===============
@@ -205,6 +212,16 @@ class FirestoreService {
         );
       }
     }
+  }
+
+  // ============ STORAGE (Images) ====================
+
+  // Create a storage reference from our storage service
+  async storeImage(uri: string) {
+    const response = await fetch(uri);
+    const blob = await response.blob();
+    const storageRef = ref(this.storage, "ImgPosts/" + new Date().getTime());
+    return { storageRef, blob };
   }
 
   // ============= BUREAU ===========
