@@ -70,30 +70,45 @@ export default function AddPost({ navigation }: AddPostScreenNP) {
     { label: "AGE", value: "AGE" },
     { label: "Gazette", value: "Gazette" },
   ];
-
+  // ATTENTION --- MODIF POUR AWAIT L'URL
   const addPost = () => {
     // Vérification si le post n'est pas vide (il doit contenir au moins un titre)
     if (post.titre != "") {
       var nvPost = post;
-      console.log(nvPost.image);
       nvPost.editor = firestoreService.getAsso();
-      setPost(nvPost);
-      console.log(post);
-      // Création du post en faisant appel à firestore.Service
-      // Si c'est un événement, on transmet les propriétés correspondantes
-      if (post.visibleCal == true) {
-        firestoreService.addPost(post);
-      }
-      // Si ce n'est pas un événement, on remplit les champs correspondant à un événement par ""
-      // (sinon, la date d'aujourd'hui serait enregistrée par défaut)
-      else {
-        var nvPost = post;
+      if (post.visibleCal === false) {
+        // Si ce n'est pas un événement, on remplit les champs correspondant à un événement par ""
+        // (sinon, la date d'aujourd'hui serait enregistrée par défaut)
         nvPost.date = ["", "", "", ""];
-        setPost(nvPost);
-        firestoreService.addPost(nvPost);
       }
-      // Une fois l'événement créé, on navigue vers l'écran du fil d'actualité
-      navigation.goBack();
+      if (post.image !== "") {
+        setLoading(true);
+        firestoreService.storeImage(post.image).then((res) => {
+          const uploadTask = uploadBytesResumable(res.storageRef, res.blob);
+          uploadTask.on(
+            "state_changed",
+            () => {},
+            (error) => {
+              console.log("Error", error.message);
+              setLoading(false);
+            },
+            () => {
+              // Handle successful uploads on complete
+              getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                nvPost.image = downloadURL;
+                setLoading(false);
+                console.log("nvpost", nvPost);
+                firestoreService.addPost(nvPost);
+                navigation.goBack();
+              });
+            }
+          );
+        });
+      } else {
+        console.log("nvpost", nvPost);
+        firestoreService.addPost(nvPost);
+        navigation.goBack();
+      }
     } else {
       Alert.alert("Erreur", "Le post doit au moins contenir un titre");
     }
@@ -138,25 +153,7 @@ export default function AddPost({ navigation }: AddPostScreenNP) {
     });
 
     if (!result.canceled) {
-      setLoading(true);
-      firestoreService.storeImage(result.assets[0].uri).then((res) => {
-        const uploadTask = uploadBytesResumable(res.storageRef, res.blob);
-        uploadTask.on(
-          "state_changed",
-          () => {},
-          (error) => {
-            console.log("Error", error.message);
-            setLoading(false);
-          },
-          () => {
-            // Handle successful uploads on complete
-            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-              setPost({ ...post, image: downloadURL });
-              setLoading(false);
-            });
-          }
-        );
-      });
+      setPost({ ...post, image: result.assets[0].uri });
     }
   };
 

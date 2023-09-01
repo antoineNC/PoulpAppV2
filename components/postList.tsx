@@ -28,7 +28,7 @@ export default function PostList(props: {
   });
 
   // Fonction appelée lors de la suppression d'un post
-  const removePost = (idPost?: string) => {
+  const removePost = (post?: Post) => {
     // Une alerte s'affiche pour confirmer la suppression
     Alert.alert(
       "Attention",
@@ -38,8 +38,10 @@ export default function PostList(props: {
           text: "Oui",
           onPress: () => {
             // Si l'utilisateur veut effectivement supprimer le post, on fait appel au firestoreService
-            if (idPost) {
-              firestoreService.removePost(idPost);
+            if (post) {
+              if (post.image !== "")
+                firestoreService.deleteImageFromStorage(post.image);
+              firestoreService.removePost(post.id);
             }
             // Si l'utilisateur supprime le post depuis le "pop-up" (postDisplayed), alors on ferme le modal
             if (isVisible == true) {

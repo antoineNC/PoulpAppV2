@@ -18,6 +18,7 @@ import {
   Timestamp,
 } from "firebase/firestore";
 import {
+  deleteObject,
   getDownloadURL,
   getStorage,
   ref,
@@ -222,6 +223,19 @@ class FirestoreService {
     const blob = await response.blob();
     const storageRef = ref(this.storage, "ImgPosts/" + new Date().getTime());
     return { storageRef, blob };
+  }
+
+  async deleteImageFromStorage(url: string) {
+    const deleteRef = ref(this.storage, url);
+    // Delete the file
+    deleteObject(deleteRef)
+      .then(() => {
+        return;
+      })
+      .catch((error) => {
+        Alert.alert("Erreur", "L'image n'a pas pu être supprimée.\n" + error);
+        return;
+      });
   }
 
   // ============= BUREAU ===========

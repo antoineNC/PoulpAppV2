@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 
 type Props = {
   post: Post;
-  removePost: (id: string) => void;
+  removePost: (post: Post) => void;
   modifPost: (post: Post) => void;
 };
 
@@ -57,7 +57,7 @@ export default function PostItem({ post, removePost, modifPost }: Props) {
                   flexDirection: "row",
                 }}
               >
-                <TouchableOpacity onPress={() => removePost(post.id)}>
+                <TouchableOpacity onPress={() => removePost(post)}>
                   <Icon
                     style={{ margin: 10, marginRight: 15 }}
                     size={20}

@@ -9,7 +9,7 @@ import { ScrollView } from "react-native-gesture-handler";
 
 type Props = {
   post: Post;
-  removePost: (id: string) => void;
+  removePost: (post: Post) => void;
   modifPost: (post: Post) => void;
   onPressClose: () => void;
   navigation: any;
@@ -124,7 +124,7 @@ export default function PostDisplayed({
         {editing ? (
           <View style={{ flexDirection: "row" }}>
             <TouchableOpacity
-              onPress={() => removePost(post.id)}
+              onPress={() => removePost(post)}
               style={postDisStyle.appButtonContainer}
             >
               <Icon

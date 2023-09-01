@@ -18,6 +18,7 @@ import * as ImagePicker from "expo-image-picker";
 import { Icon } from "@rneui/themed";
 import Tag from "../../components/tag";
 import { ModifPostScreenNavProp } from "../../navigation/types";
+import { getDownloadURL, uploadBytesResumable } from "firebase/storage";
 
 export default function ModifPostFamille({
   navigation,
@@ -28,24 +29,48 @@ export default function ModifPostFamille({
   const [timePEnd, setTimePEnd] = useState(false);
   const [datePStart, setDatePStart] = useState(false);
   const [datePEnd, setDatePEnd] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   // Fonction appellée au clic sur le bouton 'Modifier le post'
   // Fait appel au firestoreService pour modifier le post en question
   const modifPost = () => {
-    // Si c'est un événement, on transmet les propriétés correspondantes
-    if (post.visibleCal == true) {
-      firestoreService.modifPost(post);
-    }
-    // Si ce n'est pas un événement, on remplit les champs correspondant à un événement par ""
-    // (sinon, la date d'aujourd'hui serait enregistrée par défaut)
-    else {
-      var nvPost = post;
+    var nvPost = post;
+    if (post.visibleCal === false) {
+      // Si ce n'est pas un événement, on remplit les champs correspondant à un événement par ""
+      // (sinon, la date d'aujourd'hui serait enregistrée par défaut)
       nvPost.date = ["", "", "", ""];
-      setPost(nvPost);
-      firestoreService.modifPost(nvPost);
     }
-
-    navigation.navigate("FeedFamille");
+    if (
+      post.image !== "" &&
+      !post.image.startsWith("https://firebasestorage.googleapis.com")
+    ) {
+      setLoading(true);
+      if (route.params.post.image !== "")
+        firestoreService.deleteImageFromStorage(route.params.post.image);
+      firestoreService.storeImage(post.image).then((res) => {
+        const uploadTask = uploadBytesResumable(res.storageRef, res.blob);
+        uploadTask.on(
+          "state_changed",
+          () => {},
+          (error) => {
+            console.log("Error", error.message);
+            setLoading(false);
+          },
+          () => {
+            // Handle successful uploads on complete
+            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+              nvPost.image = downloadURL;
+              setLoading(false);
+              firestoreService.modifPost(nvPost);
+              navigation.navigate("FeedFamille");
+            });
+          }
+        );
+      });
+    } else {
+      firestoreService.modifPost(nvPost);
+      navigation.navigate("FeedFamille");
+    }
   };
 
   // Permet d'ajouter un tag à la liste
@@ -81,7 +106,7 @@ export default function ModifPostFamille({
   // Le chemin d'accès de l'image choisie est enregistrée dans le state
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
