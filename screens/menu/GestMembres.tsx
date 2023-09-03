@@ -38,6 +38,7 @@ export default function GestMembres({ navigation, route }: GestMembresProps) {
 
   const updateBureau = async () => {
     await firestoreService.updateBureau(bureau);
+    navigation.goBack();
   };
 
   const addMembre = () => {

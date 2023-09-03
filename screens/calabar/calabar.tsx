@@ -4,7 +4,9 @@ import styles from "../../theme/styles";
 function SettingsScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>This is the Calabar screen</Text>
+      <Text style={[styles.text, { color: "white" }]}>
+        This is the Calabar screen (WIP)
+      </Text>
     </View>
   );
 }

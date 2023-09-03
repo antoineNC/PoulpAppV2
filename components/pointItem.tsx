@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, StyleSheet, TouchableOpacity, Text, Modal } from "react-native";
 import { Icon } from "@rneui/themed";
 import firestoreService from "../service/firestore.service";
@@ -15,6 +15,13 @@ export default function PointItem({
   removeEvent,
   modifEvent,
 }: PointItemProps) {
+  const [editor, setEditor] = useState<string | null>();
+  useEffect(() => {
+    async () => {
+      const userId = await firestoreService.getId();
+      setEditor(userId);
+    };
+  }, []);
   return (
     <View style={styles.postContainer}>
       <View style={styles.headerContainer}>
@@ -24,7 +31,7 @@ export default function PointItem({
         </View>
 
         {/*Si l'utilisateur est le créateur du post, alors on affiche les boutons de suppression et modification */}
-        {firestoreService.getAsso() == "BDF" ? (
+        {editor === "BDF" ? (
           <View style={styles.optionButtons}>
             <TouchableOpacity onPress={() => removeEvent(point.id)}>
               <Icon

@@ -2,7 +2,6 @@ import { TouchableOpacity, View, Text, FlatList, Image } from "react-native";
 import { Post } from "../service/collecInterface";
 import { postDisStyle } from "../theme/styles";
 import { Icon } from "@rneui/themed";
-import firestoreService from "../service/firestore.service";
 import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ScrollView } from "react-native-gesture-handler";
@@ -22,18 +21,17 @@ export default function PostDisplayed({
   onPressClose,
   navigation,
 }: Props) {
-  const [editing, setEditing] = useState(true);
+  const [editing, setEditing] = useState(false);
 
-  // ==== IMPORTANT, check si l'utlisateur est bien l'éditeur du post
-  // useEffect(() => {
-  //   const isEditor = async () => {
-  //     const userId = await AsyncStorage.getItem("sessionId");
-  //     if (userId == post.editor) {
-  //       setEditing(true);
-  //     }
-  //   };
-  //   isEditor();
-  // }, []);
+  useEffect(() => {
+    const isEditor = async () => {
+      const userId = await AsyncStorage.getItem("sessionId");
+      if (userId == post.editor) {
+        setEditing(true);
+      }
+    };
+    isEditor();
+  }, []);
 
   // Permet de récupérer le chemin d'accès de l'image associé à l'association qui a créé le post
   const getImagePath = () => {

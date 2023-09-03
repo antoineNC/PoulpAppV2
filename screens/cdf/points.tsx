@@ -23,10 +23,9 @@ export default function PointScreen({ navigation }: PointScreenNavProp) {
     firestoreService.listenEvent((listPoints) => setPoints(listPoints));
     // On récupère l'utilisateur actuel de la session, et on regarde si c'est un admin ou non
     firestoreService.getId().then((response) => {
-      // if (response === "BDF") {
-      //   setIsBdf(true);
-      // }
-      setIsBdf(true);
+      if (response === "BDF") {
+        setIsBdf(true);
+      }
     });
   }, []);
 
@@ -84,16 +83,6 @@ export default function PointScreen({ navigation }: PointScreenNavProp) {
   };
   return (
     <View style={styles.mainContainer}>
-      {isBdf ? (
-        <TouchableOpacity
-          onPress={() => navigation.navigate("AddPoints")}
-          style={styles.floatingButton}
-        >
-          <Text style={{ color: "white", fontSize: 17 }}>
-            Ajouter des points
-          </Text>
-        </TouchableOpacity>
-      ) : null}
       <BarChart
         data={{
           labels: ["Bleu", "Jaune", "Orange", "Rouge", "Vert"],
@@ -125,7 +114,16 @@ export default function PointScreen({ navigation }: PointScreenNavProp) {
           alignSelf: "center",
         }}
       />
-
+      {isBdf ? (
+        <TouchableOpacity
+          onPress={() => navigation.navigate("AddPoints")}
+          style={styles.floatingButton}
+        >
+          <Text style={{ color: "#52234E", fontSize: 17 }}>
+            Ajouter des points
+          </Text>
+        </TouchableOpacity>
+      ) : null}
       <FlatList<Points>
         style={styles.list}
         showsVerticalScrollIndicator={false}
@@ -145,16 +143,15 @@ export default function PointScreen({ navigation }: PointScreenNavProp) {
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    alignItems: "center",
   },
   floatingButton: {
-    backgroundColor: "#52234E",
+    backgroundColor: "white",
     borderRadius: 10,
     paddingVertical: 10,
     paddingHorizontal: 10,
     marginTop: 10,
+    marginHorizontal: 10,
     alignItems: "center",
-    justifyContent: "center",
   },
   list: {
     width: Dimensions.get("window").width,

@@ -17,7 +17,7 @@ export default function PartenariatDisp(props: {
   return (
     <View style={styles.container}>
       <Icon
-        style={{ alignSelf: "flex-end", marginRight: 20 }}
+        style={{ alignSelf: "flex-end", marginRight: 20, marginTop: 20 }}
         name="close"
         type="simple-line-icon"
         color={"#52234E"}

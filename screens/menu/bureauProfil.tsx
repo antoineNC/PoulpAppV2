@@ -130,7 +130,14 @@ export default function BureauProfil({
               <TouchableOpacity
                 onPress={() => Linking.openURL("mailto:" + bureau.mail)}
               >
-                <Text style={styles.descriptionProfil}>{bureau.mail}</Text>
+                <Text
+                  style={[
+                    styles.descriptionProfil,
+                    { color: "blue", fontWeight: "bold" },
+                  ]}
+                >
+                  {bureau.mail}
+                </Text>
               </TouchableOpacity>
               <Text style={styles.descriptionProfil}>{bureau.description}</Text>
             </View>
@@ -149,7 +156,7 @@ export default function BureauProfil({
                     name="plussquareo"
                     type="antdesign"
                     size={70}
-                    color={"grey"}
+                    color={"#52234E"}
                   />
                 </View>
               </TouchableOpacity>
@@ -170,7 +177,7 @@ export default function BureauProfil({
                     name="plussquareo"
                     type="antdesign"
                     size={70}
-                    color={"grey"}
+                    color={"#52234E"}
                   />
                 </View>
               </TouchableOpacity>

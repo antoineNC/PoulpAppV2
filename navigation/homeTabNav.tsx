@@ -15,7 +15,7 @@ export default function HomeTabNav() {
     <HomeTab.Navigator
       id="home"
       initialRouteName="FeedStack"
-      sceneContainerStyle={{ backgroundColor: "white" }}
+      sceneContainerStyle={{ backgroundColor: "#52234E" }}
       screenOptions={{
         headerShown: false,
         tabBarActiveTintColor: "white",
@@ -63,7 +63,6 @@ export default function HomeTabNav() {
         options={() => ({
           tabBarLabel: "Coupe des familles",
           tabBarIcon: (props) => (
-            // <Image source={require("../image/bdf.png")} />
             <Icon
               name="trophy"
               type="font-awesome"

@@ -2,7 +2,7 @@
   "expo": {
     "name": "PoulpAppV2",
     "slug": "PoulpAppV2",
-    "version": "1.0.0",
+    "version": "0.0.1",
     "orientation": "portrait",
     "icon": "./image/logo.png",
     "userInterfaceStyle": "light",
@@ -17,7 +17,7 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier":"com.ensc.poulpapp"
+      "bundleIdentifier": "com.ensc.poulpapp"
     },
     "android": {
       "package": "com.ensc.poulpapp",

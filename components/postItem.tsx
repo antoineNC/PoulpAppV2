@@ -13,18 +13,17 @@ type Props = {
 };
 
 export default function PostItem({ post, removePost, modifPost }: Props) {
-  const [editing, setEditing] = useState(true);
+  const [editing, setEditing] = useState(false);
 
-  // ==== IMPORTANT, check si l'utlisateur est bien l'éditeur du post
-  // useEffect(() => {
-  //   const isEditor = async () => {
-  //     const userId = await AsyncStorage.getItem("sessionId");
-  //     if (userId == post.editor) {
-  //       setEditing(true);
-  //     }
-  //   };
-  //   isEditor();
-  // }, []);
+  useEffect(() => {
+    const isEditor = async () => {
+      const userId = await AsyncStorage.getItem("sessionId");
+      if (userId == post.editor) {
+        setEditing(true);
+      }
+    };
+    isEditor();
+  }, []);
 
   const getImagePath = () => {
     if (post.editor == "BDE") {

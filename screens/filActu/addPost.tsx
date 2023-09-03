@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Alert,
   ScrollView,
@@ -55,6 +55,13 @@ export default function AddPost({ navigation }: AddPostScreenNP) {
   const [datePStart, setDatePStart] = useState(false);
   const [datePEnd, setDatePEnd] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [editor, setEditor] = useState<string | null>();
+  useEffect(() => {
+    async () => {
+      const userId = await firestoreService.getId();
+      setEditor(userId);
+    };
+  }, []);
 
   const listTags = [
     { label: "BDE", value: "BDE" },
@@ -70,44 +77,47 @@ export default function AddPost({ navigation }: AddPostScreenNP) {
     { label: "AGE", value: "AGE" },
     { label: "Gazette", value: "Gazette" },
   ];
-  // ATTENTION --- MODIF POUR AWAIT L'URL
   const addPost = () => {
     // Vérification si le post n'est pas vide (il doit contenir au moins un titre)
     if (post.titre != "") {
       var nvPost = post;
-      nvPost.editor = firestoreService.getAsso();
-      if (post.visibleCal === false) {
-        // Si ce n'est pas un événement, on remplit les champs correspondant à un événement par ""
-        // (sinon, la date d'aujourd'hui serait enregistrée par défaut)
-        nvPost.date = ["", "", "", ""];
-      }
-      if (post.image !== "") {
-        setLoading(true);
-        firestoreService.storeImage(post.image).then((res) => {
-          const uploadTask = uploadBytesResumable(res.storageRef, res.blob);
-          uploadTask.on(
-            "state_changed",
-            () => {},
-            (error) => {
-              console.log("Error", error.message);
-              setLoading(false);
-            },
-            () => {
-              // Handle successful uploads on complete
-              getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                nvPost.image = downloadURL;
+      if (editor) {
+        nvPost.editor = editor;
+        if (post.visibleCal === false) {
+          // Si ce n'est pas un événement, on remplit les champs correspondant à un événement par ""
+          // (sinon, la date d'aujourd'hui serait enregistrée par défaut)
+          nvPost.date = ["", "", "", ""];
+        }
+        if (post.image !== "") {
+          setLoading(true);
+          firestoreService.storeImage(post.image).then((res) => {
+            const uploadTask = uploadBytesResumable(res.storageRef, res.blob);
+            uploadTask.on(
+              "state_changed",
+              () => {},
+              (error) => {
+                console.log("Error", error.message);
                 setLoading(false);
-                console.log("nvpost", nvPost);
-                firestoreService.addPost(nvPost);
-                navigation.goBack();
-              });
-            }
-          );
-        });
+              },
+              () => {
+                // Handle successful uploads on complete
+                getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                  nvPost.image = downloadURL;
+                  setLoading(false);
+                  console.log("nvpost", nvPost);
+                  firestoreService.addPost(nvPost);
+                  navigation.goBack();
+                });
+              }
+            );
+          });
+        } else {
+          console.log("nvpost", nvPost);
+          firestoreService.addPost(nvPost);
+          navigation.goBack();
+        }
       } else {
-        console.log("nvpost", nvPost);
-        firestoreService.addPost(nvPost);
-        navigation.goBack();
+        Alert.alert("Erreur", "L'identifiant n'a pas pu être récupéré");
       }
     } else {
       Alert.alert("Erreur", "Le post doit au moins contenir un titre");

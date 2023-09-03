@@ -79,7 +79,7 @@ function MenuScreen({ navigation }: MenuScreenNavProp) {
           }}
         />
         <View style={{ flex: 1, justifyContent: "center", paddingLeft: 10 }}>
-          <Text>{nom}</Text>
+          <Text style={{ fontWeight: "bold", fontSize: 17 }}>{nom}</Text>
           {typeof info !== "string" ? (
             <View style={{ flexDirection: "row" }}>
               <Text>Adhésions : </Text>

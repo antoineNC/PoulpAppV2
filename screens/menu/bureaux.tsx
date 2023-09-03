@@ -9,7 +9,6 @@ export default function Bureaux({ navigation }: BureauxScreenNavProp) {
     <View
       style={{
         flex: 1,
-        // paddingTop: Dimensions.get("window").height * 0.1,
       }}
     >
       <View style={{ flexDirection: "row" }}>

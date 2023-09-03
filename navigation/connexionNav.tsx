@@ -8,7 +8,13 @@ import LogOut from "../screens/connexion/logOut";
 const ConnexionStack = createStackNavigator<RootStackParamList>();
 export default function ConnexionNav() {
   return (
-    <ConnexionStack.Navigator screenOptions={{ headerTitleAlign: "center" }}>
+    <ConnexionStack.Navigator
+      screenOptions={{
+        headerTitleAlign: "center",
+        headerTintColor: "white",
+        headerStyle: { backgroundColor: "#52234E" },
+      }}
+    >
       <ConnexionStack.Screen name="Connexion" component={LogIn} />
       <ConnexionStack.Screen name="Inscription" component={SignUp} />
       <ConnexionStack.Screen

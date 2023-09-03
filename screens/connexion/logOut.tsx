@@ -38,8 +38,8 @@ export default function LogOut({ navigation }: DecoScreenNavProp) {
   }, []);
 
   const logout = async () => {
-    // await AsyncStorage.clear();
-    // console.log("clear");
+    await AsyncStorage.clear();
+    console.log("clear");
     const authJSON = await AsyncStorage.getItem("auth");
     console.log("auth", authJSON);
     if (authJSON) {

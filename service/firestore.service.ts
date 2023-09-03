@@ -106,17 +106,6 @@ class FirestoreService {
           "Déjà inscrit",
           "Le compte selectionné est déjà inscrit sur l'application. Vous pouvez vous connecter avec celui-ci."
         );
-        // } else if (mail === "aneyracontr@ensc.fr") {
-        // TEMPORAIRE A SUPPRIMER
-        // await setDoc(doc(this.db, "Bureau", "JE"), {
-        //   mail: userInfo.email,
-        //   logo: "",
-        //   nom: userInfo.name,
-        //   description: "",
-        //   membres: [],
-        // });
-        // await AsyncStorage.setItem("sessionId", "JE");
-        // added = true;
       } else if (["BDE", "BDS", "BDA", "BDF", "JE"].includes(bureau)) {
         // crétaion du document lié au nouveau Bureau
         await setDoc(doc(this.db, "Bureau", bureau), {
@@ -239,13 +228,6 @@ class FirestoreService {
   }
 
   // ============= BUREAU ===========
-
-  getAsso(): string {
-    const getid = async () => {
-      const userId = await AsyncStorage.getItem("sessionId");
-    };
-    return "BDF";
-  }
 
   listenAsso(docBureau: string, setState: (asso: Bureau) => void): () => void {
     return onSnapshot(doc(this.db, "Bureau", docBureau), (documentSnapshot) => {

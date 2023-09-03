@@ -35,28 +35,33 @@ import ClubAdd from "../screens/menu/club/clubAdd";
 import Partenariats from "../screens/menu/searchPartenariat";
 import ParteModif from "../screens/menu/partenariat/parteModif";
 import ParteAdd from "../screens/menu/partenariat/parteAdd";
-import GestMembres from "../screens/menu/GestMembres";
-
-import Constants from "expo-constants";
+import GestMembres from "../screens/menu/gestMembres";
 
 export const deconnexion = (navigation: any) => {
   navigation.navigate("Deconnexion");
 };
 
-const screenOptions: StackNavigationOptions = {
-  headerTintColor: "#fff",
-  headerStyle: { backgroundColor: "#52234E" },
-};
+const screenOptions: StackNavigationOptions = {};
 
 const FeedStack = createStackNavigator<FeedStackParamList>();
 export const FeedStackNav = () => {
   return (
-    <FeedStack.Navigator screenOptions={screenOptions}>
+    <FeedStack.Navigator
+      screenOptions={{
+        headerTintColor: "#fff",
+        headerStyle: {
+          backgroundColor: "#52234E",
+          elevation: 0, // remove shadow on Android
+          shadowOpacity: 0, // remove shadow on iOS
+        },
+      }}
+    >
       <FeedStack.Screen
         name="Feed"
         component={Feed}
         options={({ navigation }) => ({
           title: "Fil d'actualité",
+          cardStyle: { backgroundColor: "#52234E" },
           headerLeft: () => null,
           headerRight: () => (
             <TouchableOpacity
@@ -95,7 +100,17 @@ export const FeedStackNav = () => {
 const CalabarStack = createStackNavigator();
 export const CalabarStackNav = () => {
   return (
-    <CalabarStack.Navigator screenOptions={screenOptions}>
+    <CalabarStack.Navigator
+      screenOptions={{
+        headerTintColor: "#fff",
+        headerStyle: {
+          backgroundColor: "#52234E",
+          elevation: 0, // remove shadow on Android
+          shadowOpacity: 0, // remove shadow on iOS
+        },
+        cardStyle: { backgroundColor: "#52234E" },
+      }}
+    >
       <CalabarStack.Screen name="Calabar" component={Calabar} />
     </CalabarStack.Navigator>
   );
@@ -106,19 +121,18 @@ export const CDFTabNav = () => {
   return (
     <CoupeFamillesTab.Navigator
       screenOptions={{
-        tabBarIndicatorStyle: { backgroundColor: "#52234E" },
+        tabBarIndicatorStyle: { backgroundColor: "white" },
         tabBarActiveTintColor: "white",
         tabBarInactiveTintColor: "darkgrey",
         tabBarLabelStyle: {
           fontSize: 11,
           fontWeight: "bold",
-          backgroundColor: "#52234E",
           padding: 7,
           paddingHorizontal: 15,
           borderRadius: 10,
         },
         tabBarStyle: {
-          marginTop: Constants.statusBarHeight,
+          backgroundColor: "#52234E",
           elevation: 0,
         },
       }}
@@ -140,11 +154,23 @@ export const CDFTabNav = () => {
 const FeedFamStack = createStackNavigator<FeedFamStackParamList>();
 export const FeedFamStackNav = () => {
   return (
-    <FeedFamStack.Navigator>
+    <FeedFamStack.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: "#52234E",
+          elevation: 0, // remove shadow on Android
+          shadowOpacity: 0, // remove shadow on iOS
+        },
+        headerTintColor: "white",
+      }}
+    >
       <FeedFamStack.Screen
         name="FeedFamille"
         component={FeedFamille}
-        options={{ headerShown: false }}
+        options={{
+          headerShown: false,
+          cardStyle: { backgroundColor: "#52234E" },
+        }}
       />
       <FeedFamStack.Screen
         name="ModifPostFamille"
@@ -158,11 +184,23 @@ export const FeedFamStackNav = () => {
 const PointStack = createStackNavigator<PointStackParamList>();
 export const PointStackNav = () => {
   return (
-    <PointStack.Navigator>
+    <PointStack.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: "#52234E",
+          elevation: 0, // remove shadow on Android
+          shadowOpacity: 0, // remove shadow on iOS
+        },
+        headerTintColor: "white",
+      }}
+    >
       <PointStack.Screen
         name="Points"
         component={Points}
-        options={{ headerShown: false }}
+        options={{
+          headerShown: false,
+          cardStyle: { backgroundColor: "#52234E" },
+        }}
       />
       <PointStack.Screen
         name="AddPoints"
@@ -181,7 +219,16 @@ export const PointStackNav = () => {
 const MenuStack = createStackNavigator<MenuStackParamList>();
 export const MenuStackNav = () => {
   return (
-    <MenuStack.Navigator screenOptions={screenOptions}>
+    <MenuStack.Navigator
+      screenOptions={{
+        headerTintColor: "#fff",
+        headerStyle: {
+          backgroundColor: "#52234E",
+          elevation: 0, // remove shadow on Android
+          shadowOpacity: 0, // remove shadow on iOS
+        },
+      }}
+    >
       <MenuStack.Screen
         name="Menu"
         component={Menu}
@@ -192,7 +239,7 @@ export const MenuStackNav = () => {
               onPress={() => deconnexion(navigation)}
               style={styles.quitButton}
             >
-              <Icon name="sign-out" type="font-awesome" color="#52234E" />
+              <Icon name="sign-out" type="font-awesome" color="white" />
             </TouchableOpacity>
           ),
         })}
