@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import {
   Text,
   StyleSheet,
@@ -13,29 +13,22 @@ import firestoreService from "../service/firestore.service";
 import { Club } from "../service/collecInterface";
 import ClubDisp from "./clubDisp";
 import { Icon } from "@rneui/themed";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { CurrentUserContext } from "../service/context";
 
 export default function ClubList(props: {
   bureau: "BDE" | "BDS" | "BDA" | "JE";
   navigation: { navigate: (arg0: string, arg1: { club: Club }) => void };
 }) {
+  const { currentUser } = useContext(CurrentUserContext);
   const [clubs, setClubs] = useState<Club[]>();
   const [clubDisp, setClubDisp] = useState<Club>();
   const [modal, setModal] = useState(false);
-  const [editor, setEditing] = useState(false);
 
   useEffect(() => {
     const getData = async () => {
       firestoreService.listenClubs((clubs) => setClubs(clubs), props.bureau);
     };
     getData();
-    const isEditor = async () => {
-      const userId = await AsyncStorage.getItem("sessionId");
-      if (userId == props.bureau) {
-        setEditing(true);
-      }
-    };
-    isEditor();
   }, []);
 
   const showModal = (item: Club) => {
@@ -81,7 +74,7 @@ export default function ClubList(props: {
                   }}
                 />
                 <Text style={styles.nomText}>{item.nom}</Text>
-                {editor ? (
+                {currentUser.sessionId === props.bureau ? (
                   <>
                     <TouchableOpacity
                       style={{

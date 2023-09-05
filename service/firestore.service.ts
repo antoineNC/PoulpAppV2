@@ -17,14 +17,7 @@ import {
   orderBy,
   Timestamp,
 } from "firebase/firestore";
-import {
-  deleteObject,
-  getDownloadURL,
-  getStorage,
-  ref,
-  uploadBytesResumable,
-  UploadTask,
-} from "firebase/storage";
+import { deleteObject, getStorage, ref } from "firebase/storage";
 import {
   Etudiant,
   Post,
@@ -138,7 +131,10 @@ class FirestoreService {
     return added;
   }
 
-  async LogIn(id: string, mail: string): Promise<boolean> {
+  async LogIn(
+    id: string,
+    mail: string
+  ): Promise<{ exists: boolean; sessionId: string; isAdmin: number }> {
     var exists = true;
     // chercher si l'identifiant existe dans Bureau
     const bureau = this.convertEmailToAsso(mail);
@@ -149,23 +145,27 @@ class FirestoreService {
       const docRef = doc(this.db, "Etudiant", id);
       const docSnap = await getDoc(docRef);
       if (!docSnap.exists()) {
-        exists = false;
-        Alert.alert(
-          "Erreur",
-          "Le compte selectionné n'est pas inscrit sur l'application.\nAttention, le compte doit avoir une adresse 'ensc.fr'."
-        );
+        const docRef = doc(this.db, "Admins", mail);
+        const docSnap = await getDoc(docRef);
+        if (!docSnap.exists()) {
+          exists = false;
+          Alert.alert(
+            "Erreur",
+            "Le compte selectionné n'est pas inscrit sur l'application.\nAttention, le compte doit avoir une adresse 'ensc.fr'."
+          );
+        } else {
+          await AsyncStorage.setItem("sessionId", mail);
+          return { exists, sessionId: mail, isAdmin: 0 };
+        }
       } else {
         await AsyncStorage.setItem("sessionId", id);
+        return { exists, sessionId: id, isAdmin: 2 };
       }
     } else {
       await AsyncStorage.setItem("sessionId", bureau);
+      return { exists, sessionId: bureau, isAdmin: 1 };
     }
-    return exists;
-  }
-
-  async LoginTest(id: string): Promise<boolean> {
-    await AsyncStorage.setItem("sessionId", id);
-    return true;
+    return { exists, sessionId: "", isAdmin: 2 };
   }
 
   async getId() {
@@ -185,6 +185,13 @@ class FirestoreService {
     if (typeof id === "string") {
       if (await this.checkIfAdmin()) {
         let imagePath = this.getImagePath(id);
+        if (id === "antoineney.ac@gmail.com") {
+          return setState({
+            nom: "admin antoine",
+            photo: "",
+            info: "description",
+          });
+        }
         return this.listenAsso(id, (bureau) =>
           setState({
             nom: bureau.nom,
@@ -257,6 +264,12 @@ class FirestoreService {
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
         isAdmin = true;
+      } else {
+        const docRef = doc(this.db, "Admins", userId);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          isAdmin = true;
+        }
       }
     }
     return isAdmin;

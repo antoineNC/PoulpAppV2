@@ -2,9 +2,8 @@ import { View, Text, Image, TouchableOpacity, FlatList } from "react-native";
 import { postStyle } from "../theme/styles";
 import { Icon } from "@rneui/themed";
 import { Post } from "../service/collecInterface";
-import firestoreService from "../service/firestore.service";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useEffect, useState } from "react";
+import { useContext } from "react";
+import { CurrentUserContext } from "../service/context";
 
 type Props = {
   post: Post;
@@ -13,17 +12,7 @@ type Props = {
 };
 
 export default function PostItem({ post, removePost, modifPost }: Props) {
-  const [editing, setEditing] = useState(false);
-
-  useEffect(() => {
-    const isEditor = async () => {
-      const userId = await AsyncStorage.getItem("sessionId");
-      if (userId == post.editor) {
-        setEditing(true);
-      }
-    };
-    isEditor();
-  }, []);
+  const { currentUser } = useContext(CurrentUserContext);
 
   const getImagePath = () => {
     if (post.editor == "BDE") {
@@ -50,7 +39,8 @@ export default function PostItem({ post, removePost, modifPost }: Props) {
             <Text style={postStyle.titreText}>{post.titre}</Text>
 
             {/*Si l'utilisateur est le créateur du post, alors on affiche les boutons de suppression et modification */}
-            {editing ? (
+            {currentUser.isAdmin === 0 ||
+            currentUser.sessionId === post.editor ? (
               <View
                 style={{
                   flexDirection: "row",

@@ -1,10 +1,11 @@
-import { TouchableOpacity, View, Text, FlatList, Image } from "react-native";
+import { TouchableOpacity, View, Text, Image } from "react-native";
 import { Post } from "../service/collecInterface";
 import { postDisStyle } from "../theme/styles";
 import { Icon } from "@rneui/themed";
-import { useEffect, useState } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useEffect, useState, useContext } from "react";
 import { ScrollView } from "react-native-gesture-handler";
+import firestoreService from "../service/firestore.service";
+import { CurrentUserContext } from "../service/context";
 
 type Props = {
   post: Post;
@@ -21,17 +22,7 @@ export default function PostDisplayed({
   onPressClose,
   navigation,
 }: Props) {
-  const [editing, setEditing] = useState(false);
-
-  useEffect(() => {
-    const isEditor = async () => {
-      const userId = await AsyncStorage.getItem("sessionId");
-      if (userId == post.editor) {
-        setEditing(true);
-      }
-    };
-    isEditor();
-  }, []);
+  const { currentUser } = useContext(CurrentUserContext);
 
   // Permet de récupérer le chemin d'accès de l'image associé à l'association qui a créé le post
   const getImagePath = () => {
@@ -119,7 +110,7 @@ export default function PostDisplayed({
         ) : null}
 
         {/*Si l'utilisateur est le créateur du post, alors on affiche les boutons de suppression et modification */}
-        {editing ? (
+        {currentUser.isAdmin === 0 || currentUser.sessionId === post.editor ? (
           <View style={{ flexDirection: "row" }}>
             <TouchableOpacity
               onPress={() => removePost(post)}

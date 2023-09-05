@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Text,
   StyleSheet,
@@ -7,15 +7,13 @@ import {
   TouchableOpacity,
   Image,
   Modal,
-  Linking,
-  Dimensions,
   Alert,
 } from "react-native";
 import firestoreService from "../service/firestore.service";
 import { Partenariat } from "../service/collecInterface";
 import { Icon } from "@rneui/themed";
 import PartenariatDisp from "./parteDisp";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { CurrentUserContext } from "../service/context";
 
 export default function PartenariatList(props: {
   bureau: "BDE" | "BDS" | "BDA" | "JE";
@@ -23,10 +21,10 @@ export default function PartenariatList(props: {
     navigate: (arg0: string, arg1: { partenariat: Partenariat }) => void;
   };
 }) {
+  const { currentUser } = useContext(CurrentUserContext);
   const [partenariats, setPartenariats] = useState<Partenariat[]>();
   const [parteDisp, setParteDisp] = useState<Partenariat>();
   const [modal, setModal] = useState(false);
-  const [editor, setEditing] = useState(false);
 
   useEffect(() => {
     const getData = async () => {
@@ -36,13 +34,6 @@ export default function PartenariatList(props: {
       );
     };
     getData();
-    const isEditor = async () => {
-      const userId = await AsyncStorage.getItem("sessionId");
-      if (userId == props.bureau) {
-        setEditing(true);
-      }
-    };
-    isEditor();
   }, []);
 
   const showModal = (item: Partenariat) => {
@@ -88,7 +79,7 @@ export default function PartenariatList(props: {
                   }}
                 />
                 <Text style={styles.nomText}>{item.nom}</Text>
-                {editor ? (
+                {currentUser.sessionId === props.bureau ? (
                   <>
                     <TouchableOpacity
                       style={{

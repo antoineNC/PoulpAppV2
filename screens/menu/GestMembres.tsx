@@ -117,7 +117,7 @@ export default function GestMembres({ navigation, route }: GestMembresProps) {
               onChange={(item) => {
                 setSelectRole(item);
               }}
-              placeholder={"Selectionner"}
+              placeholder={"Selectionner un rôle"}
             />
           </View>
           <View style={{ marginVertical: 10 }}>
@@ -130,7 +130,7 @@ export default function GestMembres({ navigation, route }: GestMembresProps) {
               }}
               search
               searchPlaceholder="Chercher un.e étudiant.e"
-              placeholder={"Selectionner"}
+              placeholder={"Selectionner un.e étudiant.e"}
             />
           </View>
           <TouchableOpacity

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Text, View, TouchableOpacity } from "react-native";
 import { Icon } from "@rneui/themed";
 import styles from "../../theme/styles";
@@ -6,17 +6,14 @@ import { FeedScreenNavProp } from "../../navigation/types";
 import PostList from "../../components/postList";
 import { Post } from "../../service/collecInterface";
 import firestoreService from "../../service/firestore.service";
+import { CurrentUserContext } from "../../service/context";
 
 function FeedScreen({ navigation }: FeedScreenNavProp) {
-  const [isAdmin, setIsAdmin] = useState(false);
+  const { isAdmin } = useContext(CurrentUserContext).currentUser;
   const [posts, setPosts] = useState<Array<Post>>([]);
 
   useEffect(() => {
     firestoreService.listenPost((posts) => setPosts(posts));
-    firestoreService.checkIfAdmin().then((response) => {
-      console.log("admin?", response);
-      setIsAdmin(response);
-    });
   }, []);
 
   return (
@@ -24,7 +21,7 @@ function FeedScreen({ navigation }: FeedScreenNavProp) {
       <PostList posts={posts} navigation={navigation} />
 
       {/*Si c'est un admin, alors on affiche le bouton flottant, sinon rien (null)*/}
-      {isAdmin ? (
+      {isAdmin === 0 || isAdmin === 1 ? (
         <TouchableOpacity
           onPress={() => navigation.navigate("AddPost")}
           style={styles.floatingButton}

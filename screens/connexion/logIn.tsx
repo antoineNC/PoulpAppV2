@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Text, View, Image, TouchableOpacity, Button } from "react-native";
+import React, { useEffect, useContext } from "react";
+import { Text, View, Image, TouchableOpacity } from "react-native";
 import { LoginScreenNavProp } from "../../navigation/types";
 import * as WebBrowser from "expo-web-browser";
 import * as Google from "expo-auth-session/providers/google";
@@ -8,10 +8,12 @@ import firestoreService from "../../service/firestore.service";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import styles from "../../theme/styles";
 import { Icon } from "@rneui/themed";
+import { CurrentUserContext } from "../../service/context";
 
 WebBrowser.maybeCompleteAuthSession();
 
 export default function LogIn({ navigation, route }: LoginScreenNavProp) {
+  const { setCurrentUser } = useContext(CurrentUserContext);
   const [request, response, promptAsync] = Google.useAuthRequest({
     androidClientId:
       "427196722560-bfottqft64l1bvmclt6hr11dhaejkcd3.apps.googleusercontent.com",
@@ -36,11 +38,9 @@ export default function LogIn({ navigation, route }: LoginScreenNavProp) {
           );
         }
         const userInfo = await getUserInfo(response.authentication);
-        const exists = await firestoreService.LogIn(
-          userInfo.id,
-          userInfo.email
-        );
-        if (exists) {
+        const res = await firestoreService.LogIn(userInfo.id, userInfo.email);
+        if (res.exists) {
+          setCurrentUser({ sessionId: res.sessionId, isAdmin: res.isAdmin });
           navigation.navigate("Home", {
             screen: "FeedStack",
             params: { screen: "Feed" },
@@ -54,11 +54,18 @@ export default function LogIn({ navigation, route }: LoginScreenNavProp) {
 
   // useful when user want to connect again
   useEffect(() => {
-    console.log("useEffect2");
     const getPersistedAuth = async () => {
       const authJsonValue = await AsyncStorage.getItem("auth");
       const userJsonValue = await AsyncStorage.getItem("sessionId");
       if (authJsonValue != null && userJsonValue != null) {
+        console.log("useEffect2");
+        if (userJsonValue.endsWith("gmail.com")) {
+          console.log("useeffect2 admin");
+          setCurrentUser({ sessionId: userJsonValue, isAdmin: 0 });
+        } else if (userJsonValue === ("BDE" || "BDS" || "BDA" || "JE"))
+          setCurrentUser({ sessionId: userJsonValue, isAdmin: 1 });
+        else setCurrentUser({ sessionId: userJsonValue, isAdmin: 2 });
+
         navigation.navigate("Home", {
           screen: "FeedStack",
           params: { screen: "Feed" },
@@ -122,7 +129,7 @@ export default function LogIn({ navigation, route }: LoginScreenNavProp) {
           <Text style={{ color: "#57B9BB" }}>Je m'inscris !</Text>
         </TouchableOpacity>
         <View style={{ margin: 30 }}>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             onPress={async () => {
               const exists = await firestoreService.LoginTest("BDE");
               if (exists) {
@@ -134,7 +141,7 @@ export default function LogIn({ navigation, route }: LoginScreenNavProp) {
             }}
           >
             <Text>login test</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </View>
     </View>

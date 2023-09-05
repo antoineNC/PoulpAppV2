@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import {
   Text,
   View,
@@ -13,20 +13,15 @@ import PointItem from "../../components/pointItem";
 import firestoreService from "../../service/firestore.service";
 import { Points } from "../../service/collecInterface";
 import { PointScreenNavProp } from "../../navigation/types";
+import { CurrentUserContext } from "../../service/context";
 
 export default function PointScreen({ navigation }: PointScreenNavProp) {
+  const { currentUser } = useContext(CurrentUserContext);
   const [points, setPoints] = useState<Array<Points>>([]);
-  const [isBdf, setIsBdf] = useState(false);
 
   useEffect(() => {
     // On récupère la liste de posts à afficher et on les stocke dans le state
     firestoreService.listenEvent((listPoints) => setPoints(listPoints));
-    // On récupère l'utilisateur actuel de la session, et on regarde si c'est un admin ou non
-    firestoreService.getId().then((response) => {
-      if (response === "BDF") {
-        setIsBdf(true);
-      }
-    });
   }, []);
 
   // Fonction appelée lors de la suppression d'un post
@@ -114,7 +109,7 @@ export default function PointScreen({ navigation }: PointScreenNavProp) {
           alignSelf: "center",
         }}
       />
-      {isBdf ? (
+      {currentUser.isAdmin === 0 || currentUser.sessionId === "BDF" ? (
         <TouchableOpacity
           onPress={() => navigation.navigate("AddPoints")}
           style={styles.floatingButton}

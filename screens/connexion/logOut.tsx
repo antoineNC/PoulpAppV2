@@ -1,20 +1,9 @@
-import React, { useEffect, useState } from "react";
-import {
-  Text,
-  View,
-  Image,
-  TextInput,
-  TouchableOpacity,
-  Alert,
-  Button,
-  Platform,
-} from "react-native";
+import React, { useEffect } from "react";
+import { Text, View, Image } from "react-native";
 import { DecoScreenNavProp } from "../../navigation/types";
-import * as AuthSession from "expo-auth-session";
 import * as WebBrowser from "expo-web-browser";
 import * as Google from "expo-auth-session/providers/google";
 import { getUserInfo, refreshToken, revoke } from "../../service/googleAuth";
-import firestoreService from "../../service/firestore.service";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import styles from "../../theme/styles";
 
@@ -38,8 +27,8 @@ export default function LogOut({ navigation }: DecoScreenNavProp) {
   }, []);
 
   const logout = async () => {
-    await AsyncStorage.clear();
-    console.log("clear");
+    // await AsyncStorage.clear();
+    // console.log("clear");
     const authJSON = await AsyncStorage.getItem("auth");
     console.log("auth", authJSON);
     if (authJSON) {

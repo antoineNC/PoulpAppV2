@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import {
   Text,
   View,
@@ -11,6 +11,7 @@ import {
 import { MenuScreenNavProp } from "../../navigation/types";
 import Bouton from "../../components/button";
 import firestoreService from "../../service/firestore.service";
+import { CurrentUserContext } from "../../service/context";
 
 interface Profil {
   nom: string;
@@ -24,15 +25,11 @@ function MenuScreen({ navigation }: MenuScreenNavProp) {
     photo: "",
     info: "",
   });
-  const [isAdmin, setIsAdmin] = useState(false);
+  const { currentUser } = useContext(CurrentUserContext);
   useEffect(() => {
     // On récupère la liste de posts à afficher et on les stocke dans le state
     firestoreService.getProfile((profil) => {
       setProfil({ nom: profil.nom, photo: profil.photo, info: profil.info });
-    });
-    firestoreService.checkIfAdmin().then((response) => {
-      // setIsAdmin(true);
-      setIsAdmin(response);
     });
   }, []);
 
@@ -41,16 +38,14 @@ function MenuScreen({ navigation }: MenuScreenNavProp) {
   const info = profil.info;
 
   const modifProfile = () => {
-    firestoreService.getId().then((response) => {
-      if (response === ("BDE" || "BDS" || "BDA" || "JE")) {
-        navigation.navigate("BureauProfil", { idBureau: response });
-      } else {
-        Alert.alert(
-          "Une erreur est survenue",
-          "Il semblerait que le compte sur lequel vous êtes connectés ne correspond à l'identifiant de la session actuelle.\nVeuillez vous reconnecter ou contacter un administrateur."
-        );
-      }
-    });
+    if (currentUser.sessionId === ("BDE" || "BDS" || "BDA" || "JE")) {
+      navigation.navigate("BureauProfil", { idBureau: currentUser.sessionId });
+    } else {
+      Alert.alert(
+        "Une erreur est survenue",
+        "Il semblerait que le compte sur lequel vous êtes connectés ne corresponde pas à l'identifiant de la session actuelle.\nVeuillez vous reconnecter ou contacter un administrateur."
+      );
+    }
   };
   return (
     <ScrollView>
@@ -80,7 +75,9 @@ function MenuScreen({ navigation }: MenuScreenNavProp) {
         />
         <View style={{ flex: 1, justifyContent: "center", paddingLeft: 10 }}>
           <Text style={{ fontWeight: "bold", fontSize: 17 }}>{nom}</Text>
-          {typeof info !== "string" ? (
+          {currentUser.isAdmin === 0 || currentUser.isAdmin === 1 ? (
+            <Text>{info}</Text>
+          ) : (
             <View style={{ flexDirection: "row" }}>
               <Text>Adhésions : </Text>
               <FlatList
@@ -91,10 +88,8 @@ function MenuScreen({ navigation }: MenuScreenNavProp) {
                 )}
               />
             </View>
-          ) : (
-            <Text>{info}</Text>
           )}
-          {isAdmin ? (
+          {currentUser.isAdmin === 1 ? (
             <View style={{ marginTop: 10, alignItems: "flex-start" }}>
               <TouchableOpacity
                 style={{
@@ -117,7 +112,7 @@ function MenuScreen({ navigation }: MenuScreenNavProp) {
       <View style={{ paddingHorizontal: 20 }}>
         <Bouton screen="Bureaux" text="Bureaux" navigation={navigation} />
 
-        {!isAdmin ? (
+        {currentUser.isAdmin === 2 ? (
           <Bouton
             screen="Cartes"
             text="Mes cartes d'adhésions"
@@ -137,7 +132,7 @@ function MenuScreen({ navigation }: MenuScreenNavProp) {
           navigation={navigation}
         />
 
-        {!isAdmin ? (
+        {currentUser.isAdmin === 0 || currentUser.isAdmin === 2 ? (
           <Bouton
             screen="Notifications"
             text="Notifications"

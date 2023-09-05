@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import {
   View,
   Text,
@@ -15,14 +15,15 @@ import { Bureau, Etudiant, Role } from "../../service/collecInterface";
 import { BureauProfilNavProp } from "../../navigation/types";
 import ClubList from "../../components/clubList";
 import PartenariatList from "../../components/parteList";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Icon } from "@rneui/themed";
+import { CurrentUserContext } from "../../service/context";
 
 export default function BureauProfil({
   navigation,
   route,
 }: BureauProfilNavProp) {
   const { idBureau } = route.params;
+  const { currentUser } = useContext(CurrentUserContext);
   const [bureau, setBureau] = useState<Bureau>({
     nom: "Erreur",
     mail: "erreur",
@@ -35,7 +36,6 @@ export default function BureauProfil({
     { id: "", nom: "", prenom: "", adhesions: [], mail: "" },
   ]);
   const [roles, setRoles] = useState<Array<Role>>([{ idRole: "", role: "" }]);
-  const [editor, setEditing] = useState(false);
   const logo = firestoreService.getImagePath(idBureau);
 
   useEffect(() => {
@@ -44,13 +44,6 @@ export default function BureauProfil({
     });
     firestoreService.listenEtudiants((etus) => setEtus(etus));
     firestoreService.getAllRoles((roles) => setRoles(roles));
-    const isEditor = async () => {
-      const userId = await AsyncStorage.getItem("sessionId");
-      if (userId == idBureau) {
-        setEditing(true);
-      }
-    };
-    isEditor();
   }, [idBureau]);
 
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -88,7 +81,7 @@ export default function BureauProfil({
             style={{ width: 100, height: 100, resizeMode: "contain" }}
           />
 
-          {editor ? (
+          {currentUser.sessionId === idBureau ? (
             <View style={{ flex: 1, paddingHorizontal: 12, rowGap: 5 }}>
               <View style={styles.textInput}>
                 <TextInput
@@ -149,7 +142,7 @@ export default function BureauProfil({
           <Text style={styles.titretext}> Les clubs</Text>
           <View style={styles.separator} />
           <View style={{ flexDirection: "row" }}>
-            {editor ? (
+            {currentUser.sessionId === idBureau ? (
               <TouchableOpacity onPress={() => addClub(idBureau)}>
                 <View style={styles.addItem}>
                   <Icon
@@ -170,7 +163,7 @@ export default function BureauProfil({
           <Text style={styles.titretext}> Les partenariats</Text>
           <View style={styles.separator} />
           <View style={{ flexDirection: "row" }}>
-            {editor ? (
+            {currentUser.sessionId === idBureau ? (
               <TouchableOpacity onPress={() => addParte(idBureau)}>
                 <View style={styles.addItem}>
                   <Icon
@@ -205,7 +198,7 @@ export default function BureauProfil({
               </View>
             ))}
           </View>
-          {editor ? (
+          {currentUser.sessionId === idBureau ? (
             <TouchableOpacity
               style={[styles.buttonContainer, { marginVertical: 15 }]}
               onPress={() => navigation.navigate("GestMembres", { bureau })}
