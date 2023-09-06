@@ -1,12 +1,15 @@
 import { Card } from "@rneui/themed";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { View, ScrollView, StyleSheet, Text } from "react-native";
 import firestoreService from "../../service/firestore.service";
+import { CurrentUserContext } from "../../service/context";
 
 export default function Cartes() {
+  const { currentUser } = useContext(CurrentUserContext);
+
   const [adhesion, setAdhesion] = useState<string[]>([]);
   useEffect(() => {
-    firestoreService.getProfile((profil) => {
+    firestoreService.getProfile(currentUser, (profil) => {
       if (typeof profil.info !== "string") setAdhesion(profil.info);
     });
   }, []);

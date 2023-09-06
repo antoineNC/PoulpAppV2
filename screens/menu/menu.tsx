@@ -28,7 +28,7 @@ function MenuScreen({ navigation }: MenuScreenNavProp) {
   const { currentUser } = useContext(CurrentUserContext);
   useEffect(() => {
     // On récupère la liste de posts à afficher et on les stocke dans le state
-    firestoreService.getProfile((profil) => {
+    firestoreService.getProfile(currentUser, (profil) => {
       setProfil({ nom: profil.nom, photo: profil.photo, info: profil.info });
     });
   }, []);
@@ -38,7 +38,7 @@ function MenuScreen({ navigation }: MenuScreenNavProp) {
   const info = profil.info;
 
   const modifProfile = () => {
-    if (currentUser.sessionId === ("BDE" || "BDS" || "BDA" || "JE")) {
+    if (currentUser.sessionId === ("BDE" || "BDS" || "BDA" || "JE" || "BDF")) {
       navigation.navigate("BureauProfil", { idBureau: currentUser.sessionId });
     } else {
       Alert.alert(
@@ -48,9 +48,14 @@ function MenuScreen({ navigation }: MenuScreenNavProp) {
     }
   };
   return (
-    <ScrollView>
+    <ScrollView style={{ flex: 1 }}>
       <View
-        style={{ flexDirection: "row", paddingVertical: 30, paddingLeft: 20 }}
+        style={{
+          flex: 1,
+          flexDirection: "row",
+          paddingVertical: 30,
+          paddingLeft: 20,
+        }}
       >
         <Image
           source={
@@ -69,16 +74,20 @@ function MenuScreen({ navigation }: MenuScreenNavProp) {
             resizeMode: "contain",
             borderRadius: 50,
           }}
-          defaultSource={{
-            uri: "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png",
-          }}
         />
-        <View style={{ flex: 1, justifyContent: "center", paddingLeft: 10 }}>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            marginHorizontal: 15,
+            alignItems: "baseline",
+          }}
+        >
           <Text style={{ fontWeight: "bold", fontSize: 17 }}>{nom}</Text>
           {currentUser.isAdmin === 0 || currentUser.isAdmin === 1 ? (
             <Text>{info}</Text>
           ) : (
-            <View style={{ flexDirection: "row" }}>
+            <View style={{ flex: 1, flexDirection: "row", flexWrap: "wrap" }}>
               <Text>Adhésions : </Text>
               <FlatList
                 data={info}

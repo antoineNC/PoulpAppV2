@@ -168,46 +168,38 @@ class FirestoreService {
     return { exists, sessionId: "", isAdmin: 2 };
   }
 
-  async getId() {
-    const id = await AsyncStorage.getItem("sessionId");
-    return id;
-  }
-
   // Récupère les infos principales à afficher dans le menu ou l'écran BureauProfile
   async getProfile(
+    currentUser: { sessionId: string; isAdmin: number },
     setState: (profil: {
       nom: string;
       photo: string;
       info: Array<string> | string;
     }) => void
   ) {
-    const id = await this.getId();
-    if (typeof id === "string") {
-      if (await this.checkIfAdmin()) {
-        let imagePath = this.getImagePath(id);
-        if (id === "antoineney.ac@gmail.com") {
-          return setState({
-            nom: "admin antoine",
-            photo: "",
-            info: "description",
-          });
-        }
-        return this.listenAsso(id, (bureau) =>
-          setState({
-            nom: bureau.nom,
-            photo: imagePath,
-            info: bureau.description,
-          })
-        );
-      } else {
-        return this.listenEtu(id, (etu) =>
-          setState({
-            nom: etu.prenom + " " + etu.nom,
-            photo: "",
-            info: etu.adhesions,
-          })
-        );
-      }
+    if (currentUser.isAdmin === 1) {
+      let imagePath = this.getImagePath(currentUser.sessionId);
+      return this.listenBureau(currentUser.sessionId, (bureau) =>
+        setState({
+          nom: bureau.nom,
+          photo: imagePath,
+          info: bureau.description,
+        })
+      );
+    } else if (currentUser.isAdmin === 2) {
+      return this.listenEtu(currentUser.sessionId, (etu) =>
+        setState({
+          nom: etu.prenom + " " + etu.nom,
+          photo: "",
+          info: etu.adhesions,
+        })
+      );
+    } else if (currentUser.isAdmin === 0) {
+      return setState({
+        nom: "Admin",
+        photo: "",
+        info: currentUser.sessionId,
+      });
     }
   }
 
@@ -236,7 +228,10 @@ class FirestoreService {
 
   // ============= BUREAU ===========
 
-  listenAsso(docBureau: string, setState: (asso: Bureau) => void): () => void {
+  listenBureau(
+    docBureau: string,
+    setState: (asso: Bureau) => void
+  ): () => void {
     return onSnapshot(doc(this.db, "Bureau", docBureau), (documentSnapshot) => {
       setState({
         ...documentSnapshot.data(),
@@ -253,26 +248,6 @@ class FirestoreService {
       membres: bureau.membres,
       logo: bureau.logo,
     });
-  }
-
-  // Vérifie si l'utilisateur donné en entrée est un admin
-  async checkIfAdmin(): Promise<boolean> {
-    var isAdmin = false;
-    const userId = await this.getId();
-    if (userId) {
-      const docRef = doc(this.db, "Bureau", userId);
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        isAdmin = true;
-      } else {
-        const docRef = doc(this.db, "Admins", userId);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          isAdmin = true;
-        }
-      }
-    }
-    return isAdmin;
   }
 
   getImagePath(asso: string) {

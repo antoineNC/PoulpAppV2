@@ -54,7 +54,7 @@ export type PointStackParamList = {
 
 export type MenuStackParamList = {
   Menu: undefined;
-  BureauProfil: { idBureau: "BDE" | "BDS" | "BDA" | "JE" };
+  BureauProfil: { idBureau: "BDE" | "BDS" | "BDA" | "JE" | "BDF" };
   Bureaux: undefined;
   GererMesPosts: undefined;
   Cartes: undefined;

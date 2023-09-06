@@ -39,7 +39,7 @@ export default function BureauProfil({
   const logo = firestoreService.getImagePath(idBureau);
 
   useEffect(() => {
-    firestoreService.listenAsso(idBureau, (bureau: Bureau) => {
+    firestoreService.listenBureau(idBureau, (bureau: Bureau) => {
       setBureau(bureau);
     });
     firestoreService.listenEtudiants((etus) => setEtus(etus));
@@ -137,48 +137,52 @@ export default function BureauProfil({
           )}
         </View>
 
-        {/* C'est la partie des clubs, avec un titre et une flatlist de club */}
-        <View style={styles.partie}>
-          <Text style={styles.titretext}> Les clubs</Text>
-          <View style={styles.separator} />
-          <View style={{ flexDirection: "row" }}>
-            {currentUser.sessionId === idBureau ? (
-              <TouchableOpacity onPress={() => addClub(idBureau)}>
-                <View style={styles.addItem}>
-                  <Icon
-                    name="plussquareo"
-                    type="antdesign"
-                    size={70}
-                    color={"#52234E"}
-                  />
-                </View>
-              </TouchableOpacity>
-            ) : null}
-            <ClubList bureau={idBureau} navigation={navigation} />
-          </View>
-        </View>
+        {idBureau !== "JE" && idBureau !== "BDF" ? (
+          <>
+            <View style={styles.partie}>
+              {/* C'est la partie des clubs, avec un titre et une flatlist de club */}
+              <Text style={styles.titretext}> Les clubs</Text>
+              <View style={styles.separator} />
+              <View style={{ flexDirection: "row" }}>
+                {currentUser.sessionId === idBureau ? (
+                  <TouchableOpacity onPress={() => addClub(idBureau)}>
+                    <View style={styles.addItem}>
+                      <Icon
+                        name="plussquareo"
+                        type="antdesign"
+                        size={70}
+                        color={"#52234E"}
+                      />
+                    </View>
+                  </TouchableOpacity>
+                ) : null}
+                <ClubList bureau={idBureau} navigation={navigation} />
+              </View>
+            </View>
 
-        {/* C'est la partie des partenariats, avec un titre et une flatlist de partenariats */}
-        <View style={styles.partie}>
-          <Text style={styles.titretext}> Les partenariats</Text>
-          <View style={styles.separator} />
-          <View style={{ flexDirection: "row" }}>
-            {currentUser.sessionId === idBureau ? (
-              <TouchableOpacity onPress={() => addParte(idBureau)}>
-                <View style={styles.addItem}>
-                  <Icon
-                    name="plussquareo"
-                    type="antdesign"
-                    size={70}
-                    color={"#52234E"}
-                  />
-                </View>
-              </TouchableOpacity>
-            ) : null}
+            <View style={styles.partie}>
+              {/* C'est la partie des partenariats, avec un titre et une flatlist de partenariats */}
+              <Text style={styles.titretext}> Les partenariats</Text>
+              <View style={styles.separator} />
+              <View style={{ flexDirection: "row" }}>
+                {currentUser.sessionId === idBureau ? (
+                  <TouchableOpacity onPress={() => addParte(idBureau)}>
+                    <View style={styles.addItem}>
+                      <Icon
+                        name="plussquareo"
+                        type="antdesign"
+                        size={70}
+                        color={"#52234E"}
+                      />
+                    </View>
+                  </TouchableOpacity>
+                ) : null}
 
-            <PartenariatList bureau={idBureau} navigation={navigation} />
-          </View>
-        </View>
+                <PartenariatList bureau={idBureau} navigation={navigation} />
+              </View>
+            </View>
+          </>
+        ) : null}
 
         {/* C'est la partie des Membres et des postes, avec un titre et une liste de membres et de postes */}
         <View style={styles.partie}>

@@ -52,10 +52,11 @@ export default function PostDisplayed({
           onPress={onPressClose}
         >
           <Icon
-            name="window-close"
-            type="font-awesome"
-            color="#52234E"
-            size={30}
+            style={{ alignSelf: "flex-end", marginTop: 10 }}
+            name="close"
+            type="simple-line-icon"
+            color={"#52234E"}
+            size={35}
           />
         </TouchableOpacity>
 

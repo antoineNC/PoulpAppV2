@@ -1,5 +1,5 @@
 import { Icon } from "@rneui/themed";
-import { TouchableOpacity, StyleSheet, Text } from "react-native";
+import { TouchableOpacity, StyleSheet, Text, Platform } from "react-native";
 import {
   StackNavigationOptions,
   createStackNavigator,
@@ -40,8 +40,6 @@ import GestMembres from "../screens/menu/gestMembres";
 export const deconnexion = (navigation: any) => {
   navigation.navigate("Deconnexion");
 };
-
-const screenOptions: StackNavigationOptions = {};
 
 const FeedStack = createStackNavigator<FeedStackParamList>();
 export const FeedStackNav = () => {
@@ -127,11 +125,10 @@ export const CDFTabNav = () => {
         tabBarLabelStyle: {
           fontSize: 11,
           fontWeight: "bold",
-          padding: 7,
-          paddingHorizontal: 15,
           borderRadius: 10,
         },
         tabBarStyle: {
+          marginTop: Platform.OS === "ios" ? 20 : 0,
           backgroundColor: "#52234E",
           elevation: 0,
         },
@@ -299,7 +296,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     backgroundColor: "#52234E",
     borderRadius: 10,
-    paddingVertical: 6,
     paddingHorizontal: 10,
     marginRight: 10,
   },
