@@ -28,15 +28,16 @@ import {
   Role,
 } from "./collecInterface";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Firebase } from "./config.js";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyDcNbKtopB7Dxp2nGcYFlDiQ4TukEpoMPc",
+  apiKey: Firebase.APIKEY,
   authDomain: "poulpappv2.firebaseapp.com",
   projectId: "poulpappv2",
   storageBucket: "poulpappv2.appspot.com",
-  messagingSenderId: "427196722560",
+  messagingSenderId: Firebase.messagingSenderId,
   appId: "1:427196722560:web:d44eb4a0390dee45dc2565",
   measurementId: "G-2XW9TZKH8R",
 };

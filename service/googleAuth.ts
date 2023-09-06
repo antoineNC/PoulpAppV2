@@ -1,5 +1,6 @@
 import { Platform } from "react-native";
 import * as AuthSession from "expo-auth-session";
+import { Google } from "./config";
 
 export const getUserInfo = async (auth: AuthSession.TokenResponse | null) => {
   try {
@@ -17,9 +18,9 @@ export const getUserInfo = async (auth: AuthSession.TokenResponse | null) => {
 
 const getClientId = () => {
   if (Platform.OS === "ios") {
-    return "139581308140-imf4dv4bogf4aj945eosqvnett4mp06e.apps.googleusercontent.com";
+    return Google.iosId;
   } else if (Platform.OS === "android") {
-    return "139581308140-n3ebiqnid8tmskvneo7lck2cku8va9s3.apps.googleusercontent.com";
+    return Google.androidId;
   } else {
     console.log("Invalid platform - not handled");
     return "";
