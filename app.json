@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "PoulpAppV2",
+    "name": "La Poulp'App",
     "slug": "PoulpAppV2",
     "version": "0.0.2",
     "orientation": "portrait",
@@ -17,17 +17,21 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.ensc.poulpapp"
+      "bundleIdentifier": "com.ensc.poulpapp",
+      "buildNumber": "1"
     },
     "android": {
       "package": "com.ensc.poulpapp",
       "adaptiveIcon": {
         "foregroundImage": "./image/logo.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "versionCode": 1,
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/favicon.png",
+      "lang": "fr",
     },
     "extra": {
       "eas": {

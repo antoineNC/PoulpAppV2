@@ -162,8 +162,9 @@ export const postStyle = StyleSheet.create({
     justifyContent: "flex-start",
   },
   image: {
-    width: 320,
-    height: 320,
+    width: Dimensions.get("window").width - 20,
+    height: Dimensions.get("window").width - 20,
+    borderRadius: 3,
   },
 });
 
@@ -219,8 +220,9 @@ export const postDisStyle = StyleSheet.create({
     justifyContent: "flex-start",
   },
   image: {
-    width: 300,
-    height: 300,
+    width: Dimensions.get("window").width - 20,
+    height: Dimensions.get("window").width - 20,
+    borderRadius: 3,
   },
   appButtonContainer: {
     margin: 20,

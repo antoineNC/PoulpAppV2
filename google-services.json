@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "427196722560",
+    "project_id": "poulpappv2",
+    "storage_bucket": "poulpappv2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:427196722560:android:3f892a169de8843fdc2565",
+        "android_client_info": {
+          "package_name": "com.ensc.poulpapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "427196722560-bfottqft64l1bvmclt6hr11dhaejkcd3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ensc.poulpapp",
+            "certificate_hash": "fe830d3278a3b7fdf3f1943387cb74dcfd1b8cd9"
+          }
+        },
+        {
+          "client_id": "427196722560-6r60j6b8i07kpo18vlo881uslfs91q1i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAtmV6gP-hEsxGzITE6DUIJssSqcJimEWc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "427196722560-6r60j6b8i07kpo18vlo881uslfs91q1i.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "427196722560-17g8q0ggj0u2k9e3es8qaum7rc2ilto9.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.ensc.poulpapp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

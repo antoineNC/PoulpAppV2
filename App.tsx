@@ -4,6 +4,15 @@ import ConnexionNav from "./navigation/connexionNav";
 import { StatusBar } from "react-native";
 import { CurrentUserContext } from "./service/context";
 import { useState } from "react";
+import * as Notifications from "expo-notifications";
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
 
 export default function App() {
   const [currentUser, setCurrentUser] = useState({
