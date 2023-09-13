@@ -2,7 +2,7 @@
   "expo": {
     "name": "La Poulp'App",
     "slug": "PoulpAppV2",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "orientation": "portrait",
     "icon": "./image/logo.png",
     "userInterfaceStyle": "light",
@@ -31,7 +31,7 @@
     },
     "web": {
       "favicon": "./assets/favicon.png",
-      "lang": "fr",
+      "lang": "fr"
     },
     "extra": {
       "eas": {
