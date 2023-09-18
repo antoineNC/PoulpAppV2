@@ -1,13 +1,13 @@
 import React, { useEffect, useContext } from "react";
-import { Text, View, Image, TouchableOpacity } from "react-native";
-import { LoginScreenNavProp } from "../../navigation/types";
+import { Text, View, Image, TouchableOpacity, StyleSheet } from "react-native";
 import * as WebBrowser from "expo-web-browser";
 import * as Google from "expo-auth-session/providers/google";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Icon } from "@rneui/themed";
+
+import { LoginScreenNavProp } from "../../navigation/types";
 import { getUserInfo } from "../../service/googleAuth";
 import firestoreService from "../../service/firestore.service";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import styles from "../../theme/styles";
-import { Icon } from "@rneui/themed";
 import { CurrentUserContext } from "../../service/context";
 import { colors } from "../../theme/colors";
 
@@ -78,73 +78,70 @@ export default function LogIn({ navigation, route }: LoginScreenNavProp) {
 
   return (
     <View style={styles.mainContainer}>
-      <View style={styles.container}>
-        <Text style={{ fontSize: 30, fontWeight: "bold" }}>POULP'APP</Text>
-        <Image source={require("../../image/logo.png")} style={styles.logo} />
+      <View style={{ alignItems: "center" }}>
+        <Image source={require("../../image/logo.png")} style={styles.image} />
+        <Text style={styles.nameApp}>La PoulP'App</Text>
+      </View>
+      <View>
         {route.params !== undefined ? null : (
-          <View style={{ marginVertical: 20 }}>
-            <TouchableOpacity
-              style={{
-                backgroundColor: colors.primary,
-                justifyContent: "center",
-                padding: 10,
-                borderRadius: 10,
-                flexDirection: "row",
-                columnGap: 10,
-                alignItems: "center",
-              }}
-              onPress={() =>
-                navigation.navigate("Home", {
-                  screen: "FeedStack",
-                  params: { screen: "Feed" },
-                })
-              }
-            >
-              <Text style={{ color: "#fff", fontWeight: "bold" }}>
-                ACCEDER A LA SESSION
-              </Text>
-              <Icon name="sign-in" type="font-awesome" color={"#fff"} />
-            </TouchableOpacity>
-          </View>
+          <TouchableOpacity
+            style={[styles.btnContainer, { marginVertical: 20 }]}
+            onPress={() =>
+              navigation.navigate("Home", {
+                screen: "FeedStack",
+                params: { screen: "Feed" },
+              })
+            }
+          >
+            <Text style={styles.btnTxt}>ACCEDER A LA SESSION</Text>
+            <Icon name="sign-in" type="font-awesome" color={"#fff"} />
+          </TouchableOpacity>
         )}
         <TouchableOpacity
-          style={{
-            backgroundColor: colors.primary,
-            padding: 10,
-            borderRadius: 10,
-            flexDirection: "row",
-            columnGap: 10,
-            alignItems: "center",
-          }}
+          style={[styles.btnContainer, { alignSelf: "center" }]}
           onPress={() => {
             promptAsync();
           }}
           disabled={!request}
         >
-          <Text style={{ color: "#fff", fontWeight: "bold" }}>CONNEXION</Text>
+          <Text style={styles.btnTxt}>CONNEXION</Text>
           <Icon name="google" type="antdesign" color={"#fff"} />
         </TouchableOpacity>
-
-        <Text style={{ marginTop: 10 }}>Pas encore de compte ?</Text>
+      </View>
+      <View style={{ marginVertical: 20, alignItems: "center" }}>
+        <Text>Pas encore de compte ?</Text>
         <TouchableOpacity onPress={() => navigation.navigate("Inscription")}>
-          <Text style={{ color: "#57B9BB" }}>Je m'inscris !</Text>
+          <Text style={{ color: colors.cyan }}>Je m'inscris !</Text>
         </TouchableOpacity>
-        <View style={{ margin: 30 }}>
-          {/* <TouchableOpacity
-            onPress={async () => {
-              const exists = await firestoreService.LoginTest("BDE");
-              if (exists) {
-                navigation.navigate("Home", {
-                  screen: "FeedStack",
-                  params: { screen: "Feed" },
-                });
-              }
-            }}
-          >
-            <Text>login test</Text>
-          </TouchableOpacity> */}
-        </View>
       </View>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  mainContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "space-around",
+  },
+  nameApp: {
+    fontSize: 30,
+    fontWeight: "bold",
+  },
+  image: {
+    height: 100,
+    resizeMode: "center",
+    marginVertical: 30,
+  },
+  btnContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 10,
+    borderRadius: 10,
+    columnGap: 10,
+    backgroundColor: colors.primary,
+    elevation: 3, //android
+    shadowOpacity: 0.2, //ios
+  },
+  btnTxt: { color: "#fff", fontWeight: "bold" },
+});

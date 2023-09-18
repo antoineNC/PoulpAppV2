@@ -71,7 +71,7 @@ export default function PartenariatList(props: {
             <TouchableOpacity onPress={() => showModal(item)}>
               <View style={styles.club}>
                 <Image
-                  source={{ uri: item.image }}
+                  source={{ uri: item.logo }}
                   style={{
                     width: 70,
                     height: 70,

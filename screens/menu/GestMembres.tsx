@@ -6,7 +6,6 @@ import {
   StyleSheet,
   ScrollView,
 } from "react-native";
-import { Picker } from "@react-native-picker/picker";
 import { Dropdown } from "react-native-element-dropdown";
 import firestoreService from "../../service/firestore.service";
 import { GestMembresProps } from "../../navigation/types";

@@ -35,7 +35,7 @@ export interface Partenariat {
   id: string;
   nom: string;
   bureau: Bureau["id"];
-  image: string;
+  logo: string;
   description: string;
   adresse: string;
   adresseMap: string;

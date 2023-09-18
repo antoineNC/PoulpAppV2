@@ -30,7 +30,7 @@ export default function PartenariatDisp(props: {
       {/* Partie de description du partenariat avec le logo, le nom qui est donné grace aux fonctions de navigation
               une description et l'adresse qui redirige sur google map une fois qu'on clique dessus */}
       <View style={styles.image_description_container}>
-        <Image source={{ uri: props.parteDisp.image }} style={styles.strech} />
+        <Image source={{ uri: props.parteDisp.logo }} style={styles.strech} />
         <Text style={styles.nom}>{props.parteDisp.nom}</Text>
         <Text style={styles.description}>{props.parteDisp.description}</Text>
         <TouchableOpacity
@@ -50,13 +50,13 @@ export default function PartenariatDisp(props: {
       </View>
 
       {/* La présentation des différents avantages qu'offre ce partenariat. C'est une simple liste */}
-      <View style={styles.partie}>
-        <Text style={styles.titretext}> Les avantages</Text>
+      <View style={styles.avantages}>
+        <Text style={styles.avantageHeader}> Les avantages</Text>
         <View style={styles.separator} />
         <View>
           {props.parteDisp.avantages.map((item, key) => (
             <Text key={key} style={styles.avantageContent}>
-              {item}
+              - {item}
             </Text>
           ))}
         </View>
@@ -67,17 +67,20 @@ export default function PartenariatDisp(props: {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 7,
+    marginHorizontal: 10,
   },
+  close: { alignSelf: "flex-end", marginRight: 20, marginTop: 20 },
   image_description_container: {
     justifyContent: "center",
     alignItems: "center",
   },
   strech: {
-    resizeMode: "contain",
+    resizeMode: "center",
     height: 200,
-    width: Dimensions.get("window").width,
+    width: 200,
+    borderRadius: 5,
   },
+  nom: { fontSize: 20, marginTop: 15 },
   description: {
     marginTop: 10,
     textAlign: "center",
@@ -87,14 +90,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     margin: 10,
   },
+  iconAdresse: { margin: 7 },
   adresseText: {
     textAlign: "center",
     textDecorationLine: "underline",
   },
-  partie: {
+  avantages: {
     paddingVertical: 10,
   },
-  titretext: {
+  avantageHeader: {
     fontSize: 18,
     fontWeight: "bold",
     alignSelf: "center",
@@ -111,7 +115,4 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     justifyContent: "center",
   },
-  close: { alignSelf: "flex-end", marginRight: 20, marginTop: 20 },
-  nom: { fontSize: 20 },
-  iconAdresse: { margin: 7 },
 });

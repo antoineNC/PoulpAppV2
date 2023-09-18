@@ -1,5 +1,6 @@
 import React from "react";
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import { colors } from "../theme/colors";
 
 interface TagProps {
   tag: string;
@@ -14,8 +15,8 @@ export default function Tag({ tag, removeTag }: TagProps) {
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={remove} style={{ flexDirection: "row" }}>
-        <Text>{tag}</Text>
-        <Text style={{ fontWeight: "bold" }}> &times; </Text>
+        <Text style={{ color: "white" }}>{tag}</Text>
+        <Text style={{ fontWeight: "bold", color: "white" }}> &times; </Text>
       </TouchableOpacity>
     </View>
   );
@@ -23,8 +24,7 @@ export default function Tag({ tag, removeTag }: TagProps) {
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
-    backgroundColor: "#8AC8CE",
+    backgroundColor: colors.cyan,
     borderRadius: 10,
     padding: 5,
     paddingLeft: 10,

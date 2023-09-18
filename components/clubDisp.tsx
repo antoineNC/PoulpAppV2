@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   Linking,
+  Dimensions,
 } from "react-native";
 import { Club } from "../service/collecInterface";
 import { Icon } from "@rneui/themed";
@@ -17,12 +18,13 @@ export default function ClubDisp(props: {
   return (
     <View style={styles.container}>
       <Icon
-        style={styles.icon}
+        style={styles.close}
         name="close"
         type="simple-line-icon"
         color={colors.primary}
         size={35}
         onPress={() => {
+          console.log("image", props.clubDisp.logo);
           props.setModal(false);
         }}
       />
@@ -43,9 +45,9 @@ export default function ClubDisp(props: {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginHorizontal: 10,
   },
-  nom: { fontSize: 20 },
-  icon: { alignSelf: "flex-end", marginRight: 20, marginTop: 20 },
+  close: { alignSelf: "flex-end", marginRight: 20, marginTop: 20 },
   image_description_container: {
     justifyContent: "center",
     alignItems: "center",
@@ -53,8 +55,10 @@ const styles = StyleSheet.create({
   strech: {
     resizeMode: "contain",
     height: 200,
-    width: 150,
+    width: 200,
+    borderRadius: 5,
   },
+  nom: { fontSize: 20, marginTop: 15 },
   description: {
     marginTop: 15,
     marginBottom: 25,

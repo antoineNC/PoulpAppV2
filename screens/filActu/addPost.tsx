@@ -176,29 +176,3 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
   },
 });
-
-// Styles spécifiques pour les dateTimePicker
-const pickerSelectStyles = StyleSheet.create({
-  // inputIOS: {
-  //   height: 30,
-  //   fontSize: 15,
-  //   paddingVertical: 12,
-  //   paddingHorizontal: 10,
-  //   borderWidth: 1,
-  //   borderColor: "blue",
-  //   borderRadius: 4,
-  //   color: "black",
-  //   paddingRight: 30,
-  // },
-  // inputAndroid: {
-  //   height: 40,
-  //   fontSize: 15,
-  //   paddingHorizontal: 10,
-  //   paddingVertical: 8,
-  //   borderWidth: 0.5,
-  //   borderColor: "purple",
-  //   borderRadius: 8,
-  //   color: "black",
-  //   paddingRight: 30,
-  // },
-});

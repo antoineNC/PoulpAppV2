@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     margin: 10,
     width: 280,
   },
-  raddioButton: {
+  radioButton: {
     marginLeft: 20,
     marginRight: 20,
   },

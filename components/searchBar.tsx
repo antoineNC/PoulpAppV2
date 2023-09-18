@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, TextInput, View, Keyboard, Button } from "react-native";
 import { Feather, Entypo } from "@expo/vector-icons";
+import { colors } from "../theme/colors";
 
 export default function SearchBar(props: {
   clicked: any;
