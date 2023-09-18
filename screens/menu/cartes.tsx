@@ -3,6 +3,7 @@ import { useEffect, useState, useContext } from "react";
 import { View, ScrollView, StyleSheet, Text } from "react-native";
 import firestoreService from "../../service/firestore.service";
 import { CurrentUserContext } from "../../service/context";
+import { colors } from "../../theme/colors";
 
 export default function Cartes() {
   const { currentUser } = useContext(CurrentUserContext);
@@ -86,5 +87,5 @@ export default function Cartes() {
 }
 
 const styles = StyleSheet.create({
-  card: { borderRadius: 10, backgroundColor: "#dfc9ec" },
+  card: { borderRadius: 10, backgroundColor: colors.secondary },
 });

@@ -1,5 +1,4 @@
 import { StyleSheet, Dimensions } from "react-native";
-import Constants from "expo-constants";
 import { colors } from "./colors";
 
 // Common styles
@@ -87,7 +86,7 @@ const styles = StyleSheet.create({
   },
   modalView: {
     flex: 1,
-    backgroundColor: "#F0E4EF",
+    backgroundColor: colors.secondary,
     borderRadius: 5,
     borderWidth: 2,
     marginHorizontal: 5,
@@ -107,7 +106,7 @@ export const postStyle = StyleSheet.create({
     paddingTop: 5,
     margin: 3,
     paddingBottom: 10,
-    backgroundColor: "#F0E4EF",
+    backgroundColor: colors.secondary,
   },
   headerContainer: {
     flex: 1,
@@ -138,10 +137,10 @@ export const postStyle = StyleSheet.create({
   },
   calendarIcon: {
     marginRight: 10,
-    color: "#349CA8",
+    color: colors.cyan,
   },
   calendarText: {
-    color: "#349CA8",
+    color: colors.cyan,
     fontStyle: "italic",
   },
   descriptionContainer: {
@@ -196,10 +195,10 @@ export const postDisStyle = StyleSheet.create({
   },
   calendarIcon: {
     marginRight: 10,
-    color: "#349CA8",
+    color: colors.cyan,
   },
   calendarText: {
-    color: "#349CA8",
+    color: colors.cyan,
     fontStyle: "italic",
   },
   descriptionContainer: {

@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 1,
     borderColor: colors.primary,
-    backgroundColor: "#dfc9ec",
+    backgroundColor: colors.secondary,
     elevation: 3, //android
     shadowOpacity: 0.2, //ios
   },
