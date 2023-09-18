@@ -1,9 +1,6 @@
 import { Icon } from "@rneui/themed";
 import { TouchableOpacity, StyleSheet, Text, Platform } from "react-native";
-import {
-  StackNavigationOptions,
-  createStackNavigator,
-} from "@react-navigation/stack";
+import { createStackNavigator } from "@react-navigation/stack";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import {
   CDFTabParamList,

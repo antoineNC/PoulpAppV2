@@ -15,16 +15,19 @@ export default function HomeTabNav() {
     <HomeTab.Navigator
       id="home"
       initialRouteName="FeedStack"
-      sceneContainerStyle={{ backgroundColor: colors.primary }}
       screenOptions={{
         headerShown: false,
         tabBarActiveTintColor: "white",
-        tabBarActiveBackgroundColor: colors.primary,
-        tabBarInactiveTintColor: "dimgrey",
+        tabBarInactiveTintColor: "grey",
         tabBarLabelStyle: {
           fontSize: 11,
+          marginBottom: 10,
         },
-        tabBarStyle: { borderTopWidth: 0, height: 60 },
+        tabBarStyle: {
+          borderTopWidth: 0,
+          height: 65,
+          backgroundColor: colors.primary,
+        },
       }}
     >
       <HomeTab.Screen

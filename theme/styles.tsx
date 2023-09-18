@@ -97,16 +97,14 @@ const styles = StyleSheet.create({
 export const postStyle = StyleSheet.create({
   postContainer: {
     flex: 1,
-    width: Dimensions.get("window").width - 10,
-    borderWidth: 2,
-    borderColor: colors.primary,
-    borderRadius: 10,
+    width: Dimensions.get("window").width,
     textAlign: "center",
     alignItems: "center",
-    paddingTop: 5,
-    margin: 3,
-    paddingBottom: 10,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
     backgroundColor: colors.secondary,
+    borderBottomWidth: 2,
+    borderBottomColor: colors.primary,
   },
   headerContainer: {
     flex: 1,
