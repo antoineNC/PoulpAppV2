@@ -12,6 +12,7 @@ import { MenuScreenNavProp } from "../../navigation/types";
 import Bouton from "../../components/button";
 import firestoreService from "../../service/firestore.service";
 import { CurrentUserContext } from "../../service/context";
+import { colors } from "../../theme/colors";
 
 interface Profil {
   nom: string;

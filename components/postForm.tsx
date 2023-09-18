@@ -15,6 +15,7 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { CheckBox, Icon } from "@rneui/themed";
 import { Post } from "../service/collecInterface";
 import Tag from "./tag";
+import { colors } from "../theme/colors";
 
 export default function PostForm(post: Post, setPost: (post: Post) => void) {
   const [timePStart, setTimePStart] = useState(false);
@@ -163,7 +164,7 @@ export default function PostForm(post: Post, setPost: (post: Post) => void) {
           <CheckBox
             title="Evenement"
             checked={post.visibleCal}
-            checkedColor=colors.primary
+            checkedColor={colors.primary}
             onPress={() => setPost({ ...post, visibleCal: !post.visibleCal })}
             containerStyle={styles.checkBox}
           />
@@ -179,7 +180,11 @@ export default function PostForm(post: Post, setPost: (post: Post) => void) {
                 style={[styles.dtPicker, { width: 130 }]}
                 onPress={() => setDatePStart(true)}
               >
-                <Icon name="calendar" type="font-awesome" color=colors.primary />
+                <Icon
+                  name="calendar"
+                  type="font-awesome"
+                  color={colors.primary}
+                />
                 <Text>{post.date[0]}</Text>
               </TouchableOpacity>
 
@@ -213,7 +218,7 @@ export default function PostForm(post: Post, setPost: (post: Post) => void) {
                 style={[styles.dtPicker, { width: 90 }]}
                 onPress={() => setTimePStart(true)}
               >
-                <Icon name="clock" type="feather" color=colors.primary />
+                <Icon name="clock" type="feather" color={colors.primary} />
                 <Text>{post.date[2]}</Text>
               </TouchableOpacity>
 
@@ -251,7 +256,11 @@ export default function PostForm(post: Post, setPost: (post: Post) => void) {
                 style={[styles.dtPicker, { width: 130 }]}
                 onPress={() => setDatePEnd(true)}
               >
-                <Icon name="calendar" type="font-awesome" color=colors.primary />
+                <Icon
+                  name="calendar"
+                  type="font-awesome"
+                  color={colors.primary}
+                />
                 <Text>{post.date[1]}</Text>
               </TouchableOpacity>
 
@@ -282,7 +291,7 @@ export default function PostForm(post: Post, setPost: (post: Post) => void) {
                 style={[styles.dtPicker, { width: 90 }]}
                 onPress={() => setTimePEnd(true)}
               >
-                <Icon name="clock" type="feather" color=colors.primary />
+                <Icon name="clock" type="feather" color={colors.primary} />
                 <Text>{post.date[3]}</Text>
               </TouchableOpacity>
 

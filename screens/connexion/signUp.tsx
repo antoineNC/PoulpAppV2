@@ -16,6 +16,7 @@ import firestoreService from "../../service/firestore.service";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Icon } from "@rneui/themed";
 import styles from "../../theme/styles";
+import { colors } from "../../theme/colors";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -74,7 +75,12 @@ export default function SignUp({ navigation }: SignUpScreenNavProp) {
     <ScrollView>
       <View style={styles.mainContainer}>
         <View style={styles.textInput}>
-          <Icon style={{ margin: 10 }} size={20} name="lock" color=colors.primary />
+          <Icon
+            style={{ margin: 10 }}
+            size={20}
+            name="lock"
+            color={colors.primary}
+          />
           <TextInput
             onChangeText={(code) => setCode(code)}
             placeholder="Code"
@@ -85,7 +91,7 @@ export default function SignUp({ navigation }: SignUpScreenNavProp) {
             size={20}
             name="questioncircleo"
             type="antdesign"
-            color=colors.primary
+            color={colors.primary}
             onPress={() =>
               Alert.alert(
                 "Code ENSC",

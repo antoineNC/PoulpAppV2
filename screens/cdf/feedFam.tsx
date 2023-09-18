@@ -4,6 +4,7 @@ import firestoreService from "../../service/firestore.service";
 import { Post } from "../../service/collecInterface";
 import PostList from "../../components/postList";
 import { FeedFamScreenNavProps } from "../../navigation/types";
+import { colors } from "../../theme/colors";
 
 export default function FeedFamille({
   navigation,

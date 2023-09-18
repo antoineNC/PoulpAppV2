@@ -9,6 +9,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import styles from "../../theme/styles";
 import { Icon } from "@rneui/themed";
 import { CurrentUserContext } from "../../service/context";
+import { colors } from "../../theme/colors";
 
 WebBrowser.maybeCompleteAuthSession();
 

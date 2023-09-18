@@ -12,6 +12,7 @@ import { Post } from "../../service/collecInterface";
 import { ModifPostScreenNavProp } from "../../navigation/types";
 import { getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import PostForm from "../../components/postForm";
+import { colors } from "../../theme/colors";
 
 export default function ModifPostFamille({
   navigation,
@@ -78,7 +79,7 @@ export default function ModifPostFamille({
             opacity: 0.8,
           }}
         >
-          <ActivityIndicator size="large" color=colors.primary />
+          <ActivityIndicator size="large" color={colors.primary} />
         </View>
       ) : null}
       {PostForm(post, setPost)}

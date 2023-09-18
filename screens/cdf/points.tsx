@@ -14,6 +14,7 @@ import firestoreService from "../../service/firestore.service";
 import { Points } from "../../service/collecInterface";
 import { PointScreenNavProp } from "../../navigation/types";
 import { CurrentUserContext } from "../../service/context";
+import { colors } from "../../theme/colors";
 
 export default function PointScreen({ navigation }: PointScreenNavProp) {
   const { currentUser } = useContext(CurrentUserContext);
