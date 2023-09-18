@@ -49,7 +49,7 @@ export default function SearchBar(props: {
       {props.clicked && (
         <View>
           <Button
-            color={"#52234E"}
+            color={colors.primary}
             title="Annuler"
             onPress={() => {
               Keyboard.dismiss();

@@ -104,7 +104,7 @@ function MenuScreen({ navigation }: MenuScreenNavProp) {
                 style={{
                   paddingVertical: 10,
                   paddingHorizontal: 15,
-                  backgroundColor: "#52234E",
+                  backgroundColor: colors.primary,
                   borderRadius: 10,
                 }}
                 onPress={modifProfile}

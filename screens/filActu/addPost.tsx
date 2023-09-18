@@ -20,6 +20,7 @@ import {
   schedulePushNotification,
 } from "../../service/notifications";
 import * as Notifications from "expo-notifications";
+import { colors } from "../../theme/colors";
 
 export default function AddPost({ navigation }: AddPostScreenNP) {
   const [expoPushToken, setExpoPushToken] =
@@ -149,7 +150,7 @@ export default function AddPost({ navigation }: AddPostScreenNP) {
             opacity: 0.8,
           }}
         >
-          <ActivityIndicator size="large" color="#52234E" />
+          <ActivityIndicator size="large" color={colors.primary} />
         </View>
       ) : null}
       {PostForm(post, setPost)}
@@ -169,7 +170,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     marginHorizontal: 30,
     marginVertical: 20,
-    backgroundColor: "#52234E",
+    backgroundColor: colors.primary,
     borderRadius: 10,
     paddingVertical: 10,
     paddingHorizontal: 12,

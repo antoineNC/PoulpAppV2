@@ -4,6 +4,7 @@ import SignUp from "../screens/connexion/signUp";
 import HomeTabNav from "./homeTabNav";
 import { RootStackParamList } from "./types";
 import LogOut from "../screens/connexion/logOut";
+import { colors } from "../theme/colors";
 
 const ConnexionStack = createStackNavigator<RootStackParamList>();
 export default function ConnexionNav() {
@@ -12,7 +13,7 @@ export default function ConnexionNav() {
       screenOptions={{
         headerTitleAlign: "center",
         headerTintColor: "white",
-        headerStyle: { backgroundColor: "#52234E" },
+        headerStyle: { backgroundColor: colors.primary },
       }}
     >
       <ConnexionStack.Screen name="Connexion" component={LogIn} />

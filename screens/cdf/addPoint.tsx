@@ -81,7 +81,7 @@ export default function AddPoints({ navigation }: AddPointScreenNavProp) {
             style={[styles.dtPicker, { width: 130 }]}
             onPress={() => setDatePicker(true)}
           >
-            <Icon name="calendar" type="font-awesome" color="#52234E" />
+            <Icon name="calendar" type="font-awesome" color=colors.primary />
             <Text>{point.date}</Text>
           </TouchableOpacity>
           {datePicker && (
@@ -272,7 +272,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flex: 1,
-    backgroundColor: "#52234E",
+    backgroundColor: colors.primary,
     borderRadius: 10,
     marginVertical: 20,
     marginHorizontal: 90,

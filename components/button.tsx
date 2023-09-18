@@ -1,5 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
+import { colors } from "../theme/colors";
 
 interface ButtonProps {
   text: string;
@@ -27,7 +28,7 @@ export default function Button({
 const styles = StyleSheet.create({
   appButtonContainer: {
     margin: 10,
-    backgroundColor: "#52234E",
+    backgroundColor: colors.primary,
     borderRadius: 10,
     paddingVertical: 10,
     paddingHorizontal: 12,

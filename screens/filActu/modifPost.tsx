@@ -12,6 +12,7 @@ import { Post } from "../../service/collecInterface";
 import { ModifPostScreenNP } from "../../navigation/types";
 import { getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import PostForm from "../../components/postForm";
+import { colors } from "../../theme/colors";
 
 export default function ModifPost({ navigation, route }: ModifPostScreenNP) {
   const [post, setPost] = useState<Post>(route.params.post);
@@ -75,7 +76,7 @@ export default function ModifPost({ navigation, route }: ModifPostScreenNP) {
             opacity: 0.8,
           }}
         >
-          <ActivityIndicator size="large" color="#52234E" />
+          <ActivityIndicator size="large" color={colors.primary} />
         </View>
       ) : null}
       {PostForm(post, setPost)}
@@ -96,7 +97,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     marginHorizontal: 30,
     marginVertical: 20,
-    backgroundColor: "#52234E",
+    backgroundColor: colors.primary,
     borderRadius: 10,
     paddingVertical: 10,
     paddingHorizontal: 12,

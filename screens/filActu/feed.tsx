@@ -7,6 +7,7 @@ import PostList from "../../components/postList";
 import { Post } from "../../service/collecInterface";
 import firestoreService from "../../service/firestore.service";
 import { CurrentUserContext } from "../../service/context";
+import { colors } from "../../theme/colors";
 
 function FeedScreen({ navigation }: FeedScreenNavProp) {
   const { isAdmin } = useContext(CurrentUserContext).currentUser;
@@ -37,7 +38,7 @@ function FeedScreen({ navigation }: FeedScreenNavProp) {
           <Icon
             name="pluscircle"
             type="antdesign"
-            color={"#52234E"}
+            color={colors.primary}
             size={55}
           />
         </TouchableOpacity>

@@ -5,6 +5,7 @@ import { StatusBar } from "react-native";
 import { CurrentUserContext } from "./service/context";
 import { useState } from "react";
 import * as Notifications from "expo-notifications";
+import { colors } from "./theme/colors";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -22,7 +23,10 @@ export default function App() {
   return (
     <NavigationContainer>
       <CurrentUserContext.Provider value={{ currentUser, setCurrentUser }}>
-        <StatusBar barStyle={"light-content"} backgroundColor={"#52234E"} />
+        <StatusBar
+          barStyle={"light-content"}
+          backgroundColor={colors.primary}
+        />
         <ConnexionNav />
       </CurrentUserContext.Provider>
     </NavigationContainer>

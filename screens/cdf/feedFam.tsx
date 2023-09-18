@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
   addButton: {
     width: 60,
     height: 60,
-    backgroundColor: "#52234E",
+    backgroundColor: colors.primary,
     position: "absolute",
     bottom: 20,
     right: 30,
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
   pointButton: {
     width: 60,
     height: 60,
-    backgroundColor: "#52234E",
+    backgroundColor: colors.primary,
     position: "absolute",
     bottom: 20,
     left: 30,

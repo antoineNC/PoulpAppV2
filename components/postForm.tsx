@@ -163,7 +163,7 @@ export default function PostForm(post: Post, setPost: (post: Post) => void) {
           <CheckBox
             title="Evenement"
             checked={post.visibleCal}
-            checkedColor="#52234E"
+            checkedColor=colors.primary
             onPress={() => setPost({ ...post, visibleCal: !post.visibleCal })}
             containerStyle={styles.checkBox}
           />
@@ -179,7 +179,7 @@ export default function PostForm(post: Post, setPost: (post: Post) => void) {
                 style={[styles.dtPicker, { width: 130 }]}
                 onPress={() => setDatePStart(true)}
               >
-                <Icon name="calendar" type="font-awesome" color="#52234E" />
+                <Icon name="calendar" type="font-awesome" color=colors.primary />
                 <Text>{post.date[0]}</Text>
               </TouchableOpacity>
 
@@ -213,7 +213,7 @@ export default function PostForm(post: Post, setPost: (post: Post) => void) {
                 style={[styles.dtPicker, { width: 90 }]}
                 onPress={() => setTimePStart(true)}
               >
-                <Icon name="clock" type="feather" color="#52234E" />
+                <Icon name="clock" type="feather" color=colors.primary />
                 <Text>{post.date[2]}</Text>
               </TouchableOpacity>
 
@@ -251,7 +251,7 @@ export default function PostForm(post: Post, setPost: (post: Post) => void) {
                 style={[styles.dtPicker, { width: 130 }]}
                 onPress={() => setDatePEnd(true)}
               >
-                <Icon name="calendar" type="font-awesome" color="#52234E" />
+                <Icon name="calendar" type="font-awesome" color=colors.primary />
                 <Text>{post.date[1]}</Text>
               </TouchableOpacity>
 
@@ -282,7 +282,7 @@ export default function PostForm(post: Post, setPost: (post: Post) => void) {
                 style={[styles.dtPicker, { width: 90 }]}
                 onPress={() => setTimePEnd(true)}
               >
-                <Icon name="clock" type="feather" color="#52234E" />
+                <Icon name="clock" type="feather" color=colors.primary />
                 <Text>{post.date[3]}</Text>
               </TouchableOpacity>
 
@@ -363,7 +363,7 @@ const styles = StyleSheet.create({
   image: { height: 320, width: 320 },
   buttonContainer: {
     margin: 30,
-    backgroundColor: "#52234E",
+    backgroundColor: colors.primary,
     borderRadius: 10,
     paddingVertical: 10,
     paddingHorizontal: 12,
@@ -371,7 +371,7 @@ const styles = StyleSheet.create({
   },
   buttonImage: {
     margin: 10,
-    backgroundColor: "#52234E",
+    backgroundColor: colors.primary,
     borderRadius: 10,
     paddingVertical: 10,
     paddingHorizontal: 12,

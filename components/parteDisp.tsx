@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { Partenariat } from "../service/collecInterface";
 import { Icon } from "@rneui/themed";
+import { colors } from "../theme/colors";
 
 export default function PartenariatDisp(props: {
   parteDisp: Partenariat;
@@ -17,10 +18,10 @@ export default function PartenariatDisp(props: {
   return (
     <View style={styles.container}>
       <Icon
-        style={{ alignSelf: "flex-end", marginRight: 20, marginTop: 20 }}
+        style={styles.close}
         name="close"
         type="simple-line-icon"
-        color={"#52234E"}
+        color={colors.primary}
         size={35}
         onPress={() => {
           props.setModal(false);
@@ -30,17 +31,17 @@ export default function PartenariatDisp(props: {
               une description et l'adresse qui redirige sur google map une fois qu'on clique dessus */}
       <View style={styles.image_description_container}>
         <Image source={{ uri: props.parteDisp.image }} style={styles.strech} />
-        <Text style={{ fontSize: 20 }}>{props.parteDisp.nom}</Text>
+        <Text style={styles.nom}>{props.parteDisp.nom}</Text>
         <Text style={styles.description}>{props.parteDisp.description}</Text>
         <TouchableOpacity
           onPress={() => Linking.openURL(props.parteDisp.adresseMap)}
         >
           <View style={styles.adresse}>
             <Icon
-              style={{ margin: 7 }}
+              style={styles.iconAdresse}
               name="map-marker-radius"
               type="material-community"
-              color="#52234E"
+              color={colors.primary}
               size={20}
             />
             <Text style={styles.adresseText}>{props.parteDisp.adresse}</Text>
@@ -103,11 +104,14 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     height: 1,
     width: "80%",
-    backgroundColor: "#52234E",
+    backgroundColor: colors.primary,
   },
   avantageContent: {
     paddingHorizontal: 12,
     paddingVertical: 4,
     justifyContent: "center",
   },
+  close: { alignSelf: "flex-end", marginRight: 20, marginTop: 20 },
+  nom: { fontSize: 20 },
+  iconAdresse: { margin: 7 },
 });

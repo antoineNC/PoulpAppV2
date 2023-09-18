@@ -41,7 +41,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    // marginTop: Constants.statusBarHeight,
   },
   logo: {
     height: 100,
@@ -96,23 +95,12 @@ const styles = StyleSheet.create({
   },
 });
 
-// Common stack header options
-export const screenOptions = StyleSheet.create({
-  headerStyle: {
-    backgroundColor: "#f4511e",
-  },
-  // headerTintColor: "#fff",
-  headerTitleStyle: {
-    fontWeight: "bold",
-  },
-});
-
 export const postStyle = StyleSheet.create({
   postContainer: {
     flex: 1,
     width: Dimensions.get("window").width - 10,
     borderWidth: 2,
-    borderColor: "#52234E",
+    borderColor: colors.primary,
     borderRadius: 10,
     textAlign: "center",
     alignItems: "center",
@@ -226,7 +214,7 @@ export const postDisStyle = StyleSheet.create({
   },
   appButtonContainer: {
     margin: 20,
-    backgroundColor: "#52234E",
+    backgroundColor: colors.primary,
     borderRadius: 10,
     paddingVertical: 8,
     paddingHorizontal: 10,

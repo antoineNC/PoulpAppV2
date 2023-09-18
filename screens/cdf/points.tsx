@@ -114,7 +114,7 @@ export default function PointScreen({ navigation }: PointScreenNavProp) {
           onPress={() => navigation.navigate("AddPoints")}
           style={styles.floatingButton}
         >
-          <Text style={{ color: "#52234E", fontSize: 17 }}>
+          <Text style={{ color: colors.primary, fontSize: 17 }}>
             Ajouter des points
           </Text>
         </TouchableOpacity>

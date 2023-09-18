@@ -15,6 +15,7 @@ import { Partenariat } from "../../../service/collecInterface";
 import firestoreService from "../../../service/firestore.service";
 import { ParteAddProps } from "../../../navigation/types";
 import { Icon } from "@rneui/themed";
+import { colors } from "../../../theme/colors";
 
 export default function ParteAdd({ navigation, route }: ParteAddProps) {
   const { idBureau } = route.params;
@@ -256,7 +257,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     margin: 30,
-    backgroundColor: "#52234E",
+    backgroundColor: colors.primary,
     borderRadius: 10,
     paddingVertical: 10,
     paddingHorizontal: 12,
@@ -264,7 +265,7 @@ const styles = StyleSheet.create({
   },
   buttonImage: {
     margin: 10,
-    backgroundColor: "#52234E",
+    backgroundColor: colors.primary,
     borderRadius: 10,
     paddingVertical: 10,
     paddingHorizontal: 12,

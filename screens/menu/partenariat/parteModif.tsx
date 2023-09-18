@@ -13,6 +13,7 @@ import Constants from "expo-constants";
 import * as ImagePicker from "expo-image-picker";
 import firestoreService from "../../../service/firestore.service";
 import { Icon } from "@rneui/themed";
+import { colors } from "../../../theme/colors";
 
 export default function ParteModif({ navigation, route }: ParteModifProps) {
   const [partenariat, setPartenariat] = useState(route.params.partenariat);
@@ -239,7 +240,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     margin: 30,
-    backgroundColor: "#52234E",
+    backgroundColor: colors.primary,
     borderRadius: 10,
     paddingVertical: 10,
     paddingHorizontal: 12,
@@ -247,7 +248,7 @@ const styles = StyleSheet.create({
   },
   buttonImage: {
     margin: 10,
-    backgroundColor: "#52234E",
+    backgroundColor: colors.primary,
     borderRadius: 10,
     paddingVertical: 10,
     paddingHorizontal: 12,

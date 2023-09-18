@@ -7,6 +7,7 @@ import {
   MenuStackNav,
 } from "./stackNavs";
 import { HomeTabParamList } from "./types";
+import { colors } from "../theme/colors";
 
 const HomeTab = createBottomTabNavigator<HomeTabParamList>();
 export default function HomeTabNav() {
@@ -14,11 +15,11 @@ export default function HomeTabNav() {
     <HomeTab.Navigator
       id="home"
       initialRouteName="FeedStack"
-      sceneContainerStyle={{ backgroundColor: "#52234E" }}
+      sceneContainerStyle={{ backgroundColor: colors.primary }}
       screenOptions={{
         headerShown: false,
         tabBarActiveTintColor: "white",
-        tabBarActiveBackgroundColor: "#52234E",
+        tabBarActiveBackgroundColor: colors.primary,
         tabBarInactiveTintColor: "dimgrey",
         tabBarLabelStyle: {
           fontSize: 11,

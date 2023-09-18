@@ -14,6 +14,7 @@ import Constants from "expo-constants";
 import { Club } from "../../../service/collecInterface";
 import firestoreService from "../../../service/firestore.service";
 import { ClubAddProps } from "../../../navigation/types";
+import { colors } from "../../../theme/colors";
 
 export default function ClubAdd({ navigation, route }: ClubAddProps) {
   const { idBureau } = route.params;
@@ -150,7 +151,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     margin: 30,
-    backgroundColor: "#52234E",
+    backgroundColor: colors.primary,
     borderRadius: 10,
     paddingVertical: 10,
     paddingHorizontal: 12,
@@ -158,7 +159,7 @@ const styles = StyleSheet.create({
   },
   buttonImage: {
     margin: 10,
-    backgroundColor: "#52234E",
+    backgroundColor: colors.primary,
     borderRadius: 10,
     paddingVertical: 10,
     paddingHorizontal: 12,

@@ -36,6 +36,7 @@ import Partenariats from "../screens/menu/searchPartenariat";
 import ParteModif from "../screens/menu/partenariat/parteModif";
 import ParteAdd from "../screens/menu/partenariat/parteAdd";
 import GestMembres from "../screens/menu/gestMembres";
+import { colors } from "../theme/colors";
 
 export const deconnexion = (navigation: any) => {
   navigation.navigate("Deconnexion");
@@ -48,7 +49,7 @@ export const FeedStackNav = () => {
       screenOptions={{
         headerTintColor: "#fff",
         headerStyle: {
-          backgroundColor: "#52234E",
+          backgroundColor: colors.primary,
           elevation: 0, // remove shadow on Android
           shadowOpacity: 0, // remove shadow on iOS
         },
@@ -59,7 +60,7 @@ export const FeedStackNav = () => {
         component={Feed}
         options={({ navigation }) => ({
           title: "Fil d'actualité",
-          cardStyle: { backgroundColor: "#52234E" },
+          cardStyle: { backgroundColor: colors.primary },
           headerLeft: () => null,
           headerRight: () => (
             <TouchableOpacity
@@ -102,11 +103,11 @@ export const CalabarStackNav = () => {
       screenOptions={{
         headerTintColor: "#fff",
         headerStyle: {
-          backgroundColor: "#52234E",
+          backgroundColor: colors.primary,
           elevation: 0, // remove shadow on Android
           shadowOpacity: 0, // remove shadow on iOS
         },
-        cardStyle: { backgroundColor: "#52234E" },
+        cardStyle: { backgroundColor: colors.primary },
       }}
     >
       <CalabarStack.Screen name="Calabar" component={Calabar} />
@@ -129,7 +130,7 @@ export const CDFTabNav = () => {
         },
         tabBarStyle: {
           marginTop: Platform.OS === "ios" ? 20 : 0,
-          backgroundColor: "#52234E",
+          backgroundColor: colors.primary,
           elevation: 0,
         },
       }}
@@ -154,7 +155,7 @@ export const FeedFamStackNav = () => {
     <FeedFamStack.Navigator
       screenOptions={{
         headerStyle: {
-          backgroundColor: "#52234E",
+          backgroundColor: colors.primary,
           elevation: 0, // remove shadow on Android
           shadowOpacity: 0, // remove shadow on iOS
         },
@@ -166,7 +167,7 @@ export const FeedFamStackNav = () => {
         component={FeedFamille}
         options={{
           headerShown: false,
-          cardStyle: { backgroundColor: "#52234E" },
+          cardStyle: { backgroundColor: colors.primary },
         }}
       />
       <FeedFamStack.Screen
@@ -184,7 +185,7 @@ export const PointStackNav = () => {
     <PointStack.Navigator
       screenOptions={{
         headerStyle: {
-          backgroundColor: "#52234E",
+          backgroundColor: colors.primary,
           elevation: 0, // remove shadow on Android
           shadowOpacity: 0, // remove shadow on iOS
         },
@@ -196,7 +197,7 @@ export const PointStackNav = () => {
         component={Points}
         options={{
           headerShown: false,
-          cardStyle: { backgroundColor: "#52234E" },
+          cardStyle: { backgroundColor: colors.primary },
         }}
       />
       <PointStack.Screen
@@ -220,7 +221,7 @@ export const MenuStackNav = () => {
       screenOptions={{
         headerTintColor: "#fff",
         headerStyle: {
-          backgroundColor: "#52234E",
+          backgroundColor: colors.primary,
           elevation: 0, // remove shadow on Android
           shadowOpacity: 0, // remove shadow on iOS
         },
@@ -294,7 +295,7 @@ const styles = StyleSheet.create({
   },
   buttonCalendar: {
     justifyContent: "space-between",
-    backgroundColor: "#52234E",
+    backgroundColor: colors.primary,
     borderRadius: 10,
     paddingHorizontal: 10,
     marginRight: 10,

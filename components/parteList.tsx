@@ -14,6 +14,7 @@ import { Partenariat } from "../service/collecInterface";
 import { Icon } from "@rneui/themed";
 import PartenariatDisp from "./parteDisp";
 import { CurrentUserContext } from "../service/context";
+import { colors } from "../theme/colors";
 
 export default function PartenariatList(props: {
   bureau: "BDE" | "BDS" | "BDA" | "JE";
@@ -82,16 +83,7 @@ export default function PartenariatList(props: {
                 {currentUser.sessionId === props.bureau ? (
                   <>
                     <TouchableOpacity
-                      style={{
-                        position: "absolute",
-                        left: 5,
-                        borderColor: "black",
-                        borderWidth: 0.5,
-                        borderRadius: 5,
-                        backgroundColor: "red",
-                        height: 25,
-                        width: 25,
-                      }}
+                      style={styles.delete}
                       onPress={() => {
                         Alert.alert(
                           "Suppression",
@@ -111,16 +103,7 @@ export default function PartenariatList(props: {
                       <Icon name="trash" type="evilicon" color={"white"} />
                     </TouchableOpacity>
                     <TouchableOpacity
-                      style={{
-                        position: "absolute",
-                        right: 5,
-                        borderColor: "#52234E",
-                        borderWidth: 0.5,
-                        borderRadius: 5,
-                        backgroundColor: "#dfc9ec",
-                        height: 25,
-                        width: 25,
-                      }}
+                      style={styles.edit}
                       onPress={() => {
                         props.navigation.navigate("ParteModif", {
                           partenariat: item,
@@ -151,5 +134,25 @@ const styles = StyleSheet.create({
     fontSize: 8,
     fontWeight: "bold",
     paddingVertical: 7,
+  },
+  delete: {
+    position: "absolute",
+    left: 5,
+    borderColor: "black",
+    borderWidth: 0.5,
+    borderRadius: 5,
+    backgroundColor: "red",
+    height: 25,
+    width: 25,
+  },
+  edit: {
+    position: "absolute",
+    right: 5,
+    borderColor: colors.primary,
+    borderWidth: 0.5,
+    borderRadius: 5,
+    backgroundColor: "#dfc9ec",
+    height: 25,
+    width: 25,
   },
 });

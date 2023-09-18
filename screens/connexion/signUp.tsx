@@ -74,7 +74,7 @@ export default function SignUp({ navigation }: SignUpScreenNavProp) {
     <ScrollView>
       <View style={styles.mainContainer}>
         <View style={styles.textInput}>
-          <Icon style={{ margin: 10 }} size={20} name="lock" color="#52234E" />
+          <Icon style={{ margin: 10 }} size={20} name="lock" color=colors.primary />
           <TextInput
             onChangeText={(code) => setCode(code)}
             placeholder="Code"
@@ -85,7 +85,7 @@ export default function SignUp({ navigation }: SignUpScreenNavProp) {
             size={20}
             name="questioncircleo"
             type="antdesign"
-            color="#52234E"
+            color=colors.primary
             onPress={() =>
               Alert.alert(
                 "Code ENSC",

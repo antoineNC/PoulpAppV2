@@ -84,7 +84,7 @@ export default function LogIn({ navigation, route }: LoginScreenNavProp) {
           <View style={{ marginVertical: 20 }}>
             <TouchableOpacity
               style={{
-                backgroundColor: "#52234E",
+                backgroundColor: colors.primary,
                 justifyContent: "center",
                 padding: 10,
                 borderRadius: 10,
@@ -108,7 +108,7 @@ export default function LogIn({ navigation, route }: LoginScreenNavProp) {
         )}
         <TouchableOpacity
           style={{
-            backgroundColor: "#52234E",
+            backgroundColor: colors.primary,
             padding: 10,
             borderRadius: 10,
             flexDirection: "row",

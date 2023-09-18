@@ -12,6 +12,7 @@ import firestoreService from "../../service/firestore.service";
 import { GestMembresProps } from "../../navigation/types";
 import { Etudiant, Role } from "../../service/collecInterface";
 import { Icon } from "@rneui/themed";
+import { colors } from "../../theme/colors";
 
 export default function GestMembres({ navigation, route }: GestMembresProps) {
   const [bureau, setBureau] = useState(route.params.bureau);
@@ -155,7 +156,7 @@ export default function GestMembres({ navigation, route }: GestMembresProps) {
         onPress={updateBureau}
         style={{
           alignSelf: "center",
-          backgroundColor: "#52234E",
+          backgroundColor: colors.primary,
           borderRadius: 10,
           paddingVertical: 10,
           paddingHorizontal: 12,

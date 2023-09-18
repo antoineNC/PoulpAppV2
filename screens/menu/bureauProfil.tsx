@@ -17,6 +17,7 @@ import ClubList from "../../components/clubList";
 import PartenariatList from "../../components/parteList";
 import { Icon } from "@rneui/themed";
 import { CurrentUserContext } from "../../service/context";
+import { colors } from "../../theme/colors";
 
 export default function BureauProfil({
   navigation,
@@ -151,7 +152,7 @@ export default function BureauProfil({
                         name="plussquareo"
                         type="antdesign"
                         size={70}
-                        color={"#52234E"}
+                        color={colors.primary}
                       />
                     </View>
                   </TouchableOpacity>
@@ -172,7 +173,7 @@ export default function BureauProfil({
                         name="plussquareo"
                         type="antdesign"
                         size={70}
-                        color={"#52234E"}
+                        color={colors.primary}
                       />
                     </View>
                   </TouchableOpacity>
@@ -260,7 +261,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     alignSelf: "center",
-    backgroundColor: "#52234E",
+    backgroundColor: colors.primary,
     borderRadius: 10,
     paddingVertical: 10,
     paddingHorizontal: 12,
@@ -283,7 +284,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     height: 1,
     width: "80%",
-    backgroundColor: "#52234E",
+    backgroundColor: colors.primary,
   },
   addItem: {
     flexDirection: "column",

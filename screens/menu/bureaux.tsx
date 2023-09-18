@@ -1,6 +1,7 @@
 import { StyleSheet, View, Image, Text, ScrollView } from "react-native";
 import { TouchableOpacity } from "react-native";
 import { BureauxScreenNavProp } from "../../navigation/types";
+import { colors } from "../../theme/colors";
 
 export default function Bureaux({ navigation }: BureauxScreenNavProp) {
   return (
@@ -93,7 +94,7 @@ const styles = StyleSheet.create({
     margin: 15,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: "#52234E",
+    borderColor: colors.primary,
     backgroundColor: "#dfc9ec",
     elevation: 3, //android
     shadowOpacity: 0.2, //ios
@@ -105,7 +106,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   text: { fontWeight: "bold", fontSize: 16 },
-  separator: { borderTopWidth: 0.7, borderColor: "#52234E" },
+  separator: { borderTopWidth: 0.7, borderColor: colors.primary },
   imgContainer: {
     padding: 5,
     alignItems: "center",

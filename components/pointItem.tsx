@@ -3,6 +3,7 @@ import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
 import { Icon } from "@rneui/themed";
 import { Points } from "../service/collecInterface";
 import { CurrentUserContext } from "../service/context";
+import { colors } from "../theme/colors";
 
 interface PointItemProps {
   point: Points;
@@ -76,7 +77,7 @@ const styles = StyleSheet.create({
   postContainer: {
     flex: 1,
     borderWidth: 2,
-    borderColor: "#52234E",
+    borderColor: colors.primary,
     borderRadius: 10,
     paddingTop: 5,
     margin: 6,

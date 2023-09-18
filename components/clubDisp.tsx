@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import { Club } from "../service/collecInterface";
 import { Icon } from "@rneui/themed";
+import { colors } from "../theme/colors";
 
 export default function ClubDisp(props: {
   clubDisp: Club;
@@ -16,10 +17,10 @@ export default function ClubDisp(props: {
   return (
     <View style={styles.container}>
       <Icon
-        style={{ alignSelf: "flex-end", marginRight: 20, marginTop: 20 }}
+        style={styles.icon}
         name="close"
         type="simple-line-icon"
-        color={"#52234E"}
+        color={colors.primary}
         size={35}
         onPress={() => {
           props.setModal(false);
@@ -27,7 +28,7 @@ export default function ClubDisp(props: {
       />
       <View style={styles.image_description_container}>
         <Image source={{ uri: props.clubDisp.logo }} style={styles.strech} />
-        <Text style={{ fontSize: 20 }}>{props.clubDisp.nom}</Text>
+        <Text style={styles.nom}>{props.clubDisp.nom}</Text>
         <Text style={styles.description}>{props.clubDisp.description}</Text>
       </View>
       <TouchableOpacity
@@ -43,6 +44,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  nom: { fontSize: 20 },
+  icon: { alignSelf: "flex-end", marginRight: 20, marginTop: 20 },
   image_description_container: {
     justifyContent: "center",
     alignItems: "center",
@@ -60,7 +63,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     alignSelf: "center",
     margin: 30,
-    backgroundColor: "#52234E",
+    backgroundColor: colors.primary,
     borderRadius: 10,
     paddingVertical: 10,
     paddingHorizontal: 12,

@@ -6,6 +6,7 @@ import { useEffect, useState, useContext } from "react";
 import { ScrollView } from "react-native-gesture-handler";
 import firestoreService from "../service/firestore.service";
 import { CurrentUserContext } from "../service/context";
+import { colors } from "../theme/colors";
 
 type Props = {
   post: Post;
@@ -55,7 +56,7 @@ export default function PostDisplayed({
             style={{ alignSelf: "flex-end", marginTop: 10 }}
             name="close"
             type="simple-line-icon"
-            color={"#52234E"}
+            color={colors.primary}
             size={35}
           />
         </TouchableOpacity>
