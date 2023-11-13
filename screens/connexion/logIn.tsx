@@ -30,24 +30,8 @@ export default function LogIn(props: { setIsLogged: (state: string) => void }) {
       firestoreService
         .LogIn(email, password)
         // Si l'authentification fonctionne, on navigue vers l'écran du fil d'actualité
-        .then(() => props.setIsLogged("logged"))
-        // Sinon on récupère l'erreur et on l'affiche sous forme d'alerte.
-        // Les erreures les plus courantes ont été traduites en français
-        .catch((error) => {
-          switch (error.code) {
-            case "auth/user-not-found":
-              Alert.alert("Erreur", "Utilisateur non reconnu");
-              break;
-            case "auth/invalid-email":
-              Alert.alert("Erreur", "Email invalide");
-              break;
-            case "auth/wrong-password":
-              Alert.alert("Erreur", "Mot de passe incorrect");
-              break;
-            default:
-              Alert.alert("Erreur :", error.code);
-              break;
-          }
+        .then((res) => {
+          if (res === true) props.setIsLogged("logged");
         });
     }
   };

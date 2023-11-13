@@ -5,6 +5,7 @@ import {
   getAuth,
   getRedirectResult,
   sendEmailVerification,
+  signInWithEmailAndPassword,
   signInWithPopup,
   signInWithRedirect,
   signOut,
@@ -131,49 +132,6 @@ class FirestoreService {
     }
   }
 
-  //   createUserWithEmailAndPassword(this.auth, mail, password)
-  //     .then((userCredential) => {
-  //       if (this.isBureau(mail) === false) {
-  //         this.addEtudiant(userCredential.user.uid, mail, firstName, lastName)
-  //           .then(() => {
-  //             sendEmailVerification(userCredential.user)
-  //               .then(() => {
-  //                 console.log("email envoyé");
-  //                 return true;
-  //               })
-  //               .catch(() => {
-  //                 return false;
-  //               });
-  //           })
-  //           .catch(() => {
-  //             return false;
-  //           });
-  //       } else return false;
-  //     })
-  //     // Sinon on récupère l'erreur et on l'affiche sous forme d'alerte.
-  //     // Les erreures les plus courantes ont été traduites en français
-  //     .catch((error) => {
-  //       switch (error.code) {
-  //         case "auth/email-already-in-use":
-  //           Alert.alert("Erreur", "Email déjà utilisé");
-  //           break;
-  //         case "auth/invalid-email":
-  //           Alert.alert("Erreur", "Email non valide");
-  //           break;
-  //         case "auth/weak-password":
-  //           Alert.alert(
-  //             "Erreur",
-  //             "Le mot de passe doit contenir au moins 6 caractères"
-  //           );
-  //           break;
-  //         default:
-  //           Alert.alert("Erreur :", error.code);
-  //           break;
-  //       }
-  //       return false;
-  //     });
-  // }
-
   isBureau(mail: string): boolean {
     const mailStart = mail.substring(0, mail.lastIndexOf("@"));
     if (["bde", "bds", "bda", "bdf", "junior"].includes(mailStart)) {
@@ -181,7 +139,40 @@ class FirestoreService {
     } else return false;
   }
 
-  async LogIn(id: string, mail: string) {}
+  async LogIn(mail: string, password: string) {
+    const userCredential = await signInWithEmailAndPassword(
+      this.auth,
+      mail,
+      password
+    ).catch((error) => {
+      // On récupère l'erreur et on l'affiche sous forme d'alerte.
+      // Les erreures les plus courantes ont été traduites en français
+      switch (error.code) {
+        case "auth/user-not-found":
+          Alert.alert("Erreur", "Utilisateur non reconnu");
+          break;
+        case "auth/invalid-email":
+          Alert.alert("Erreur", "Email invalide");
+          break;
+        case "auth/wrong-password":
+          Alert.alert("Erreur", "Mot de passe incorrect");
+          break;
+        default:
+          Alert.alert("Erreur :", error.code);
+          break;
+      }
+    });
+    if (userCredential?.user.emailVerified) {
+      return true;
+    } else {
+      Alert.alert(
+        "Attention",
+        "Veuillez vérifier votre adresse mail en cliquant sur le lien qui vous a été envoyé sur " +
+          mail +
+          ".\nSi vous n'avez rien reçu, contactez un administrateur."
+      );
+    }
+  }
 
   // Récupère les infos principales à afficher dans le menu ou l'écran BureauProfile
   async getProfile(
