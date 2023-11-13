@@ -16,10 +16,9 @@ import firestoreService from "../../service/firestore.service";
 import { Icon } from "@rneui/themed";
 import styles from "../../theme/styles";
 import { colors } from "../../theme/colors";
+import { SignUpScreenNavProp } from "../../navigation/types";
 
-export default function SignUp(props: {
-  setIsLogged: (state: string) => void;
-}) {
+export default function SignUp({ navigation }: SignUpScreenNavProp) {
   const [code, setCode] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -42,7 +41,12 @@ export default function SignUp(props: {
                 Alert.alert(
                   "E-mail de vérification",
                   "Un e-mail de vérification vous a été envoyé à votre adresse ENSC.\nPensez à chercher dans les spams.",
-                  [{ text: "Ok", onPress: () => props.setIsLogged("login") }]
+                  [
+                    {
+                      text: "Ok",
+                      onPress: () => navigation.goBack(),
+                    },
+                  ]
                 );
               }
             })
@@ -131,6 +135,7 @@ export default function SignUp(props: {
           <TextInput
             onChangeText={(txt) => setMail(txt)}
             placeholder="E-mail"
+            autoCapitalize="none"
             style={{ width: 190 }}
           />
         </View>
@@ -184,7 +189,7 @@ export default function SignUp(props: {
 
         <View style={{ marginVertical: 20, alignItems: "center" }}>
           <Text>Déjà inscrit ?</Text>
-          <TouchableOpacity onPress={() => props.setIsLogged("login")}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
             <Text style={{ color: colors.cyan }}>Je me connecte !</Text>
           </TouchableOpacity>
         </View>

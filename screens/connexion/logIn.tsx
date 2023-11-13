@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Text,
   View,
@@ -8,36 +8,61 @@ import {
   TextInput,
   Switch,
   Alert,
+  Dimensions,
+  ActivityIndicator,
 } from "react-native";
 import { Icon } from "@rneui/themed";
 import { colors } from "../../theme/colors";
 import firestoreService from "../../service/firestore.service";
+import { LoginScreenNavProp } from "../../navigation/types";
+import { signOut } from "firebase/auth";
+import { CurrentUserContext } from "../../service/context";
 
-import AsyncStorage from "@react-native-async-storage/async-storage";
-
-export default function LogIn(props: { setIsLogged: (state: string) => void }) {
+export default function LogIn({ navigation }: LoginScreenNavProp) {
+  const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [user, setUser] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const signIn = () => {
     // Vérifications d'usage
     if (email == "" || password == "") {
       Alert.alert("Champs vide", "Un ou plusieurs champs sont vides.");
     } else {
+      setLoading(true);
       // S'il n'y a pas d'erreur, on fait appel au service d'authentification de firebase depuis le firestoreService
-      // try {
-      firestoreService
-        .LogIn(email, password)
-        // Si l'authentification fonctionne, on navigue vers l'écran du fil d'actualité
-        .then((res) => {
-          if (res === true) props.setIsLogged("logged");
-        });
+      firestoreService.LogIn(email, password).then((res) => {
+        if (res === true) {
+          signOut(firestoreService.auth).then(() =>
+            setCurrentUser({
+              ...currentUser,
+              user: firestoreService.auth.currentUser,
+            })
+          );
+        }
+        setLoading(false);
+      });
     }
   };
 
   return (
     <>
+      {loading === true ? (
+        <View
+          style={{
+            height: Dimensions.get("window").height,
+            width: Dimensions.get("window").width,
+            position: "absolute",
+            zIndex: 10,
+            opacity: 0.6,
+            backgroundColor: "white",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <ActivityIndicator size={"large"} />
+        </View>
+      ) : null}
       <View style={styles.mainContainer}>
         <View style={{ alignItems: "center" }}>
           <Image
@@ -56,6 +81,7 @@ export default function LogIn(props: { setIsLogged: (state: string) => void }) {
           />
           <TextInput
             placeholder="email"
+            autoCapitalize="none"
             style={{ width: 190 }}
             onChangeText={(email) => setEmail(email)}
           />
@@ -76,14 +102,6 @@ export default function LogIn(props: { setIsLogged: (state: string) => void }) {
             onChangeText={(password) => setPassword(password)}
           />
         </View>
-        <View style={{ flexDirection: "row", alignItems: "center" }}>
-          <Text>Elève</Text>
-          <Switch
-            value={user}
-            onValueChange={() => setUser((previousState) => !previousState)}
-          />
-          <Text>Admin</Text>
-        </View>
 
         <TouchableOpacity onPress={signIn} style={styles.appButtonContainer}>
           <Text style={styles.appButtonText}>Se connecter</Text>
@@ -91,7 +109,7 @@ export default function LogIn(props: { setIsLogged: (state: string) => void }) {
 
         <View style={{ marginVertical: 20, alignItems: "center" }}>
           <Text>Pas encore de compte ?</Text>
-          <TouchableOpacity onPress={() => props.setIsLogged("signup")}>
+          <TouchableOpacity onPress={() => navigation.navigate("Inscription")}>
             <Text style={{ color: colors.cyan }}>Je m'inscris !</Text>
           </TouchableOpacity>
         </View>
@@ -104,7 +122,6 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "space-around",
   },
   nameApp: {
     fontSize: 30,

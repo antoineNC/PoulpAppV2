@@ -12,14 +12,11 @@ import {
   Points,
   Post,
 } from "../service/collecInterface";
-import { AuthRequestPromptOptions, AuthSessionResult } from "expo-auth-session";
 
 //======PARAM LIST=======
 export type RootStackParamList = {
   Connexion: undefined;
   Inscription: undefined;
-  Deconnexion: undefined;
-  Home: NavigatorScreenParams<HomeTabParamList>;
 };
 
 export type HomeTabParamList = {
@@ -82,10 +79,6 @@ export type SignUpScreenNavProp = StackScreenProps<
 export type LoginScreenNavProp = StackScreenProps<
   RootStackParamList,
   "Connexion"
->;
-export type DecoScreenNavProp = StackScreenProps<
-  RootStackParamList,
-  "Deconnexion"
 >;
 
 // FeedStack

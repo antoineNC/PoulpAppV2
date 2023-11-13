@@ -132,13 +132,6 @@ class FirestoreService {
     }
   }
 
-  isBureau(mail: string): boolean {
-    const mailStart = mail.substring(0, mail.lastIndexOf("@"));
-    if (["bde", "bds", "bda", "bdf", "junior"].includes(mailStart)) {
-      return true;
-    } else return false;
-  }
-
   async LogIn(mail: string, password: string) {
     const userCredential = await signInWithEmailAndPassword(
       this.auth,
@@ -162,15 +155,14 @@ class FirestoreService {
           break;
       }
     });
-    if (userCredential?.user.emailVerified) {
-      return true;
-    } else {
+    if (!userCredential?.user.emailVerified) {
       Alert.alert(
         "Attention",
-        "Veuillez vérifier votre adresse mail en cliquant sur le lien qui vous a été envoyé sur " +
+        "Vérifiez votre adresse mail en cliquant sur le lien qui vous a été envoyé sur " +
           mail +
           ".\nSi vous n'avez rien reçu, contactez un administrateur."
       );
+      return true;
     }
   }
 
@@ -209,14 +201,11 @@ class FirestoreService {
     }
   }
 
-  signOut() {
-    signOut(this.auth)
-      .then(() => {
-        // Sign-out successful.
-      })
-      .catch((error) => {
-        console.log("Erreur", error);
-      });
+  isBureau(mail: string): boolean {
+    const mailStart = mail.substring(0, mail.lastIndexOf("@"));
+    if (["bde", "bds", "bda", "bdf", "junior"].includes(mailStart)) {
+      return true;
+    } else return false;
   }
 
   // ============ STORAGE (Images) ====================

@@ -9,6 +9,7 @@ import { colors } from "./theme/colors";
 import firestoreService from "./service/firestore.service";
 import { User, onAuthStateChanged } from "firebase/auth";
 import SignUp from "./screens/connexion/signUp";
+import ConnexionNav from "./navigation/connexionNav";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -19,44 +20,33 @@ Notifications.setNotificationHandler({
 });
 
 export default function App() {
-  const [currentUser, setCurrentUser] = useState({
+  const [currentUser, setCurrentUser] = useState<{
+    sessionId: string;
+    isAdmin: number;
+    user: User | null;
+  }>({
     sessionId: "",
     isAdmin: 2,
+    user: null,
   });
-  // Set an initializing state whilst Firebase connects
-  const [user, setUser] = useState<User | null>(null);
-  const [isLogged, setIsLogged] = useState("login");
-
-  // Handle user state changes
-  function Observer(user: User | null) {
-    if (user) {
-      // User is signed in, see docs for a list of available properties
-      // https://firebase.google.com/docs/reference/js/auth.user
-      setUser(user);
-    } else {
-      // User is signed out
-    }
-  }
 
   useEffect(() => {
-    return onAuthStateChanged(firestoreService.auth, Observer);
+    onAuthStateChanged(firestoreService.auth, (user) => {
+      if (user) {
+        console.log("user", user.uid, "vérifié", user.emailVerified);
+        setCurrentUser({ ...currentUser, user: user });
+      }
+    });
   }, []);
-
-  if (isLogged === "login") {
-    return <Login setIsLogged={setIsLogged} />;
-  } else if (isLogged === "signup") {
-    return <SignUp setIsLogged={setIsLogged} />;
-  } else if (isLogged === "logged") {
-    return (
-      <NavigationContainer>
-        <CurrentUserContext.Provider value={{ currentUser, setCurrentUser }}>
-          <StatusBar
-            barStyle={"light-content"}
-            backgroundColor={colors.primary}
-          />
-          <HomeTabNav />
-        </CurrentUserContext.Provider>
-      </NavigationContainer>
-    );
-  }
+  return (
+    <NavigationContainer>
+      <CurrentUserContext.Provider value={{ currentUser, setCurrentUser }}>
+        <StatusBar
+          barStyle={"light-content"}
+          backgroundColor={colors.primary}
+        />
+        {currentUser.user ? <HomeTabNav /> : <ConnexionNav />}
+      </CurrentUserContext.Provider>
+    </NavigationContainer>
+  );
 }

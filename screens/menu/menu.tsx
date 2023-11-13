@@ -13,6 +13,9 @@ import Bouton from "../../components/button";
 import firestoreService from "../../service/firestore.service";
 import { CurrentUserContext } from "../../service/context";
 import { colors } from "../../theme/colors";
+import { signOut } from "firebase/auth";
+import styles from "../../theme/styles";
+import { Icon } from "@rneui/themed";
 
 interface Profil {
   nom: string;
@@ -26,7 +29,7 @@ function MenuScreen({ navigation }: MenuScreenNavProp) {
     photo: "",
     info: "",
   });
-  const { currentUser } = useContext(CurrentUserContext);
+  const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
   useEffect(() => {
     // On récupère la liste de posts à afficher et on les stocke dans le state
     firestoreService.getProfile(currentUser, (profil) => {
@@ -155,6 +158,29 @@ function MenuScreen({ navigation }: MenuScreenNavProp) {
           text="Détails de l'application"
           navigation={navigation}
         />
+        <TouchableOpacity
+          onPress={() =>
+            signOut(firestoreService.auth).then(() =>
+              setCurrentUser({
+                ...currentUser,
+                user: firestoreService.auth.currentUser,
+              })
+            )
+          }
+          style={[
+            styles.appButtonContainer,
+            {
+              margin: 10,
+              width: "auto",
+              flexDirection: "row",
+              justifyContent: "center",
+              columnGap: 20,
+            },
+          ]}
+        >
+          <Text style={styles.appButtonText}>Déconnexion</Text>
+          <Icon name="sign-out" type="font-awesome" color={"white"} />
+        </TouchableOpacity>
       </View>
     </ScrollView>
   );

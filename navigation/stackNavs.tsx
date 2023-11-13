@@ -38,10 +38,6 @@ import ParteAdd from "../screens/menu/partenariat/parteAdd";
 import GestMembres from "../screens/menu/gestMembres";
 import { colors } from "../theme/colors";
 
-export const deconnexion = (navigation: any) => {
-  navigation.navigate("Deconnexion");
-};
-
 const FeedStack = createStackNavigator<FeedStackParamList>();
 export const FeedStackNav = () => {
   return (
@@ -227,21 +223,7 @@ export const MenuStackNav = () => {
         },
       }}
     >
-      <MenuStack.Screen
-        name="Menu"
-        component={Menu}
-        options={({ navigation }) => ({
-          headerLeft: () => null,
-          headerRight: () => (
-            <TouchableOpacity
-              onPress={() => deconnexion(navigation)}
-              style={styles.quitButton}
-            >
-              <Icon name="sign-out" type="font-awesome" color="white" />
-            </TouchableOpacity>
-          ),
-        })}
-      />
+      <MenuStack.Screen name="Menu" component={Menu} />
       <MenuStack.Screen
         name="BureauProfil"
         component={BureauProfil}
