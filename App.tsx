@@ -1,15 +1,13 @@
-import { NavigationContainer } from "@react-navigation/native";
-import Login from "./screens/connexion/logIn";
-import HomeTabNav from "./navigation/homeTabNav";
-import { StatusBar } from "react-native";
-import { CurrentUserContext } from "./service/context";
 import { useEffect, useState } from "react";
+import { StatusBar } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import HomeTabNav from "./navigation/homeTabNav";
+import ConnexionNav from "./navigation/connexionNav";
+import { CurrentUserContext } from "./service/context";
 import * as Notifications from "expo-notifications";
 import { colors } from "./theme/colors";
 import firestoreService from "./service/firestore.service";
 import { User, onAuthStateChanged } from "firebase/auth";
-import SignUp from "./screens/connexion/signUp";
-import ConnexionNav from "./navigation/connexionNav";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -33,7 +31,7 @@ export default function App() {
   useEffect(() => {
     onAuthStateChanged(firestoreService.auth, (user) => {
       if (user) {
-        console.log("user", user.uid, "vérifié", user.emailVerified);
+        console.log("user UID", user.uid, "vérifié?", user.emailVerified);
         setCurrentUser({ ...currentUser, user: user });
       }
     });

@@ -6,7 +6,6 @@ import {
   Alert,
   Text,
   ScrollView,
-  Button,
   Image,
   StyleSheet,
   ActivityIndicator,
@@ -99,37 +98,36 @@ export default function SignUp({ navigation }: SignUpScreenNavProp) {
           />
           <Text style={localStyles.nameApp}>La Poulp'App</Text>
         </View>
-        <View style={styles.textInput}>
+        <View style={localStyles.textInput2}>
           <Icon
             style={{ margin: 10 }}
             size={20}
-            name="lock"
-            color={colors.primary}
-          />
-          <TextInput
-            onChangeText={(txt) => setFirstName(txt)}
-            placeholder="Prénom"
-            style={{ width: 190 }}
-          />
-        </View>
-        <View style={styles.textInput}>
-          <Icon
-            style={{ margin: 10 }}
-            size={20}
-            name="lock"
+            name="user"
+            type="ant-design"
             color={colors.primary}
           />
           <TextInput
             onChangeText={(txt) => setLastName(txt)}
             placeholder="Nom"
-            style={{ width: 190 }}
+            style={{
+              flex: 1,
+              marginRight: 5,
+              paddingRight: 5,
+              borderRightWidth: 0.5,
+            }}
+          />
+          <TextInput
+            onChangeText={(txt) => setFirstName(txt)}
+            placeholder="Prénom"
+            style={{ flex: 1 }}
           />
         </View>
         <View style={styles.textInput}>
           <Icon
             style={{ margin: 10 }}
             size={20}
-            name="lock"
+            name="at"
+            type="ionicon"
             color={colors.primary}
           />
           <TextInput
@@ -206,5 +204,15 @@ const localStyles = StyleSheet.create({
   nameApp: {
     fontSize: 30,
     fontWeight: "bold",
+  },
+  textInput2: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: colors.lightgrey,
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    margin: 10,
+    width: 320,
   },
 });

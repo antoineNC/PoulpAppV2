@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   StyleSheet,
   TextInput,
-  Switch,
   Alert,
   Dimensions,
   ActivityIndicator,
@@ -75,12 +74,12 @@ export default function LogIn({ navigation }: LoginScreenNavProp) {
           <Icon
             style={{ margin: 10 }}
             size={20}
-            name="user"
-            type="antdesign"
+            name="at"
+            type="ionicon"
             color="#52234E"
           />
           <TextInput
-            placeholder="email"
+            placeholder="E-mail"
             autoCapitalize="none"
             style={{ width: 190 }}
             onChangeText={(email) => setEmail(email)}
@@ -96,7 +95,7 @@ export default function LogIn({ navigation }: LoginScreenNavProp) {
             color="#52234E"
           />
           <TextInput
-            placeholder="mot de passe"
+            placeholder="Mot de passe"
             secureTextEntry={true}
             style={{ width: 190 }}
             onChangeText={(password) => setPassword(password)}
@@ -155,7 +154,6 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontWeight: "bold",
     alignSelf: "center",
-    //textTransform: "uppercase",
   },
   btnContainer: {
     flexDirection: "row",
