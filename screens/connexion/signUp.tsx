@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   View,
   TouchableOpacity,
@@ -16,8 +16,11 @@ import { Icon } from "@rneui/themed";
 import styles from "../../theme/styles";
 import { colors } from "../../theme/colors";
 import { SignUpScreenNavProp } from "../../navigation/types";
+import { signOut } from "firebase/auth";
+import { CurrentUserContext } from "../../service/context";
 
 export default function SignUp({ navigation }: SignUpScreenNavProp) {
+  const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
   const [code, setCode] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -39,13 +42,13 @@ export default function SignUp({ navigation }: SignUpScreenNavProp) {
               if (res === true) {
                 Alert.alert(
                   "E-mail de vérification",
-                  "Un e-mail de vérification vous a été envoyé à votre adresse ENSC.\nPensez à chercher dans les spams.",
-                  [
-                    {
-                      text: "Ok",
-                      onPress: () => navigation.goBack(),
-                    },
-                  ]
+                  "Un e-mail de vérification vous a été envoyé à votre adresse ENSC.\nPensez à chercher dans les spams."
+                );
+                signOut(firestoreService.auth).then(() =>
+                  setCurrentUser({
+                    ...currentUser,
+                    user: firestoreService.auth.currentUser,
+                  })
                 );
               }
             })
@@ -134,6 +137,7 @@ export default function SignUp({ navigation }: SignUpScreenNavProp) {
             onChangeText={(txt) => setMail(txt)}
             placeholder="E-mail"
             autoCapitalize="none"
+            keyboardType="email-address"
             style={{ width: 190 }}
           />
         </View>

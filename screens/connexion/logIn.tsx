@@ -23,7 +23,7 @@ export default function LogIn({ navigation }: LoginScreenNavProp) {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const signIn = () => {
+  const logIn = () => {
     // Vérifications d'usage
     if (email == "" || password == "") {
       Alert.alert("Champs vide", "Un ou plusieurs champs sont vides.");
@@ -81,6 +81,7 @@ export default function LogIn({ navigation }: LoginScreenNavProp) {
           <TextInput
             placeholder="E-mail"
             autoCapitalize="none"
+            keyboardType="email-address"
             style={{ width: 190 }}
             onChangeText={(email) => setEmail(email)}
           />
@@ -102,7 +103,7 @@ export default function LogIn({ navigation }: LoginScreenNavProp) {
           />
         </View>
 
-        <TouchableOpacity onPress={signIn} style={styles.appButtonContainer}>
+        <TouchableOpacity onPress={logIn} style={styles.appButtonContainer}>
           <Text style={styles.appButtonText}>Se connecter</Text>
         </TouchableOpacity>
 

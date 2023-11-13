@@ -142,22 +142,22 @@ class FirestoreService {
       // Les erreures les plus courantes ont été traduites en français
       switch (error.code) {
         case "auth/user-not-found":
-          Alert.alert("Erreur", "Utilisateur non reconnu");
+          Alert.alert("Erreur", "Utilisateur non reconnu.");
           break;
         case "auth/invalid-email":
-          Alert.alert("Erreur", "Email invalide");
+          Alert.alert("Erreur", "Email invalide.");
           break;
         case "auth/wrong-password":
-          Alert.alert("Erreur", "Mot de passe incorrect");
+          Alert.alert("Erreur", "Mot de passe incorrect.");
           break;
         default:
           Alert.alert("Erreur :", error.code);
           break;
       }
     });
-    if (!userCredential?.user.emailVerified) {
+    if (userCredential && !userCredential.user.emailVerified) {
       Alert.alert(
-        "Attention",
+        "E-mail de vérification",
         "Vérifiez votre adresse mail en cliquant sur le lien qui vous a été envoyé sur " +
           mail +
           ".\nSi vous n'avez rien reçu, contactez un administrateur."
