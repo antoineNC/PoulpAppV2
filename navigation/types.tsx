@@ -12,10 +12,11 @@ import {
   Points,
   Post,
 } from "../service/collecInterface";
+import { AuthRequestPromptOptions, AuthSessionResult } from "expo-auth-session";
 
 //======PARAM LIST=======
 export type RootStackParamList = {
-  Connexion: { reconnect?: boolean };
+  Connexion: undefined;
   Inscription: undefined;
   Deconnexion: undefined;
   Home: NavigatorScreenParams<HomeTabParamList>;

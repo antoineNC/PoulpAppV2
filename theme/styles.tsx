@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
   textInput: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "white",
+    backgroundColor: colors.lightgrey,
     borderRadius: 10,
     paddingVertical: 10,
     paddingHorizontal: 12,

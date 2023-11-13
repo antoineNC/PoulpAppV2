@@ -1,6 +1,14 @@
 import { Alert } from "react-native";
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  getAuth,
+  getRedirectResult,
+  sendEmailVerification,
+  signInWithPopup,
+  signInWithRedirect,
+  signOut,
+} from "firebase/auth";
 import {
   getFirestore,
   DocumentReference,
@@ -29,6 +37,7 @@ import {
 } from "./collecInterface";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Firebase } from "./config.js";
+import { GoogleAuthProvider } from "firebase/auth";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -41,9 +50,11 @@ const firebaseConfig = {
   appId: "1:427196722560:web:d44eb4a0390dee45dc2565",
   measurementId: "G-2XW9TZKH8R",
 };
+const app = initializeApp(firebaseConfig);
+const provider = new GoogleAuthProvider();
 
 class FirestoreService {
-  private auth;
+  public auth;
   private db;
   private bureauRef;
   private etuRef: any;
@@ -55,8 +66,7 @@ class FirestoreService {
 
   // Connexion à la base de données
   constructor() {
-    initializeApp(firebaseConfig);
-    this.auth = getAuth();
+    this.auth = getAuth(app);
     this.db = getFirestore();
     this.bureauRef = collection(this.db, "Bureau");
     this.etuRef = collection(this.db, "Etudiant");
@@ -69,105 +79,109 @@ class FirestoreService {
   }
 
   //========== Connexion ===============
-  // Insertion d'un nouvel Etudiant dans la BDD
-  async SignUp(userInfo: any): Promise<boolean> {
-    var isBureau = false;
-    var isEtu = false;
-    var added = false;
-    console.log("userInfo", userInfo);
-    // check que l'adresse mail finisse par "@ensc.fr"
-    const mail = userInfo.email;
-    const mailDomain = mail.substring(mail.length - 8); // on recupère le "@ensc.fr" en théorie
-    if (mailDomain === "@ensc.fr") {
-      // chercher si l'identifiant existe dans Bureau
-      const bureau = this.convertEmailToAsso(mail);
-      var docRef = doc(this.db, "Bureau", bureau);
-      var docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        isBureau = true;
-      }
-
-      // chercher si l'identifiant existe dans "Etudiant"
-      docRef = doc(this.db, "Etudiant", userInfo.id);
-      docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        isEtu = true;
-      }
-
-      // si c'est un bureau ou un étudiant
-      if (isBureau || isEtu) {
-        Alert.alert(
-          "Déjà inscrit",
-          "Le compte selectionné est déjà inscrit sur l'application. Vous pouvez vous connecter avec celui-ci."
-        );
-      } else if (["BDE", "BDS", "BDA", "BDF", "JE"].includes(bureau)) {
-        // crétaion du document lié au nouveau Bureau
-        await setDoc(doc(this.db, "Bureau", bureau), {
-          mail: userInfo.email,
-          logo: "",
-          nom: userInfo.given_name,
-          description: "",
-          membres: [],
-        });
-        await AsyncStorage.setItem("sessionId", bureau);
-        added = true;
-      } else {
-        // crétaion du document lié au nouvel "Etudiant"
-        await setDoc(doc(this.db, "Etudiant", userInfo.id), {
-          mail: userInfo.email,
-          nom: userInfo.family_name,
-          prenom: userInfo.given_name,
-          adhesions: [],
-        });
-        await AsyncStorage.setItem("sessionId", userInfo.id);
-        added = true;
-      }
-    } else {
-      Alert.alert(
-        "Erreur",
-        "Le compte selectionné doit appartenir au domaine 'ensc.fr'"
-      );
-    }
-
-    return added;
-  }
-
-  async LogIn(
-    id: string,
-    mail: string
-  ): Promise<{ exists: boolean; sessionId: string; isAdmin: number }> {
-    var exists = true;
-    // chercher si l'identifiant existe dans Bureau
-    const bureau = this.convertEmailToAsso(mail);
-    var docRef = doc(this.db, "Bureau", bureau);
-    var docSnap = await getDoc(docRef);
-    if (!docSnap.exists()) {
-      // puis chercher dans Etudiant
-      const docRef = doc(this.db, "Etudiant", id);
-      const docSnap = await getDoc(docRef);
-      if (!docSnap.exists()) {
-        const docRef = doc(this.db, "Admins", mail);
-        const docSnap = await getDoc(docRef);
-        if (!docSnap.exists()) {
-          exists = false;
+  // Inscription d'un nouvel utilisateur et
+  // insertion d'un nouvel Etudiant dans la BDD
+  async SignUp(
+    mail: string,
+    password: string,
+    firstName: string,
+    lastName: string
+  ): Promise<boolean | undefined> {
+    const userCredential = await createUserWithEmailAndPassword(
+      this.auth,
+      mail,
+      password
+    ).catch((error) => {
+      switch (error.code) {
+        case "auth/email-already-in-use":
+          Alert.alert("Erreur", "Email déjà utilisé");
+          break;
+        case "auth/invalid-email":
+          Alert.alert("Erreur", "Email non valide");
+          break;
+        case "auth/weak-password":
           Alert.alert(
             "Erreur",
-            "Le compte selectionné n'est pas inscrit sur l'application.\nAttention, le compte doit avoir une adresse 'ensc.fr'."
+            "Le mot de passe doit contenir au moins 6 caractères"
           );
-        } else {
-          await AsyncStorage.setItem("sessionId", mail);
-          return { exists, sessionId: mail, isAdmin: 0 };
-        }
-      } else {
-        await AsyncStorage.setItem("sessionId", id);
-        return { exists, sessionId: id, isAdmin: 2 };
+          break;
+        default:
+          Alert.alert("Erreur :", error.code);
+          break;
       }
-    } else {
-      await AsyncStorage.setItem("sessionId", bureau);
-      return { exists, sessionId: bureau, isAdmin: 1 };
+      return null;
+    });
+    if (userCredential !== null && this.isBureau(mail) === false) {
+      const etuAdded = await this.addEtudiant(
+        userCredential.user.uid,
+        mail,
+        firstName,
+        lastName
+      ).catch((e) => {
+        return false;
+      });
+      const mailSent = await sendEmailVerification(userCredential.user).catch(
+        (e) => {
+          return false;
+        }
+      );
+      if (etuAdded !== false && mailSent !== false) {
+        return true;
+      }
     }
-    return { exists, sessionId: "", isAdmin: 2 };
   }
+
+  //   createUserWithEmailAndPassword(this.auth, mail, password)
+  //     .then((userCredential) => {
+  //       if (this.isBureau(mail) === false) {
+  //         this.addEtudiant(userCredential.user.uid, mail, firstName, lastName)
+  //           .then(() => {
+  //             sendEmailVerification(userCredential.user)
+  //               .then(() => {
+  //                 console.log("email envoyé");
+  //                 return true;
+  //               })
+  //               .catch(() => {
+  //                 return false;
+  //               });
+  //           })
+  //           .catch(() => {
+  //             return false;
+  //           });
+  //       } else return false;
+  //     })
+  //     // Sinon on récupère l'erreur et on l'affiche sous forme d'alerte.
+  //     // Les erreures les plus courantes ont été traduites en français
+  //     .catch((error) => {
+  //       switch (error.code) {
+  //         case "auth/email-already-in-use":
+  //           Alert.alert("Erreur", "Email déjà utilisé");
+  //           break;
+  //         case "auth/invalid-email":
+  //           Alert.alert("Erreur", "Email non valide");
+  //           break;
+  //         case "auth/weak-password":
+  //           Alert.alert(
+  //             "Erreur",
+  //             "Le mot de passe doit contenir au moins 6 caractères"
+  //           );
+  //           break;
+  //         default:
+  //           Alert.alert("Erreur :", error.code);
+  //           break;
+  //       }
+  //       return false;
+  //     });
+  // }
+
+  isBureau(mail: string): boolean {
+    const mailStart = mail.substring(0, mail.lastIndexOf("@"));
+    if (["bde", "bds", "bda", "bdf", "junior"].includes(mailStart)) {
+      return true;
+    } else return false;
+  }
+
+  async LogIn(id: string, mail: string) {}
 
   // Récupère les infos principales à afficher dans le menu ou l'écran BureauProfile
   async getProfile(
@@ -202,6 +216,16 @@ class FirestoreService {
         info: currentUser.sessionId,
       });
     }
+  }
+
+  signOut() {
+    signOut(this.auth)
+      .then(() => {
+        // Sign-out successful.
+      })
+      .catch((error) => {
+        console.log("Erreur", error);
+      });
   }
 
   // ============ STORAGE (Images) ====================
@@ -306,6 +330,19 @@ class FirestoreService {
 
   // ============ ETUDIANTS ===============
 
+  async addEtudiant(
+    uid: string,
+    mail: string,
+    firstName: string,
+    lastName: string
+  ) {
+    return await setDoc(doc(this.db, "Etudiant", uid), {
+      mail: mail,
+      nom: lastName,
+      prenom: firstName,
+      adhesions: [],
+    });
+  }
   // Récupère les infos d'un étudiant particulier
   listenEtu(
     docEtu: string,
@@ -534,7 +571,7 @@ class FirestoreService {
       adresse: partenariat.adresse,
       adresseMap: partenariat.adresseMap,
       avantages: partenariat.avantages,
-      image: partenariat.image,
+      image: partenariat.logo,
       bureau: partenariat.bureau,
     };
     return addDoc(this.partenariatRef, nvPartenariat);
@@ -547,7 +584,7 @@ class FirestoreService {
       adresse: partenariat.adresse,
       adresseMap: partenariat.adresseMap,
       avantages: partenariat.avantages,
-      image: partenariat.image,
+      image: partenariat.logo,
       bureau: partenariat.bureau,
     });
   }

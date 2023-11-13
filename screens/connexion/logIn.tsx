@@ -1,120 +1,118 @@
-import React, { useEffect, useContext } from "react";
-import { Text, View, Image, TouchableOpacity, StyleSheet } from "react-native";
-import * as WebBrowser from "expo-web-browser";
-import * as Google from "expo-auth-session/providers/google";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, { useEffect, useState } from "react";
+import {
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+  StyleSheet,
+  TextInput,
+  Switch,
+  Alert,
+} from "react-native";
 import { Icon } from "@rneui/themed";
-
-import { LoginScreenNavProp } from "../../navigation/types";
-import { getUserInfo } from "../../service/googleAuth";
-import firestoreService from "../../service/firestore.service";
-import { CurrentUserContext } from "../../service/context";
 import { colors } from "../../theme/colors";
+import firestoreService from "../../service/firestore.service";
 
-WebBrowser.maybeCompleteAuthSession();
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export default function LogIn({ navigation, route }: LoginScreenNavProp) {
-  const { setCurrentUser } = useContext(CurrentUserContext);
-  const [request, response, promptAsync] = Google.useAuthRequest({
-    androidClientId:
-      "427196722560-bfottqft64l1bvmclt6hr11dhaejkcd3.apps.googleusercontent.com",
-    iosClientId:
-      "427196722560-17g8q0ggj0u2k9e3es8qaum7rc2ilto9.apps.googleusercontent.com",
-    webClientId:
-      "427196722560-6r60j6b8i07kpo18vlo881uslfs91q1i.apps.googleusercontent.com",
-    expoClientId:
-      "427196722560-b0c2niu649m98qiep7qsvrgq9h4mvq0j.apps.googleusercontent.com",
-  });
+export default function LogIn(props: { setIsLogged: (state: string) => void }) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [user, setUser] = useState(false);
 
-  useEffect(() => {
-    console.log("useEffect1", response?.type);
-    // enter after logging in google
-    if (response?.type === "success" && response.authentication) {
-      // setAuth(response.authentication);
-      const persistAuth = async () => {
-        if (response.authentication) {
-          await AsyncStorage.setItem(
-            "auth",
-            JSON.stringify(response.authentication)
-          );
-        }
-        const userInfo = await getUserInfo(response.authentication);
-        const res = await firestoreService.LogIn(userInfo.id, userInfo.email);
-        if (res.exists) {
-          setCurrentUser({ sessionId: res.sessionId, isAdmin: res.isAdmin });
-          navigation.navigate("Home", {
-            screen: "FeedStack",
-            params: { screen: "Feed" },
-          });
-        }
-      };
-      console.log("useEffect1 auth", response.authentication);
-      persistAuth();
-    }
-  }, [response]);
-
-  // useful when user want to connect again
-  useEffect(() => {
-    const getPersistedAuth = async () => {
-      const authJsonValue = await AsyncStorage.getItem("auth");
-      const userJsonValue = await AsyncStorage.getItem("sessionId");
-      if (authJsonValue != null && userJsonValue != null) {
-        console.log("useEffect2");
-        if (userJsonValue.endsWith("gmail.com")) {
-          console.log("useeffect2 admin");
-          setCurrentUser({ sessionId: userJsonValue, isAdmin: 0 });
-        } else if (userJsonValue === ("BDE" || "BDS" || "BDA" || "JE"))
-          setCurrentUser({ sessionId: userJsonValue, isAdmin: 1 });
-        else setCurrentUser({ sessionId: userJsonValue, isAdmin: 2 });
-
-        navigation.navigate("Home", {
-          screen: "FeedStack",
-          params: { screen: "Feed" },
+  const signIn = () => {
+    // Vérifications d'usage
+    if (email == "" || password == "") {
+      Alert.alert("Champs vide", "Un ou plusieurs champs sont vides.");
+    } else {
+      // S'il n'y a pas d'erreur, on fait appel au service d'authentification de firebase depuis le firestoreService
+      // try {
+      firestoreService
+        .LogIn(email, password)
+        // Si l'authentification fonctionne, on navigue vers l'écran du fil d'actualité
+        .then(() => props.setIsLogged("logged"))
+        // Sinon on récupère l'erreur et on l'affiche sous forme d'alerte.
+        // Les erreures les plus courantes ont été traduites en français
+        .catch((error) => {
+          switch (error.code) {
+            case "auth/user-not-found":
+              Alert.alert("Erreur", "Utilisateur non reconnu");
+              break;
+            case "auth/invalid-email":
+              Alert.alert("Erreur", "Email invalide");
+              break;
+            case "auth/wrong-password":
+              Alert.alert("Erreur", "Mot de passe incorrect");
+              break;
+            default:
+              Alert.alert("Erreur :", error.code);
+              break;
+          }
         });
-      }
-    };
-    getPersistedAuth();
-  }, []);
+    }
+  };
 
   return (
-    <View style={styles.mainContainer}>
-      <View style={{ alignItems: "center" }}>
-        <Image source={require("../../image/logo.png")} style={styles.image} />
-        <Text style={styles.nameApp}>La PoulP'App</Text>
-      </View>
-      <View>
-        {route.params !== undefined ? null : (
-          <TouchableOpacity
-            style={[styles.btnContainer, { marginVertical: 20 }]}
-            onPress={() =>
-              navigation.navigate("Home", {
-                screen: "FeedStack",
-                params: { screen: "Feed" },
-              })
-            }
-          >
-            <Text style={styles.btnTxt}>ACCEDER A LA SESSION</Text>
-            <Icon name="sign-in" type="font-awesome" color={"#fff"} />
+    <>
+      <View style={styles.mainContainer}>
+        <View style={{ alignItems: "center" }}>
+          <Image
+            source={require("../../image/logo.png")}
+            style={styles.image}
+          />
+          <Text style={styles.nameApp}>La Poulp'App</Text>
+        </View>
+        <View style={styles.textInput}>
+          <Icon
+            style={{ margin: 10 }}
+            size={20}
+            name="user"
+            type="antdesign"
+            color="#52234E"
+          />
+          <TextInput
+            placeholder="email"
+            style={{ width: 190 }}
+            onChangeText={(email) => setEmail(email)}
+          />
+        </View>
+
+        <View style={styles.textInput}>
+          <Icon
+            style={{ margin: 10 }}
+            size={20}
+            name="key"
+            type="entypo"
+            color="#52234E"
+          />
+          <TextInput
+            placeholder="mot de passe"
+            secureTextEntry={true}
+            style={{ width: 190 }}
+            onChangeText={(password) => setPassword(password)}
+          />
+        </View>
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <Text>Elève</Text>
+          <Switch
+            value={user}
+            onValueChange={() => setUser((previousState) => !previousState)}
+          />
+          <Text>Admin</Text>
+        </View>
+
+        <TouchableOpacity onPress={signIn} style={styles.appButtonContainer}>
+          <Text style={styles.appButtonText}>Se connecter</Text>
+        </TouchableOpacity>
+
+        <View style={{ marginVertical: 20, alignItems: "center" }}>
+          <Text>Pas encore de compte ?</Text>
+          <TouchableOpacity onPress={() => props.setIsLogged("signup")}>
+            <Text style={{ color: colors.cyan }}>Je m'inscris !</Text>
           </TouchableOpacity>
-        )}
-        <TouchableOpacity
-          style={[styles.btnContainer, { alignSelf: "center" }]}
-          onPress={() => {
-            promptAsync();
-          }}
-          disabled={!request}
-        >
-          <Text style={styles.btnTxt}>CONNEXION</Text>
-          <Icon name="google" type="antdesign" color={"#fff"} />
-        </TouchableOpacity>
+        </View>
       </View>
-      <View style={{ marginVertical: 20, alignItems: "center" }}>
-        <Text>Pas encore de compte ?</Text>
-        <TouchableOpacity onPress={() => navigation.navigate("Inscription")}>
-          <Text style={{ color: colors.cyan }}>Je m'inscris !</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+    </>
   );
 }
 
@@ -132,6 +130,31 @@ const styles = StyleSheet.create({
     height: 100,
     resizeMode: "center",
     marginVertical: 30,
+  },
+  textInput: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: colors.lightgrey,
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    margin: 10,
+    width: 280,
+  },
+  appButtonContainer: {
+    margin: 30,
+    backgroundColor: "#52234E",
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    width: 200,
+  },
+  appButtonText: {
+    fontSize: 18,
+    color: "#fff",
+    fontWeight: "bold",
+    alignSelf: "center",
+    //textTransform: "uppercase",
   },
   btnContainer: {
     flexDirection: "row",

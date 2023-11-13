@@ -16,7 +16,6 @@ export default function ConnexionNav() {
         headerStyle: { backgroundColor: colors.primary },
       }}
     >
-      <ConnexionStack.Screen name="Connexion" component={LogIn} />
       <ConnexionStack.Screen name="Inscription" component={SignUp} />
       <ConnexionStack.Screen
         name="Deconnexion"
