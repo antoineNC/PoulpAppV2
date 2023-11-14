@@ -29,15 +29,20 @@ export default function LogIn({ navigation }: LoginScreenNavProp) {
       Alert.alert("Champs vide", "Un ou plusieurs champs sont vides.");
     } else {
       setLoading(true);
-      // S'il n'y a pas d'erreur, on fait appel au service d'authentification de firebase depuis le firestoreService
       firestoreService.LogIn(email, password).then((res) => {
-        if (res === true) {
+        if (res?.verified === false) {
           signOut(firestoreService.auth).then(() =>
             setCurrentUser({
               ...currentUser,
-              user: firestoreService.auth.currentUser,
+              user: res.user,
             })
           );
+        } else if (res?.verified === true && res.user !== null) {
+          setCurrentUser({
+            sessionId: res.user?.uid,
+            isAdmin: 2,
+            user: res.user,
+          });
         }
         setLoading(false);
       });

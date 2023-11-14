@@ -29,10 +29,11 @@ export default function App() {
   });
 
   useEffect(() => {
-    onAuthStateChanged(firestoreService.auth, (user) => {
+    onAuthStateChanged(firestoreService.auth, async (user) => {
       if (user) {
         console.log("user UID", user.uid, "vérifié?", user.emailVerified);
-        setCurrentUser({ ...currentUser, user: user });
+        const localSession = await firestoreService.setLocalSession(user);
+        if (localSession !== null) setCurrentUser(localSession);
       }
     });
   }, []);

@@ -3,12 +3,11 @@ import { initializeApp } from "firebase/app";
 import {
   createUserWithEmailAndPassword,
   getAuth,
-  getRedirectResult,
   sendEmailVerification,
   signInWithEmailAndPassword,
-  signInWithPopup,
-  signInWithRedirect,
-  signOut,
+  setPersistence,
+  browserLocalPersistence,
+  User,
 } from "firebase/auth";
 import {
   getFirestore,
@@ -36,9 +35,7 @@ import {
   Partenariat,
   Role,
 } from "./collecInterface";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Firebase } from "./config.js";
-import { GoogleAuthProvider } from "firebase/auth";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -52,7 +49,6 @@ const firebaseConfig = {
   measurementId: "G-2XW9TZKH8R",
 };
 const app = initializeApp(firebaseConfig);
-const provider = new GoogleAuthProvider();
 
 class FirestoreService {
   public auth;
@@ -77,6 +73,7 @@ class FirestoreService {
     this.pointRef = collection(this.db, "Point");
     // Get a reference to the storage service, which is used to create references in your storage bucket
     this.storage = getStorage();
+    this.auth.setPersistence(browserLocalPersistence);
   }
 
   //========== Connexion ===============
@@ -155,14 +152,68 @@ class FirestoreService {
           break;
       }
     });
-    if (userCredential && !userCredential.user.emailVerified) {
+    // if (userCredential)
+    //   console.log(
+    //     "id token",
+    //     (await userCredential.user.getIdTokenResult()).token
+    //   );
+    if (userCredential) {
+      if (!userCredential.user.emailVerified) {
+        Alert.alert(
+          "E-mail de vérification",
+          "Vérifiez votre adresse mail en cliquant sur le lien qui vous a été envoyé sur " +
+            mail +
+            ".\nSi vous n'avez rien reçu, contactez un administrateur."
+        );
+        return { verified: false, user: null };
+      } else {
+        return { verified: true, user: userCredential.user };
+      }
+    }
+  }
+
+  async setLocalSession(currentUser: User): Promise<{
+    sessionId: string;
+    isAdmin: number;
+    user: User;
+  } | null> {
+    // chercher si l'identifiant existe dans Bureau
+    if (currentUser.email) {
+      const bureau = this.convertEmailToAsso(currentUser.email);
+      var docRef = doc(this.db, "Bureau", bureau);
+      var docSnap = await getDoc(docRef);
+      if (!docSnap.exists()) {
+        // puis chercher dans Etudiant
+        const docRef = doc(this.db, "Etudiant", currentUser.uid);
+        const docSnap = await getDoc(docRef);
+        if (!docSnap.exists()) {
+          const docRef = doc(this.db, "Admins", currentUser.email);
+          const docSnap = await getDoc(docRef);
+          if (!docSnap.exists()) {
+            Alert.alert(
+              "Erreur",
+              "Le compte connecté ne possède pas de profil.\nVeuillez contacter un administrateur."
+            );
+            return null;
+          } else {
+            return {
+              sessionId: currentUser.email,
+              isAdmin: 0,
+              user: currentUser,
+            };
+          }
+        } else {
+          return { sessionId: currentUser.uid, isAdmin: 2, user: currentUser };
+        }
+      } else {
+        return { sessionId: bureau, isAdmin: 1, user: currentUser };
+      }
+    } else {
       Alert.alert(
-        "E-mail de vérification",
-        "Vérifiez votre adresse mail en cliquant sur le lien qui vous a été envoyé sur " +
-          mail +
-          ".\nSi vous n'avez rien reçu, contactez un administrateur."
+        "Erreur",
+        "Le compte connecté ne possède pas d'adresse mail.\nVeuillez contacter un administrateur."
       );
-      return true;
+      return null;
     }
   }
 
@@ -348,6 +399,7 @@ class FirestoreService {
   }
 
   // ============ POSTS ==============
+
   // Permet de récupérer la liste des posts enregistrés dans la BDD
   listenPost(setState: (post: Array<Post>) => void, tag?: string): () => void {
     var q = query(this.postRef, orderBy("timeStamp", "desc")); // plus récent en haut de la liste
@@ -430,6 +482,7 @@ class FirestoreService {
   }
 
   //========== EVENT (Points) ===============
+
   listenEvent(setState: (point: Array<Points>) => void): () => void {
     const q = query(this.pointRef, orderBy("date", "desc"));
     return onSnapshot(q, (snapshot: { docs: any[] }) =>
@@ -474,6 +527,7 @@ class FirestoreService {
   }
 
   // ========== CLUB ===============
+
   listenClubs(
     onClubsChange: (clubs: Array<Club>) => void,
     asso?: "BDE" | "BDS" | "BDA" | "JE"
@@ -522,6 +576,7 @@ class FirestoreService {
   }
 
   // ========== PARTENARIAT ==============
+
   listenPartenariats(
     onPartenariatsChange: (users: Array<Partenariat>) => void,
     asso?: "BDE" | "BDS" | "BDA" | "JE"
