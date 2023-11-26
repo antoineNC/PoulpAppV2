@@ -205,10 +205,12 @@ export default function BureauProfil({
           </View>
           {currentUser.sessionId === idBureau ? (
             <TouchableOpacity
-              style={[styles.buttonContainer, { marginVertical: 15 }]}
+              style={{ marginVertical: 15 }}
               onPress={() => navigation.navigate("GestMembres", { bureau })}
             >
-              <Text style={styles.appButtonText}>Gérer les membres</Text>
+              <View style={styles.buttonContainer}>
+                <Text style={styles.appButtonText}>Gérer les membres</Text>
+              </View>
             </TouchableOpacity>
           ) : null}
         </View>

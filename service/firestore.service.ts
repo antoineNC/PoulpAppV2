@@ -152,13 +152,11 @@ class FirestoreService {
           break;
       }
     });
-    // if (userCredential)
-    //   console.log(
-    //     "id token",
-    //     (await userCredential.user.getIdTokenResult()).token
-    //   );
     if (userCredential) {
-      if (!userCredential.user.emailVerified) {
+      if (
+        !this.isBureau(userCredential.user.email) &&
+        !userCredential.user.emailVerified
+      ) {
         Alert.alert(
           "E-mail de vérification",
           "Vérifiez votre adresse mail en cliquant sur le lien qui vous a été envoyé sur " +
@@ -219,7 +217,7 @@ class FirestoreService {
 
   // Récupère les infos principales à afficher dans le menu ou l'écran BureauProfile
   async getProfile(
-    currentUser: { sessionId: string; isAdmin: number },
+    currentUser: { sessionId: string; isAdmin: number; user: User | null },
     setState: (profil: {
       nom: string;
       photo: string;
@@ -252,10 +250,12 @@ class FirestoreService {
     }
   }
 
-  isBureau(mail: string): boolean {
-    const mailStart = mail.substring(0, mail.lastIndexOf("@"));
-    if (["bde", "bds", "bda", "bdf", "junior"].includes(mailStart)) {
-      return true;
+  isBureau(mail: string | null): boolean {
+    if (mail) {
+      const mailStart = mail.substring(0, mail.lastIndexOf("@"));
+      if (["bde", "bds", "bda", "bdf", "junior"].includes(mailStart)) {
+        return true;
+      } else return false;
     } else return false;
   }
 

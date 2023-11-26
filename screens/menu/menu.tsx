@@ -31,7 +31,6 @@ function MenuScreen({ navigation }: MenuScreenNavProp) {
   });
   const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
   useEffect(() => {
-    // On récupère la liste de posts à afficher et on les stocke dans le state
     firestoreService.getProfile(currentUser, (profil) => {
       setProfil({ nom: profil.nom, photo: profil.photo, info: profil.info });
     });
@@ -42,7 +41,14 @@ function MenuScreen({ navigation }: MenuScreenNavProp) {
   const info = profil.info;
 
   const modifProfile = () => {
-    if (currentUser.sessionId === ("BDE" || "BDS" || "BDA" || "JE" || "BDF")) {
+    console.log("currentUser", currentUser.sessionId);
+    if (
+      currentUser.sessionId == "BDE" ||
+      currentUser.sessionId == "BDS" ||
+      currentUser.sessionId == "BDA" ||
+      currentUser.sessionId == "JE" ||
+      currentUser.sessionId == "BDF"
+    ) {
       navigation.navigate("BureauProfil", { idBureau: currentUser.sessionId });
     } else {
       Alert.alert(
